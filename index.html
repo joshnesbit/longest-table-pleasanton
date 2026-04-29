@@ -288,12 +288,13 @@ section { padding: 96px 0; }
   background: none; border: 0; cursor: pointer;
   color: var(--ink); text-decoration: none;
   transition: background .15s;
+  white-space: nowrap;
 }
 .nav-link:hover { background: var(--cream); }
 .nav-link.active { background: var(--forest); color: var(--paper); }
 .nav-cta { margin-left: 8px; }
 .nav-mobile-btn { display: none; }
-@media (max-width: 880px) {
+@media (max-width: 1024px) {
   .nav-links { display: none; }
   .nav-mobile-btn {
     display: inline-flex; align-items: center; gap: 8px;
@@ -312,7 +313,7 @@ section { padding: 96px 0; }
 .footer h4 { color: var(--paper); font-family: var(--sans); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 16px; }
 .footer .btn-link { white-space: nowrap; text-decoration: none; }
 .footer .btn-link:hover { color: var(--gold); text-decoration: none; }
-@media (max-width: 880px) {
+@media (max-width: 1024px) {
   .footer-grid { grid-template-columns: 1fr 1fr !important; }
 }
 @media (max-width: 520px) {
@@ -658,6 +659,7 @@ const NAV_ITEMS = [
   { id: "about", label: "About" },
   { id: "state", label: "State of Connection" },
   { id: "plan", label: "Community Plan" },
+  { id: "faq", label: "FAQ" },
   { id: "signup", label: "Sign Up" },
   { id: "contact", label: "Contact" },
 ];
@@ -673,7 +675,7 @@ function Nav({ route, go }) {
   }, []);
 
   const onRoute = route.split("/")[0];
-  const homeActive = ["home", "host", "volunteer", "dish", "share"].includes(onRoute);
+  const homeActive = ["home", "host", "volunteer", "dish", "share", "sponsor"].includes(onRoute);
   const isOn = (id) => {
     if (id === "home") return homeActive;
     return onRoute === id;
@@ -743,6 +745,7 @@ function Footer({ go }) {
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("about")}>About</button></li>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("state")}>State of Connection</button></li>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("plan")}>Community Plan</button></li>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("faq")}>FAQ</button></li>
           </ul>
         </div>
         <div>
@@ -752,6 +755,7 @@ function Footer({ go }) {
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("volunteer")}>Volunteer</button></li>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("dish")}>Bring a dish</button></li>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("share")}>Spread the word</button></li>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("sponsor")}>Sponsor</button></li>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("signup")}>Sign up for updates</button></li>
           </ul>
         </div>
@@ -971,25 +975,49 @@ function FiveWays({ go }) {
   );
 }
 
-function Sponsors() {
-  const partners = ["Pleasanton Library", "Downtown Association", "Tri-Valley YMCA", "Amador Valley HS", "Senior Center", "Faith Council", "Rotary Club", "Local Bakers"];
+function Sponsors({ go }) {
+  const partners = ["Pleasanton Downtown Association", "Pleasanton Connects"];
   return (
     <section style={{ background: "var(--paper)", padding: "72px 0" }}>
       <div className="container">
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 32 }}>
-          <p style={{ margin: 0, fontSize: 16, color: "var(--ink-soft)", maxWidth: "44ch" }}>
-            Made possible with neighbors and partners across Pleasanton.
+          <p style={{ margin: 0, fontSize: 16, color: "var(--ink-soft)", maxWidth: "52ch" }}>
+            This event is organized in partnership with the <strong style={{ color: "var(--ink)" }}>Pleasanton Downtown Association</strong> and <strong style={{ color: "var(--ink)" }}>Pleasanton Connects</strong>.
           </p>
-          <a className="btn-link" href="#" onClick={(e) => { e.preventDefault(); window.showToast("Partner inquiry form coming soon"); }}>
-            Become a partner →
-          </a>
+          <button className="btn-link" onClick={() => go("sponsor")}>
+            Become a sponsor →
+          </button>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: "var(--rule)", border: "1px solid var(--rule)", borderRadius: 14, overflow: "hidden" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 1, background: "var(--rule)", border: "1px solid var(--rule)", borderRadius: 14, overflow: "hidden" }}>
           {partners.map((p) => (
-            <div key={p} style={{ background: "var(--paper)", padding: "32px 16px", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--muted)", fontFamily: "var(--serif)", fontSize: 18, fontStyle: "italic", textAlign: "center", minHeight: 100 }}>
+            <div key={p} style={{ background: "var(--paper)", padding: "32px 16px", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink-soft)", fontFamily: "var(--serif)", fontSize: 20, fontStyle: "italic", textAlign: "center", minHeight: 100 }}>
               {p}
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SponsorCTA({ go }) {
+  return (
+    <section style={{ background: "var(--ink)", color: "var(--paper)", padding: "72px 0" }}>
+      <div className="container" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 48, alignItems: "center" }}>
+        <div>
+          <div className="eyebrow" style={{ color: "var(--gold)" }}>Sponsor the table</div>
+          <h2 className="serif" style={{ marginTop: 14, color: "var(--paper)" }}>Help us seat 1,000 neighbors.</h2>
+          <p style={{ marginTop: 16, opacity: 0.85, fontSize: 17, maxWidth: "48ch" }}>
+            Tables, chairs, lights, permits, insurance, and a stipend for the small crew that makes this run. Donations from local businesses and neighbors keep the dinner free.
+          </p>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
+          <button className="btn btn-terracotta" onClick={() => go("sponsor")}>
+            Sponsor this event <Icon.Arrow size={14} />
+          </button>
+          <button className="btn-link" style={{ color: "var(--cream)" }} onClick={() => go("contact")}>
+            Or get in touch about partnerships →
+          </button>
         </div>
       </div>
     </section>
@@ -1002,7 +1030,8 @@ function Home({ go }) {
       <Hero go={go} />
       <WhatWhy />
       <FiveWays go={go} />
-      <Sponsors />
+      <Sponsors go={go} />
+      <SponsorCTA go={go} />
     </div>
   );
 }
@@ -1055,51 +1084,12 @@ function ThankYou({ title, body, emailPreview, go }) {
 }
 
 function HostPage({ go }) {
-  const [data, setData] = React.useState({ name: "", email: "", phone: "", seats: 10, who: "", prior: "", notes: "" });
-  const [errors, setErrors] = React.useState({});
-  const [submitted, setSubmitted] = React.useState(false);
-  const set = (k, v) => setData((d) => ({ ...d, [k]: v }));
-
-  const submit = (e) => {
-    e.preventDefault();
-    const errs = {};
-    if (!data.name.trim()) errs.name = "Tell us your name";
-    if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "We need a valid email to confirm";
-    if (!data.prior) errs.prior = "Quick yes or no helps us match you";
-    if (data.seats < 4 || data.seats > 20) errs.seats = "Somewhere between 4 and 20, please";
-    setErrors(errs);
-    if (Object.keys(errs).length) return;
-    setSubmitted(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  if (submitted) {
-    return (
-      <div className="page-fade">
-        <PageHeader eyebrow="You're in" title="Thank you for hosting." sub="A small act with an outsized impact. We'll be in touch within a week with your table assignment and dish coordination." go={go} />
-        <ThankYou go={go}
-          title={`See you June 6, ${data.name.split(" ")[0]}.`}
-          body={`We saved ${data.seats} seats with your name on them. Start thinking about who you'll bring — your block, your coworkers, your faith community, your soccer parents.`}
-          emailPreview={{
-            subject: "You're hosting a table at the Longest Table",
-            body: [
-              `Hi ${data.name.split(" ")[0]},`,
-              `Thank you for stepping up to host. Hosting a section of the Longest Table is one of the most direct ways to fill a thousand seats with neighbors who actually know each other.`,
-              `Here's what happens next: in the next week, we'll send you your table number and the names of nearby hosts. Two weeks before the event, we'll send a dish-coordination note so we are not all bringing potato salad. The day before, we'll send a final logistics email with parking, setup window, and a phone number for the host lead.`,
-              `If anything changes for you, just reply to this email.`,
-            ],
-          }}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className="page-fade">
       <PageHeader eyebrow="Host a Table" title="Claim a section. Bring your people."
-        sub="Hosting is the fastest way to fill 1,000 seats. Pick a number, gather your circle (8 to 12 is the sweet spot), and we'll handle the rest." go={go} />
-      <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
-        <div style={{ marginBottom: 48, padding: 24, borderRadius: 14, background: "var(--cream)", border: "1px solid var(--rule)", display: "grid", gridTemplateColumns: "auto 1fr", gap: 18, alignItems: "start" }}>
+        sub="Hosting is the fastest way to fill 1,000 seats. Pick a section, gather your circle (8 to 12 is the sweet spot), and we'll handle the rest." go={go} />
+      <section className="container-narrow" style={{ padding: "56px 0 96px" }}>
+        <div style={{ marginBottom: 40, padding: 24, borderRadius: 14, background: "var(--cream)", border: "1px solid var(--rule)", display: "grid", gridTemplateColumns: "auto 1fr", gap: 18, alignItems: "start" }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: "var(--forest)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Icon.Table size={22} />
           </div>
@@ -1110,59 +1100,39 @@ function HostPage({ go }) {
             </p>
           </div>
         </div>
-        <div className="form-grid">
-          <div className="field">
-            <label>Your name</label>
-            <input type="text" value={data.name} onChange={(e) => set("name", e.target.value)} placeholder="First and last" />
-            {errors.name && <div className="error-msg">{errors.name}</div>}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
-            <div className="field">
-              <label>Email</label>
-              <input type="email" value={data.email} onChange={(e) => set("email", e.target.value)} placeholder="you@email.com" />
-              {errors.email && <div className="error-msg">{errors.email}</div>}
+
+        <div style={{ display: "grid", gap: 18, marginBottom: 40 }}>
+          {[
+            { n: "01", t: "RSVP on Eventbrite", b: "Pick the host ticket type. Takes about a minute." },
+            { n: "02", t: "We'll confirm your section", b: "Within a week we'll send your table number and the names of nearby hosts." },
+            { n: "03", t: "Invite your people", b: "Use the share toolkit to send a personal note to 8–12 friends, neighbors, or coworkers." },
+            { n: "04", t: "Show up June 6", b: "We handle setup and dish coordination. You bring the people." },
+          ].map((s) => (
+            <div key={s.n} className="card" style={{ display: "flex", gap: 18, alignItems: "flex-start" }}>
+              <div className="serif" style={{ fontSize: 36, color: "var(--terracotta)", lineHeight: 1, minWidth: 48 }}>{s.n}</div>
+              <div>
+                <strong style={{ display: "block", marginBottom: 4 }}>{s.t}</strong>
+                <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>{s.b}</p>
+              </div>
             </div>
-            <div className="field">
-              <label>Phone <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
-              <input type="tel" value={data.phone} onChange={(e) => set("phone", e.target.value)} placeholder="(925) 555-0100" />
-            </div>
-          </div>
-          <div className="field">
-            <label>How many seats do you want to host?</label>
-            <div className="hint">8 to 12 works best. Pick what feels comfortable.</div>
-            <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 8 }}>
-              <input type="range" min="4" max="20" value={data.seats} onChange={(e) => set("seats", Number(e.target.value))} style={{ flex: 1, accentColor: "var(--forest)" }} />
-              <div style={{ minWidth: 70, textAlign: "right", fontFamily: "var(--serif)", fontSize: 32, color: "var(--forest)" }}>{data.seats}</div>
-            </div>
-            {errors.seats && <div className="error-msg">{errors.seats}</div>}
-          </div>
-          <div className="field">
-            <label>Tell us about who you're bringing <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
-            <div className="hint">Neighbors from your block, coworkers, faith community, your kid's soccer team — whatever feels right.</div>
-            <textarea value={data.who} onChange={(e) => set("who", e.target.value)} placeholder="A mix of folks from my street and a few coworkers..." />
-          </div>
-          <div className="field">
-            <label>Have you hosted a Longest Table or similar event before?</label>
-            <div className="radio-row">
-              {["Yes", "No"].map((opt) => (
-                <label key={opt} className={data.prior === opt ? "is-on" : ""}>
-                  <input type="radio" name="prior" value={opt} checked={data.prior === opt} onChange={() => set("prior", opt)} />
-                  {opt}
-                </label>
-              ))}
-            </div>
-            {errors.prior && <div className="error-msg">{errors.prior}</div>}
-          </div>
-          <div className="field">
-            <label>Anything we should know? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
-            <textarea value={data.notes} onChange={(e) => set("notes", e.target.value)} placeholder="Accessibility notes, dietary considerations across your group, etc." />
-          </div>
-          <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
-            <button type="submit" className="btn btn-primary">I'm in. Save my section.</button>
-            <span style={{ fontSize: 13, color: "var(--muted)" }}>You'll get a confirmation email right away.</span>
+          ))}
+        </div>
+
+        <div style={{ background: "var(--forest)", color: "var(--paper)", borderRadius: 18, padding: "40px 32px", textAlign: "center" }}>
+          <div style={{ fontFamily: "var(--sans)", fontSize: 12, letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.8, marginBottom: 12 }}>Ready to host?</div>
+          <h2 className="serif" style={{ fontSize: 36, marginBottom: 12, color: "var(--paper)" }}>Sign up takes about a minute.</h2>
+          <p style={{ maxWidth: "44ch", margin: "0 auto 28px", opacity: 0.92, fontSize: 16 }}>
+            Hosting and RSVPs both happen on Eventbrite — pick the host ticket type when you go through.
+          </p>
+          <a className="btn btn-terracotta" href="https://eventbrite.com" target="_blank" rel="noreferrer"
+            onClick={(e) => { e.preventDefault(); window.showToast("Opens Eventbrite in a new tab"); }}>
+            Host on Eventbrite <Icon.ExternalArrow />
+          </a>
+          <div style={{ marginTop: 16, fontSize: 13, opacity: 0.7 }}>
+            Questions first? <button className="btn-link" style={{ color: "var(--gold)" }} onClick={() => go("contact")}>Get in touch</button>
           </div>
         </div>
-      </form>
+      </section>
     </div>
   );
 }
@@ -1989,6 +1959,86 @@ function ContactPage({ go }) {
   );
 }
 
+/* ─── FAQ ─── */
+function FaqPage({ go }) {
+  return (
+    <div className="page-fade">
+      <PageHeader eyebrow="FAQ" title="Frequently asked questions."
+        sub="The short answers to the questions we get most. Don't see yours? Send a note via the contact page." go={go} />
+      <section className="container-narrow" style={{ padding: "72px 0 96px" }}>
+        <div style={{ background: "var(--cream)", border: "1px solid var(--rule)", borderRadius: 18, padding: "48px 32px", textAlign: "center" }}>
+          <div style={{ fontFamily: "var(--mono)", fontSize: 12, letterSpacing: "0.06em", color: "var(--brown)", marginBottom: 14 }}>
+            placeholder
+          </div>
+          <h2 className="serif" style={{ fontSize: 36, marginBottom: 12 }}>Copy coming soon.</h2>
+          <p style={{ color: "var(--ink-soft)", maxWidth: "48ch", margin: "0 auto 28px" }}>
+            We're collecting the questions neighbors have been asking and writing the clearest possible answers. Check back in a few days.
+          </p>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            <button className="btn btn-primary" onClick={() => go("contact")}>Ask us something</button>
+            <button className="btn btn-ghost" onClick={() => go("home")}>Back to home</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ─── Sponsor ─── */
+function SponsorPage({ go }) {
+  const TIERS = [
+    { name: "Friend of the Table", amount: "$100+", body: "Help cover linens, lights, and a single section of the table." },
+    { name: "Block Sponsor", amount: "$500+", body: "Underwrite an entire section of the table. Your name on a placard at that section." },
+    { name: "Main Street Sponsor", amount: "$2,500+", body: "Underwrite a major piece of the production: tents, sound, or the volunteer t-shirts." },
+    { name: "Anchor Sponsor", amount: "$10,000+", body: "Make the whole night possible. Recognition on the home page, the program, and the postcards." },
+  ];
+  return (
+    <div className="page-fade">
+      <PageHeader eyebrow="Sponsor" title="Help fund a free dinner for 1,000 neighbors."
+        sub="The Longest Table is free to attend. It's not free to produce. Local businesses and individual donors close the gap so every neighbor in Pleasanton can sit at this table." go={go} />
+
+      <section className="container-narrow" style={{ padding: "56px 0 32px" }}>
+        <div style={{ background: "var(--cream)", border: "1px dashed var(--rule)", borderRadius: 14, padding: 24, fontFamily: "var(--mono)", fontSize: 13, color: "var(--brown)" }}>
+          [donation link and tax-deductible details to be added — Pleasanton Connects is a 501(c)(3)]
+        </div>
+      </section>
+
+      <section className="container-narrow" style={{ padding: "32px 0" }}>
+        <div className="eyebrow" style={{ marginBottom: 12 }}>Sponsorship tiers</div>
+        <h2 className="serif" style={{ fontSize: 36, marginBottom: 28 }}>Where your gift goes.</h2>
+        <div style={{ display: "grid", gap: 14 }}>
+          {TIERS.map((t) => (
+            <div key={t.name} className="card" style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 18, alignItems: "center" }}>
+              <div>
+                <strong style={{ display: "block", marginBottom: 4 }}>{t.name}</strong>
+                <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>{t.body}</p>
+              </div>
+              <div className="serif" style={{ fontSize: 22, color: "var(--forest)", whiteSpace: "nowrap" }}>{t.amount}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="container-narrow" style={{ padding: "32px 0 96px" }}>
+        <div style={{ background: "var(--forest)", color: "var(--paper)", borderRadius: 18, padding: "40px 32px", textAlign: "center" }}>
+          <h3 className="serif" style={{ fontSize: 28, marginBottom: 12, color: "var(--paper)" }}>Ready to give?</h3>
+          <p style={{ maxWidth: "44ch", margin: "0 auto 24px", opacity: 0.92, fontSize: 16 }}>
+            Donation link is being finalized. In the meantime, reach out and we'll send wire details, a check-by-mail address, or invoice your business directly.
+          </p>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            <button className="btn btn-terracotta" onClick={() => window.showToast("Donation link coming soon")}>
+              Donate <Icon.Arrow size={14} />
+            </button>
+            <button className="btn" style={{ background: "transparent", color: "var(--paper)", border: "1px solid rgba(246,239,227,0.4)" }} onClick={() => go("contact")}>
+              Contact us
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 /* ─── App ─── */
 function App() {
   const parseHash = () => (window.location.hash || "#home").replace(/^#\/?/, "") || "home";
@@ -2016,6 +2066,8 @@ function App() {
     case "about": page = <AboutPage go={go} />; break;
     case "state": page = <StatePage go={go} />; break;
     case "plan": page = <PlanPage go={go} />; break;
+    case "faq": page = <FaqPage go={go} />; break;
+    case "sponsor": page = <SponsorPage go={go} />; break;
     case "signup": page = <SignupPage go={go} />; break;
     case "contact": page = <ContactPage go={go} />; break;
     case "home":
