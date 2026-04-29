@@ -1114,13 +1114,131 @@ function ThankYou({ title, body, emailPreview, go }) {
   );
 }
 
+/* ─── Captcha + form submit helpers ─── */
+function useCaptcha() {
+  const [data, setData] = React.useState(null);
+  const [answer, setAnswer] = React.useState("");
+  const [loading, setLoading] = React.useState(true);
+  const refresh = React.useCallback(async () => {
+    setLoading(true);
+    setAnswer("");
+    try {
+      const r = await fetch("/api/captcha");
+      if (!r.ok) throw new Error("captcha");
+      setData(await r.json());
+    } catch {
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  React.useEffect(() => { refresh(); }, [refresh]);
+  return { data, answer, setAnswer, loading, refresh };
+}
+
+function CaptchaField({ captcha, error }) {
+  return (
+    <div className="field">
+      <label>{captcha.data ? captcha.data.question : "Quick human check"}</label>
+      <div className="hint">A simple math check so robots can't fill the form.</div>
+      <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+        <input
+          type="text"
+          inputMode="numeric"
+          autoComplete="off"
+          value={captcha.answer}
+          onChange={(e) => captcha.setAnswer(e.target.value)}
+          placeholder="Your answer"
+          disabled={!captcha.data}
+          style={{ maxWidth: 180 }}
+        />
+        <button type="button" className="btn-link" onClick={captcha.refresh} disabled={captcha.loading}>
+          New question
+        </button>
+      </div>
+      {error && <div className="error-msg">{error}</div>}
+    </div>
+  );
+}
+
+function Honeypot({ value, onChange }) {
+  return (
+    <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", top: "auto", width: 1, height: 1, overflow: "hidden" }}>
+      <label>Website (leave blank)</label>
+      <input type="text" tabIndex="-1" autoComplete="off" value={value} onChange={(e) => onChange(e.target.value)} />
+    </div>
+  );
+}
+
+async function submitForm({ form, data, captcha, honeypot }) {
+  const r = await fetch("/api/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      form,
+      data,
+      honeypot,
+      captcha: captcha.data ? { ...captcha.data, answer: captcha.answer } : null,
+    }),
+  });
+  let json = {};
+  try { json = await r.json(); } catch {}
+  if (!r.ok) {
+    const msg = (json && json.error) || "Something went wrong. Try again.";
+    const isCaptcha = /captcha/i.test(msg);
+    return { ok: false, error: msg, captcha: isCaptcha };
+  }
+  return { ok: true };
+}
+
 function HostPage({ go }) {
+  const [data, setData] = React.useState({ name: "", email: "", phone: "", seats: 10, who: "", prior: "", notes: "" });
+  const [errors, setErrors] = React.useState({});
+  const [submitting, setSubmitting] = React.useState(false);
+  const [submitted, setSubmitted] = React.useState(false);
+  const [honeypot, setHoneypot] = React.useState("");
+  const captcha = useCaptcha();
+  const set = (k, v) => setData((d) => ({ ...d, [k]: v }));
+
+  const submit = async (e) => {
+    e.preventDefault();
+    const errs = {};
+    if (!data.name.trim()) errs.name = "Tell us your name";
+    if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "We need a valid email to confirm";
+    if (!data.prior) errs.prior = "Quick yes or no helps us match you";
+    if (data.seats < 4 || data.seats > 20) errs.seats = "Somewhere between 4 and 20, please";
+    if (!captcha.data) errs.captcha = "Verification still loading";
+    setErrors(errs);
+    if (Object.keys(errs).length) return;
+    setSubmitting(true);
+    const res = await submitForm({ form: "host", data, captcha, honeypot });
+    setSubmitting(false);
+    if (!res.ok) {
+      if (res.captcha) { captcha.refresh(); setErrors({ captcha: res.error }); return; }
+      setErrors({ submit: res.error });
+      return;
+    }
+    setSubmitted(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  if (submitted) {
+    return (
+      <div className="page-fade">
+        <PageHeader eyebrow="You're in" title="Thank you for hosting." sub="A small act with an outsized impact. We'll be in touch with your table assignment and dish coordination." go={go} />
+        <ThankYou go={go}
+          title={`See you June 6, ${data.name.split(" ")[0]}.`}
+          body={`We saved ${data.seats} seats with your name on them. Start thinking about who you'll bring — your block, your coworkers, your faith community, your soccer parents.`} />
+      </div>
+    );
+  }
+
   return (
     <div className="page-fade">
       <PageHeader eyebrow="Host a Table" title="Claim a section. Bring your people."
-        sub="Hosting is the fastest way to fill 1,000 seats. Pick a section, gather your circle (8 to 12 is the sweet spot), and we'll handle the rest." go={go} />
-      <section className="container-narrow" style={{ padding: "56px 0 96px" }}>
-        <div style={{ marginBottom: 40, padding: 24, borderRadius: 14, background: "var(--cream)", border: "1px solid var(--rule)", display: "grid", gridTemplateColumns: "auto 1fr", gap: 18, alignItems: "start" }}>
+        sub="Hosting is the fastest way to fill 1,000 seats. Pick a number, gather your circle (8 to 12 is the sweet spot), and we'll handle the rest." go={go} />
+      <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
+        <div style={{ marginBottom: 48, padding: 24, borderRadius: 14, background: "var(--cream)", border: "1px solid var(--rule)", display: "grid", gridTemplateColumns: "auto 1fr", gap: 18, alignItems: "start" }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: "var(--forest)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Icon.Table size={22} />
           </div>
@@ -1132,38 +1250,64 @@ function HostPage({ go }) {
           </div>
         </div>
 
-        <div style={{ display: "grid", gap: 18, marginBottom: 40 }}>
-          {[
-            { n: "01", t: "RSVP on Eventbrite", b: "Pick the host ticket type. Takes about a minute." },
-            { n: "02", t: "We'll confirm your section", b: "Within a week we'll send your table number and the names of nearby hosts." },
-            { n: "03", t: "Invite your people", b: "Use the share toolkit to send a personal note to 8–12 friends, neighbors, or coworkers." },
-            { n: "04", t: "Show up June 6", b: "We handle setup and dish coordination. You bring the people." },
-          ].map((s) => (
-            <div key={s.n} className="card" style={{ display: "flex", gap: 18, alignItems: "flex-start" }}>
-              <div className="serif" style={{ fontSize: 36, color: "var(--terracotta)", lineHeight: 1, minWidth: 48 }}>{s.n}</div>
-              <div>
-                <strong style={{ display: "block", marginBottom: 4 }}>{s.t}</strong>
-                <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>{s.b}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <Honeypot value={honeypot} onChange={setHoneypot} />
 
-        <div style={{ background: "var(--forest)", color: "var(--paper)", borderRadius: 18, padding: "40px 32px", textAlign: "center" }}>
-          <div style={{ fontFamily: "var(--sans)", fontSize: 12, letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.8, marginBottom: 12 }}>Ready to host?</div>
-          <h2 className="serif" style={{ fontSize: 36, marginBottom: 12, color: "var(--paper)" }}>Sign up takes about a minute.</h2>
-          <p style={{ maxWidth: "44ch", margin: "0 auto 28px", opacity: 0.92, fontSize: 16 }}>
-            Hosting and RSVPs both happen on Eventbrite — pick the host ticket type when you go through.
-          </p>
-          <a className="btn btn-terracotta" href="https://eventbrite.com" target="_blank" rel="noreferrer"
-            onClick={(e) => { e.preventDefault(); window.showToast("Opens Eventbrite in a new tab"); }}>
-            Host on Eventbrite <Icon.ExternalArrow />
-          </a>
-          <div style={{ marginTop: 16, fontSize: 13, opacity: 0.7 }}>
-            Questions first? <button className="btn-link" style={{ color: "var(--gold)" }} onClick={() => go("contact")}>Get in touch</button>
+        <div className="form-grid">
+          <div className="field">
+            <label>Your name</label>
+            <input type="text" value={data.name} onChange={(e) => set("name", e.target.value)} placeholder="First and last" />
+            {errors.name && <div className="error-msg">{errors.name}</div>}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+            <div className="field">
+              <label>Email</label>
+              <input type="email" value={data.email} onChange={(e) => set("email", e.target.value)} placeholder="you@email.com" />
+              {errors.email && <div className="error-msg">{errors.email}</div>}
+            </div>
+            <div className="field">
+              <label>Phone <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+              <input type="tel" value={data.phone} onChange={(e) => set("phone", e.target.value)} placeholder="(925) 555-0100" />
+            </div>
+          </div>
+          <div className="field">
+            <label>How many seats do you want to host?</label>
+            <div className="hint">8 to 12 works best. Pick what feels comfortable.</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 8 }}>
+              <input type="range" min="4" max="20" value={data.seats} onChange={(e) => set("seats", Number(e.target.value))} style={{ flex: 1, accentColor: "var(--forest)" }} />
+              <div style={{ minWidth: 70, textAlign: "right", fontFamily: "var(--serif)", fontSize: 32, color: "var(--forest)" }}>{data.seats}</div>
+            </div>
+            {errors.seats && <div className="error-msg">{errors.seats}</div>}
+          </div>
+          <div className="field">
+            <label>Tell us about who you're bringing <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+            <textarea value={data.who} onChange={(e) => set("who", e.target.value)} placeholder="A mix of folks from my street and a few coworkers..." />
+          </div>
+          <div className="field">
+            <label>Have you hosted a Longest Table or similar event before?</label>
+            <div className="radio-row">
+              {["Yes", "No"].map((opt) => (
+                <label key={opt} className={data.prior === opt ? "is-on" : ""}>
+                  <input type="radio" name="prior" value={opt} checked={data.prior === opt} onChange={() => set("prior", opt)} />
+                  {opt}
+                </label>
+              ))}
+            </div>
+            {errors.prior && <div className="error-msg">{errors.prior}</div>}
+          </div>
+          <div className="field">
+            <label>Anything we should know? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+            <textarea value={data.notes} onChange={(e) => set("notes", e.target.value)} placeholder="Accessibility notes, dietary considerations across your group, etc." />
+          </div>
+          <CaptchaField captcha={captcha} error={errors.captcha} />
+          {errors.submit && <div className="error-msg">{errors.submit}</div>}
+          <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
+            <button type="submit" className="btn btn-primary" disabled={submitting}>
+              {submitting ? "Saving…" : "I'm in. Save my section."}
+            </button>
+            <span style={{ fontSize: 13, color: "var(--muted)" }}>You'll get a confirmation email once that's wired up.</span>
           </div>
         </div>
-      </section>
+      </form>
     </div>
   );
 }
@@ -1185,11 +1329,14 @@ const AVAIL = [
 function VolunteerPage({ go }) {
   const [data, setData] = React.useState({ name: "", email: "", phone: "", roles: [], avail: [], access: "", notes: "" });
   const [errors, setErrors] = React.useState({});
+  const [submitting, setSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
+  const [honeypot, setHoneypot] = React.useState("");
+  const captcha = useCaptcha();
   const set = (k, v) => setData((d) => ({ ...d, [k]: v }));
   const toggle = (k, v) => setData((d) => ({ ...d, [k]: d[k].includes(v) ? d[k].filter((x) => x !== v) : [...d[k], v] }));
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     const errs = {};
     if (!data.name.trim()) errs.name = "Tell us your name";
@@ -1197,8 +1344,17 @@ function VolunteerPage({ go }) {
     if (!data.phone.trim()) errs.phone = "We text day-of updates, so we need a number";
     if (!data.roles.length) errs.roles = "Pick at least one role";
     if (!data.avail.length) errs.avail = "Pick at least one window";
+    if (!captcha.data) errs.captcha = "Verification still loading";
     setErrors(errs);
     if (Object.keys(errs).length) return;
+    setSubmitting(true);
+    const res = await submitForm({ form: "volunteer", data, captcha, honeypot });
+    setSubmitting(false);
+    if (!res.ok) {
+      if (res.captcha) { captcha.refresh(); setErrors({ captcha: res.error }); return; }
+      setErrors({ submit: res.error });
+      return;
+    }
     setSubmitted(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -1230,6 +1386,7 @@ function VolunteerPage({ go }) {
       <PageHeader eyebrow="Volunteer" title="It takes a small army to feed a town."
         sub="Pick a role, pick a window, and we'll match you with a lead. Most volunteers commit two to four hours." go={go} />
       <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
+        <Honeypot value={honeypot} onChange={setHoneypot} />
         <div className="form-grid">
           <div className="field">
             <label>Your name</label>
@@ -1287,8 +1444,12 @@ function VolunteerPage({ go }) {
             <label>Anything else? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
             <textarea value={data.notes} onChange={(e) => set("notes", e.target.value)} placeholder="" />
           </div>
+          <CaptchaField captcha={captcha} error={errors.captcha} />
+          {errors.submit && <div className="error-msg">{errors.submit}</div>}
           <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
-            <button type="submit" className="btn btn-primary">Sign me up</button>
+            <button type="submit" className="btn btn-primary" disabled={submitting}>
+              {submitting ? "Saving…" : "Sign me up"}
+            </button>
             <span style={{ fontSize: 13, color: "var(--muted)" }}>Your role lead will reach out within a week.</span>
           </div>
         </div>
@@ -1303,11 +1464,14 @@ const DIETS = ["Vegetarian", "Vegan", "Neither"];
 function DishPage({ go }) {
   const [data, setData] = React.useState({ name: "", email: "", dish: "", servings: 12, allergens: [], diet: "", needsServingDish: "" });
   const [errors, setErrors] = React.useState({});
+  const [submitting, setSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
+  const [honeypot, setHoneypot] = React.useState("");
+  const captcha = useCaptcha();
   const set = (k, v) => setData((d) => ({ ...d, [k]: v }));
   const toggle = (k, v) => setData((d) => ({ ...d, [k]: d[k].includes(v) ? d[k].filter((x) => x !== v) : [...d[k], v] }));
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     const errs = {};
     if (!data.name.trim()) errs.name = "Tell us your name";
@@ -1315,8 +1479,17 @@ function DishPage({ go }) {
     if (!data.dish.trim()) errs.dish = "Even a tentative answer helps us coordinate";
     if (!data.diet) errs.diet = "One quick pick";
     if (!data.needsServingDish) errs.needsServingDish = "Yes or no";
+    if (!captcha.data) errs.captcha = "Verification still loading";
     setErrors(errs);
     if (Object.keys(errs).length) return;
+    setSubmitting(true);
+    const res = await submitForm({ form: "dish", data, captcha, honeypot });
+    setSubmitting(false);
+    if (!res.ok) {
+      if (res.captcha) { captcha.refresh(); setErrors({ captcha: res.error }); return; }
+      setErrors({ submit: res.error });
+      return;
+    }
     setSubmitted(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -1348,6 +1521,7 @@ function DishPage({ go }) {
       <PageHeader eyebrow="Bring a Dish" title="A potluck for a thousand."
         sub="We are not catering this. We are feeding each other. Family recipes welcome. Store-bought welcome too." go={go} />
       <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
+        <Honeypot value={honeypot} onChange={setHoneypot} />
         <div className="form-grid">
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
             <div className="field">
@@ -1408,8 +1582,12 @@ function DishPage({ go }) {
             </div>
             {errors.needsServingDish && <div className="error-msg">{errors.needsServingDish}</div>}
           </div>
+          <CaptchaField captcha={captcha} error={errors.captcha} />
+          {errors.submit && <div className="error-msg">{errors.submit}</div>}
           <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
-            <button type="submit" className="btn btn-primary">Add my dish</button>
+            <button type="submit" className="btn btn-primary" disabled={submitting}>
+              {submitting ? "Saving…" : "Add my dish"}
+            </button>
             <span style={{ fontSize: 13, color: "var(--muted)" }}>Dropoff details land two days before.</span>
           </div>
         </div>
@@ -1449,13 +1627,27 @@ function CopyBlock({ channel, body }) {
 
 function SharePage({ go }) {
   const [shared, setShared] = React.useState({ name: "", channels: [] });
+  const [submitting, setSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [captchaError, setCaptchaError] = React.useState("");
+  const [honeypot, setHoneypot] = React.useState("");
+  const captcha = useCaptcha();
   const toggleC = (c) => setShared((s) => ({ ...s, channels: s.channels.includes(c) ? s.channels.filter((x) => x !== c) : [...s.channels, c] }));
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
+    setError(""); setCaptchaError("");
     if (!shared.channels.length) { setError("Pick at least one channel so we can thank you properly."); return; }
+    if (!captcha.data) { setCaptchaError("Verification still loading"); return; }
+    setSubmitting(true);
+    const res = await submitForm({ form: "share", data: shared, captcha, honeypot });
+    setSubmitting(false);
+    if (!res.ok) {
+      if (res.captcha) { captcha.refresh(); setCaptchaError(res.error); return; }
+      setError(res.error);
+      return;
+    }
     setSubmitted(true);
     window.showToast("Thanks for sharing");
   };
@@ -1531,6 +1723,7 @@ function SharePage({ go }) {
               <p style={{ color: "var(--ink-soft)", marginBottom: 28 }}>
                 Helps us thank you, and helps us see which channels actually move the needle.
               </p>
+              <Honeypot value={honeypot} onChange={setHoneypot} />
               <div className="form-grid">
                 <div className="field">
                   <label>Your name <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
@@ -1547,7 +1740,12 @@ function SharePage({ go }) {
                   </div>
                   {error && <div className="error-msg">{error}</div>}
                 </div>
-                <div><button type="submit" className="btn btn-primary">Log it</button></div>
+                <CaptchaField captcha={captcha} error={captchaError} />
+                <div>
+                  <button type="submit" className="btn btn-primary" disabled={submitting}>
+                    {submitting ? "Saving…" : "Log it"}
+                  </button>
+                </div>
               </div>
             </form>
           ) : (
@@ -1569,17 +1767,29 @@ function SharePage({ go }) {
 /* ─── Signup, Contact ─── */
 function SignupPage({ go }) {
   const [data, setData] = React.useState({ name: "", email: "", newsletter: true, volunteer: false, keep: true });
+  const [submitting, setSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
   const [err, setErr] = React.useState({});
+  const [honeypot, setHoneypot] = React.useState("");
+  const captcha = useCaptcha();
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     const errs = {};
     if (!data.name.trim()) errs.name = "Tell us your name";
     if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "Valid email please";
     if (!data.newsletter && !data.volunteer && !data.keep) errs.opts = "Pick at least one";
+    if (!captcha.data) errs.captcha = "Verification still loading";
     setErr(errs);
     if (Object.keys(errs).length) return;
+    setSubmitting(true);
+    const res = await submitForm({ form: "signup", data, captcha, honeypot });
+    setSubmitting(false);
+    if (!res.ok) {
+      if (res.captcha) { captcha.refresh(); setErr({ captcha: res.error }); return; }
+      setErr({ submit: res.error });
+      return;
+    }
     setSubmitted(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -1607,6 +1817,7 @@ function SignupPage({ go }) {
     <div className="page-fade">
       <PageHeader eyebrow="Sign Up" title="Stay in the loop." sub="Pick what you want to hear about. We send less than you'd expect." go={go} />
       <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
+        <Honeypot value={honeypot} onChange={setHoneypot} />
         <div className="form-grid">
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
             <div className="field">
@@ -1639,7 +1850,13 @@ function SignupPage({ go }) {
             </div>
             {err.opts && <div className="error-msg">{err.opts}</div>}
           </div>
-          <div><button type="submit" className="btn btn-primary">Sign me up</button></div>
+          <CaptchaField captcha={captcha} error={err.captcha} />
+          {err.submit && <div className="error-msg">{err.submit}</div>}
+          <div>
+            <button type="submit" className="btn btn-primary" disabled={submitting}>
+              {submitting ? "Saving…" : "Sign me up"}
+            </button>
+          </div>
         </div>
       </form>
     </div>
@@ -1649,16 +1866,28 @@ function SignupPage({ go }) {
 function ContactPage({ go }) {
   const [data, setData] = React.useState({ name: "", email: "", message: "" });
   const [err, setErr] = React.useState({});
+  const [submitting, setSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
+  const [honeypot, setHoneypot] = React.useState("");
+  const captcha = useCaptcha();
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     const errs = {};
     if (!data.name.trim()) errs.name = "Tell us your name";
     if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "Valid email please";
     if (!data.message.trim()) errs.message = "Tell us what you want to say";
+    if (!captcha.data) errs.captcha = "Verification still loading";
     setErr(errs);
     if (Object.keys(errs).length) return;
+    setSubmitting(true);
+    const res = await submitForm({ form: "contact", data, captcha, honeypot });
+    setSubmitting(false);
+    if (!res.ok) {
+      if (res.captcha) { captcha.refresh(); setErr({ captcha: res.error }); return; }
+      setErr({ submit: res.error });
+      return;
+    }
     setSubmitted(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -1699,6 +1928,7 @@ function ContactPage({ go }) {
             </p>
           </div>
           <form onSubmit={submit} noValidate>
+            <Honeypot value={honeypot} onChange={setHoneypot} />
             <div className="form-grid">
               <div className="field">
                 <label>Your name</label>
@@ -1715,7 +1945,13 @@ function ContactPage({ go }) {
                 <textarea value={data.message} onChange={(e) => setData({ ...data, message: e.target.value })} style={{ minHeight: 160 }} />
                 {err.message && <div className="error-msg">{err.message}</div>}
               </div>
-              <div><button type="submit" className="btn btn-primary">Send</button></div>
+              <CaptchaField captcha={captcha} error={err.captcha} />
+              {err.submit && <div className="error-msg">{err.submit}</div>}
+              <div>
+                <button type="submit" className="btn btn-primary" disabled={submitting}>
+                  {submitting ? "Sending…" : "Send"}
+                </button>
+              </div>
             </div>
           </form>
         </div>
