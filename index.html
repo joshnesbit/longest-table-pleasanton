@@ -480,6 +480,63 @@ section { padding: 96px 0; }
 .email-preview .ep-body { padding: 24px 28px; }
 .email-preview .ep-body p { margin: 0 0 12px; line-height: 1.55; }
 .tree-mark { width: 36px; height: 36px; }
+
+/* ─── Mobile optimizations ─── */
+@media (max-width: 720px) {
+  body { font-size: 16px; }
+  .container, .container-narrow, .container-wide { width: calc(100% - 32px); }
+
+  /* Hero — bigger contrast scrim, smaller type, shorter section */
+  .hero { min-height: 78vh; }
+  .hero-inner { padding: 0 0 48px; }
+  .hero h1 { font-size: 42px !important; line-height: 1.05; max-width: none; }
+  .hero p.lede { font-size: 16px; line-height: 1.5; }
+  .hero-date {
+    font-size: 11px;
+    padding: 6px 12px;
+    gap: 10px;
+  }
+  .hero-grad {
+    background:
+      linear-gradient(180deg, rgba(31,42,34,0.55) 0%, rgba(31,42,34,0.25) 25%, rgba(31,42,34,0.7) 60%, rgba(31,42,34,0.95) 100%);
+  }
+  .hero h1, .hero p.lede { text-shadow: 0 2px 18px rgba(0,0,0,0.45); }
+
+  /* Logo a touch smaller in nav on small screens */
+  .logo-img { height: 52px; }
+
+  /* Page headers — pull top padding in */
+  header[style*="padding: 120px 0 56px"] { padding: 88px 0 36px !important; }
+
+  /* Collapse desktop multi-column grids built with inline styles */
+  [style*="grid-template-columns: 1fr 1.1fr"],
+  [style*="grid-template-columns: 1fr 1.2fr"],
+  [style*="grid-template-columns: 1fr 1.4fr"],
+  [style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns: repeat(2, 1fr)"],
+  [style*="grid-template-columns: repeat(3, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="grid-template-columns: repeat(4, 1fr)"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  /* Ease very large container gaps */
+  [style*="gap: 80"] { gap: 32px !important; }
+  [style*="gap: 64"] { gap: 32px !important; }
+
+  /* Tighten section h1/h2 */
+  h1 { font-size: 36px; }
+  h2 { font-size: 28px; }
+
+  /* Email preview body padding */
+  .email-preview .ep-body { padding: 20px 18px; }
+
+  /* Thank-you card padding */
+  .ty-card { padding: 40px 24px; }
+
+  /* Stats numbers */
+  .stat .num { font-size: 44px; }
+}
 </style>
 </head>
 <body>
