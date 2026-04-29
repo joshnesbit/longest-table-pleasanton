@@ -243,7 +243,7 @@ section { padding: 96px 0; }
   background:
     linear-gradient(180deg, rgba(31,42,34,0.35) 0%, rgba(31,42,34,0) 35%, rgba(31,42,34,0.6) 78%, rgba(31,42,34,0.92) 100%);
 }
-.hero-inner { position: relative; padding: 0 0 80px; width: 100%; }
+.hero-inner { position: relative; padding: 0 0 80px; }
 .hero h1 { font-size: clamp(48px, 7vw, 108px); line-height: 0.96; max-width: 16ch; }
 .hero h1 em { font-style: italic; color: var(--gold); }
 .hero p.lede { font-size: clamp(17px, 1.4vw, 21px); max-width: 56ch; opacity: 0.92; }
@@ -656,11 +656,8 @@ const Icon = {
 /* ─── Shared chrome: Nav, Footer, Toast, Modal ─── */
 const NAV_ITEMS = [
   { id: "home", label: "Longest Table" },
-  { id: "about", label: "About" },
-  { id: "state", label: "State of Connection" },
-  { id: "plan", label: "Community Plan" },
   { id: "faq", label: "FAQ" },
-  { id: "signup", label: "Sign Up" },
+  { id: "pc", label: "Pleasanton Connects", external: "https://pleasantonconnects.org" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -681,6 +678,15 @@ function Nav({ route, go }) {
     return onRoute === id;
   };
 
+  const goVolunteer = () => {
+    if (onRoute === "home") {
+      document.getElementById("five-ways")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.__scrollAfterRoute = "five-ways";
+      go("home");
+    }
+  };
+
   return (
     <React.Fragment>
       <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
@@ -690,12 +696,22 @@ function Nav({ route, go }) {
           </a>
           <div className="nav-links">
             {NAV_ITEMS.map((item) => (
-              <button key={item.id} className={`nav-link ${isOn(item.id) ? "active" : ""}`} onClick={() => go(item.id)}>
-                {item.label}
-              </button>
+              item.external ? (
+                <a key={item.id} className="nav-link" href={item.external} target="_blank" rel="noreferrer"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                  {item.label} <Icon.ExternalArrow />
+                </a>
+              ) : (
+                <button key={item.id} className={`nav-link ${isOn(item.id) ? "active" : ""}`} onClick={() => go(item.id)}>
+                  {item.label}
+                </button>
+              )
             ))}
-            <a className="btn btn-terracotta nav-cta" href="https://eventbrite.com" target="_blank" rel="noreferrer"
-              onClick={(e) => { e.preventDefault(); window.showToast("Opens Eventbrite in a new tab"); }}>
+            <button className="btn btn-ghost nav-cta" onClick={goVolunteer}>
+              Volunteer
+            </button>
+            <a className="btn btn-terracotta" href="https://eventbrite.com" target="_blank" rel="noreferrer"
+              onClick={(e) => { e.preventDefault(); window.showToast("Eventbrite link coming soon"); }}>
               RSVP <Icon.ExternalArrow />
             </a>
           </div>
@@ -710,14 +726,26 @@ function Nav({ route, go }) {
             <Icon.X /> Close
           </button>
           {NAV_ITEMS.map((item) => (
-            <button key={item.id} className={`nav-link ${isOn(item.id) ? "active" : ""}`}
-              onClick={() => { go(item.id); setOpen(false); }}>
-              {item.label}
-            </button>
+            item.external ? (
+              <a key={item.id} className="nav-link" href={item.external} target="_blank" rel="noreferrer"
+                onClick={() => setOpen(false)}
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                {item.label} <Icon.ExternalArrow />
+              </a>
+            ) : (
+              <button key={item.id} className={`nav-link ${isOn(item.id) ? "active" : ""}`}
+                onClick={() => { go(item.id); setOpen(false); }}>
+                {item.label}
+              </button>
+            )
           ))}
-          <a className="btn btn-terracotta" style={{ marginTop: 24, alignSelf: "flex-start" }}
+          <button className="btn btn-ghost" style={{ marginTop: 16, alignSelf: "flex-start" }}
+            onClick={() => { setOpen(false); goVolunteer(); }}>
+            Volunteer
+          </button>
+          <a className="btn btn-terracotta" style={{ marginTop: 8, alignSelf: "flex-start" }}
             href="https://eventbrite.com" target="_blank" rel="noreferrer"
-            onClick={(e) => { e.preventDefault(); window.showToast("Opens Eventbrite in a new tab"); setOpen(false); }}>
+            onClick={(e) => { e.preventDefault(); window.showToast("Eventbrite link coming soon"); setOpen(false); }}>
             RSVP on Eventbrite <Icon.ExternalArrow />
           </a>
         </div>
@@ -742,10 +770,8 @@ function Footer({ go }) {
           <h4>Pages</h4>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14 }}>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("home")}>Longest Table</button></li>
-            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("about")}>About</button></li>
-            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("state")}>State of Connection</button></li>
-            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("plan")}>Community Plan</button></li>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("faq")}>FAQ</button></li>
+            <li><a href="https://pleasantonconnects.org" target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>Pleasanton Connects <Icon.ExternalArrow /></a></li>
           </ul>
         </div>
         <div>
@@ -763,9 +789,7 @@ function Footer({ go }) {
           <h4>Connect</h4>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14 }}>
             <li><a href="#" onClick={(e) => { e.preventDefault(); go("contact"); }}>hello@pleasantonconnects.org</a></li>
-            <li><a href="#" onClick={(e) => e.preventDefault()}>Instagram</a></li>
-            <li><a href="#" onClick={(e) => e.preventDefault()}>Nextdoor</a></li>
-            <li><a href="#" onClick={(e) => e.preventDefault()}>Newsletter</a></li>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("signup")}>Newsletter</button></li>
           </ul>
         </div>
       </div>
@@ -821,7 +845,7 @@ function Hero({ go }) {
       <div className="container hero-inner">
         <div className="hero-date" style={{ marginBottom: 28 }}>
           <span className="dot"></span>
-          <span>Saturday, June 6, 2026 · 5:30 pm · Downtown Pleasanton</span>
+          <span>Saturday, June 6, 2026 · 6:30 pm · Downtown Pleasanton</span>
         </div>
         <h1 className="serif">
           1,000 neighbors.<br/>
@@ -884,32 +908,24 @@ function WhatWhy() {
             )}
           </div>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-          <div className="card-warm" style={{ padding: 24, gridColumn: "span 2" }}>
-            <div className="eyebrow" style={{ marginBottom: 6 }}>The details</div>
-            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "14px 16px", marginTop: 16, alignItems: "start" }}>
-              <Icon.Calendar />
-              <div>
-                <div style={{ fontWeight: 500 }}>Saturday, June 6, 2026</div>
-                <div style={{ color: "var(--muted)", fontSize: 14 }}>Rain date: Sunday, June 7</div>
-              </div>
-              <Icon.Clock />
-              <div>
-                <div style={{ fontWeight: 500 }}>5:30 pm — 9:00 pm</div>
-                <div style={{ color: "var(--muted)", fontSize: 14 }}>Doors open at 5:00 for table seating</div>
-              </div>
-              <Icon.MapPin />
-              <div>
-                <div style={{ fontWeight: 500 }}>Main Street, between Neal and St. Mary</div>
-                <div style={{ color: "var(--muted)", fontSize: 14 }}>Downtown Pleasanton, CA</div>
-              </div>
+        <div className="card-warm" style={{ padding: 28 }}>
+          <div className="eyebrow" style={{ marginBottom: 6 }}>The details</div>
+          <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "16px 18px", marginTop: 18, alignItems: "start" }}>
+            <Icon.Calendar />
+            <div>
+              <div style={{ fontWeight: 500 }}>Saturday, June 6, 2026</div>
+              <div style={{ color: "var(--muted)", fontSize: 14 }}>Rain date: Sunday, June 7</div>
             </div>
-          </div>
-          <div className="photo placeholder" style={{ aspectRatio: "1", gridColumn: "span 1" }}>
-            photo: hosts setting up the table at golden hour
-          </div>
-          <div className="photo placeholder" style={{ aspectRatio: "1", gridColumn: "span 1" }}>
-            photo: kids running between chairs
+            <Icon.Clock />
+            <div>
+              <div style={{ fontWeight: 500 }}>6:30 pm — 8:00 pm</div>
+              <div style={{ color: "var(--muted)", fontSize: 14 }}>Doors open at 6:00 for table seating</div>
+            </div>
+            <Icon.MapPin />
+            <div>
+              <div style={{ fontWeight: 500 }}>Main Street, between Neal and St. Mary</div>
+              <div style={{ color: "var(--muted)", fontSize: 14 }}>Downtown Pleasanton, CA</div>
+            </div>
           </div>
         </div>
       </div>
@@ -946,7 +962,7 @@ function FiveWays({ go }) {
       <div className="container">
         <div style={{ maxWidth: 720, marginBottom: 56 }}>
           <div className="eyebrow">Get involved</div>
-          <h2 style={{ marginTop: 16 }}>Five ways to join in.</h2>
+          <h2 style={{ marginTop: 16 }}>Five ways to contribute.</h2>
           <p style={{ fontSize: 18, color: "var(--ink-soft)", marginTop: 16 }}>
             Whatever your bandwidth, there is a place for you at the table — and at least one before it.
           </p>
@@ -1024,11 +1040,26 @@ function SponsorCTA({ go }) {
   );
 }
 
+function Why() {
+  return (
+    <section id="why" style={{ background: "var(--paper)" }}>
+      <div className="container-narrow">
+        <div className="eyebrow">Why</div>
+        <h2 style={{ marginTop: 14, marginBottom: 24 }}>A town remembers itself over a shared meal.</h2>
+        <div style={{ background: "var(--cream)", border: "1px dashed var(--rule)", borderRadius: 14, padding: "32px 28px", fontFamily: "var(--mono)", fontSize: 13, color: "var(--brown)" }}>
+          [Why section copy coming soon — adapted from the original About page.]
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Home({ go }) {
   return (
     <div className="page-fade">
       <Hero go={go} />
       <WhatWhy />
+      <Why />
       <FiveWays go={go} />
       <Sponsors go={go} />
       <SponsorCTA go={go} />
@@ -1138,17 +1169,17 @@ function HostPage({ go }) {
 }
 
 const VOL_ROLES = [
-  { id: "setup", title: "Setup crew", desc: "Tables, chairs, linens, lights. The transformation crew.", time: "1:00 — 5:00 pm" },
-  { id: "greet", title: "Greeters", desc: "Welcome arrivals, point them to their section, hand out a small program.", time: "5:00 — 6:30 pm" },
-  { id: "stewards", title: "Table stewards", desc: "Keep your assigned section flowing — water, conversation prompts, dish handoff.", time: "5:30 — 9:00 pm" },
-  { id: "cleanup", title: "Cleanup crew", desc: "Take it all back down so Main Street is ready for Sunday morning.", time: "9:00 — 11:00 pm" },
-  { id: "photo", title: "Photo & social", desc: "Capture the night. Share it as it happens. We'll provide a shot list.", time: "5:00 — 9:30 pm" },
-  { id: "access", title: "Accessibility hosts", desc: "Help neighbors with mobility, sensory, or other access needs find their seat and feel at home.", time: "5:00 — 9:00 pm" },
+  { id: "setup", title: "Setup crew", desc: "Tables, chairs, linens, lights. The transformation crew.", time: "3:00 — 6:30 pm" },
+  { id: "greet", title: "Greeters", desc: "Welcome arrivals, point them to their section, hand out a small program.", time: "6:00 — 7:00 pm" },
+  { id: "stewards", title: "Table stewards", desc: "Keep your assigned section flowing — water, conversation prompts, dish handoff.", time: "6:30 — 8:00 pm" },
+  { id: "cleanup", title: "Cleanup crew", desc: "Take it all back down so Main Street is ready for Sunday morning.", time: "8:00 — 10:00 pm" },
+  { id: "photo", title: "Photo & social", desc: "Capture the night. Share it as it happens. We'll provide a shot list.", time: "6:00 — 8:30 pm" },
+  { id: "access", title: "Accessibility hosts", desc: "Help neighbors with mobility, sensory, or other access needs find their seat and feel at home.", time: "6:00 — 8:00 pm" },
 ];
 const AVAIL = [
-  { id: "am", label: "Setup AM (afternoon)" },
-  { id: "pm", label: "Event PM (5:30 — 9:00)" },
-  { id: "ev", label: "Cleanup evening (9:00 — 11:00)" },
+  { id: "am", label: "Setup (3:00 — 6:30)" },
+  { id: "pm", label: "Event (6:30 — 8:00)" },
+  { id: "ev", label: "Cleanup (8:00 — 10:00)" },
 ];
 
 function VolunteerPage({ go }) {
@@ -1389,9 +1420,9 @@ function DishPage({ go }) {
 
 /* ─── Share page ─── */
 const SHARE_BLOCKS = [
-  { channel: "Instagram caption", body: `One long table. 1,000 neighbors. One Saturday evening on Main Street.\n\nThe Longest Table is back — June 6, 5:30pm. RSVP free, bring a dish, sit next to someone you don't know yet. That's it. That's the whole event.\n\n🔗 link in bio\n#PleasantonConnects #LongestTable` },
+  { channel: "Instagram caption", body: `One long table. 1,000 neighbors. One Saturday evening on Main Street.\n\nThe Longest Table is back — June 6, 6:30pm. RSVP free, bring a dish, sit next to someone you don't know yet. That's it. That's the whole event.\n\n🔗 link in bio\n#PleasantonConnects #LongestTable` },
   { channel: "Facebook post", body: `Hey neighbors — on Saturday, June 6 we are setting one continuous table down Main Street and inviting all of Pleasanton to dinner. No tickets, no fundraiser. Just neighbors eating together. Bring a dish, bring a friend, bring yourself. RSVP at pleasantonconnects.org.` },
-  { channel: "Nextdoor", body: `For my fellow Pleasanton neighbors: The Longest Table dinner is back on June 6 from 5:30 to 9pm on Main Street. We are aiming for 1,000 of us at one long table. It's free. Hosts are claiming sections of 8–12 — would love to see our block represented. Details and signup at pleasantonconnects.org.` },
+  { channel: "Nextdoor", body: `For my fellow Pleasanton neighbors: The Longest Table dinner is back on June 6 from 6:30 to 8pm on Main Street. We are aiming for 1,000 of us at one long table. It's free. Hosts are claiming sections of 8–12 — would love to see our block represented. Details and signup at pleasantonconnects.org.` },
   { channel: "Text to a neighbor", body: `Hey — there's a community dinner happening June 6 down Main Street. Free, just bring a dish. I think we should go. Want to grab seats together? pleasantonconnects.org` },
 ];
 
@@ -1450,7 +1481,7 @@ function SharePage({ go }) {
               <div style={{ aspectRatio: "1", backgroundImage: "url(assets/longest-table-hero.png)", backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 40%, rgba(31,42,34,0.85))", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: 20, color: "var(--paper)" }}>
                   <div className="serif" style={{ fontSize: 28, lineHeight: 1.05 }}>The Longest Table</div>
-                  <div style={{ fontSize: 13, marginTop: 4, opacity: 0.85 }}>June 6 · 5:30pm · Main Street</div>
+                  <div style={{ fontSize: 13, marginTop: 4, opacity: 0.85 }}>June 6 · 6:30pm · Main Street</div>
                 </div>
               </div>
               <div style={{ padding: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -1466,7 +1497,7 @@ function SharePage({ go }) {
                   <div style={{ fontFamily: "var(--sans)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase" }}>Pleasanton Connects</div>
                   <div>
                     <div className="serif" style={{ fontSize: 32, lineHeight: 0.95 }}>1,000 neighbors. One long table.</div>
-                    <div style={{ fontSize: 13, marginTop: 8, opacity: 0.85 }}>June 6 · 5:30pm · Main Street</div>
+                    <div style={{ fontSize: 13, marginTop: 8, opacity: 0.85 }}>June 6 · 6:30pm · Main Street</div>
                   </div>
                 </div>
               </div>
@@ -1488,7 +1519,7 @@ function SharePage({ go }) {
             The shorter and more personal, the better. Edit a line, attach a graphic, send it out.
           </p>
           <CopyBlock channel="Personal invite (email or text)"
-            body={`Hi [name] —\n\nI'm hosting a table at the Longest Table on June 6 — a community dinner with 1,000 neighbors on Main Street, downtown Pleasanton. 5:30 to 9pm.\n\nIt's free, it's outside, kids and dogs welcome. I'd love for you to sit at my section. Would you come?\n\nMore info and the RSVP link: pleasantonconnects.org`} />
+            body={`Hi [name] —\n\nI'm hosting a table at the Longest Table on June 6 — a community dinner with 1,000 neighbors on Main Street, downtown Pleasanton. 6:30 to 8pm.\n\nIt's free, it's outside, kids and dogs welcome. I'd love for you to sit at my section. Would you come?\n\nMore info and the RSVP link: pleasantonconnects.org`} />
         </div>
       </section>
       <section style={{ background: "var(--cream)", padding: "72px 0" }}>
@@ -1535,267 +1566,7 @@ function SharePage({ go }) {
   );
 }
 
-/* ─── About, State, Plan, Signup, Contact ─── */
-const MEMBERS = [
-  { name: "Asha Patel", role: "Co-founder", neigh: "Vintage Hills", initials: "AP", bio: "Asha grew up in Pleasanton and came back after a decade in Oakland to raise her kids near her parents. She started Pleasanton Connects after realizing she didn't know any of her neighbors' names." },
-  { name: "Marcus Whitfield", role: "Co-founder", neigh: "Downtown", initials: "MW", bio: "Marcus runs a small architecture practice on Main Street. He's the one who suggested 'what if we just put one really long table down the street.'" },
-  { name: "Linh Tran", role: "Network steward", neigh: "Mohr Park", initials: "LT", bio: "Linh coordinates between block captains and city contacts. Former PTA president, current believer in showing up." },
-  { name: "Robert Kim", role: "Block captain", neigh: "Birdland", initials: "RK", bio: "Robert has lived on the same Birdland street for 27 years and knows every household. The original neighborhood node." },
-  { name: "Diana Reyes", role: "Block captain", neigh: "Val Vista", initials: "DR", bio: "Runs a small bakery from her home kitchen. Diana believes any problem can be solved with the right loaf of bread on the table." },
-  { name: "Tom Erickson", role: "Logistics lead", neigh: "Castlewood", initials: "TE", bio: "Retired event producer. Tom is the reason we have a permit, a tent contingency, and a real Plan B." },
-  { name: "Priya Shah", role: "Communications", neigh: "Stoneridge", initials: "PS", bio: "Priya writes everything you read on this site, in the newsletter, and on the postcards in your mailbox." },
-  { name: "Jamal Ortiz", role: "Volunteer lead", neigh: "Downtown", initials: "JO", bio: "Coaches youth basketball at the Y. Jamal can rally fifty people for a Saturday morning in about three text messages." },
-  { name: "Hannah Cho", role: "Youth program", neigh: "Ruby Hill", initials: "HC", bio: "High school senior. Hannah leads our student volunteer corps and is the reason there are kids on the planning committee at all." },
-  { name: "Sam Goldberg", role: "Faith liaison", neigh: "Bridle Creek", initials: "SG", bio: "Bridges the dozen-plus faith communities that have lent kitchens, parking lots, and people to this network." },
-  { name: "Nora Albright", role: "Senior outreach", neigh: "Pleasanton Heights", initials: "NA", bio: "Nora makes sure neighbors who don't use Instagram still hear about every event. Phone tree royalty." },
-  { name: "David Nguyen", role: "Tech & data", neigh: "Mission Park", initials: "DN", bio: "Keeps the website running and the signups flowing into the right inboxes. Software engineer by day." },
-  { name: "Alicia Brennan", role: "Block captain", neigh: "Foothill", initials: "AB", bio: "Alicia turned a single block party into a quarterly tradition. Then she started knocking on doors three streets over." },
-  { name: "Kenji Sato", role: "Photography", neigh: "Downtown", initials: "KS", bio: "Documents the network. The aerial photo on the home page is his." },
-  { name: "Yara Haddad", role: "Translation", neigh: "Stoneridge", initials: "YH", bio: "Translates outreach materials into Spanish, Mandarin, and Arabic. Believes every neighbor should hear about this in the language their family speaks at home." },
-  { name: "Frank Delaney", role: "Block captain", neigh: "Vintage Hills", initials: "FD", bio: "Frank has lived on his block for forty years and is on a first-name basis with every household. He's why his block has 100% participation." },
-  { name: "Maya Johnson", role: "Accessibility lead", neigh: "Mohr Park", initials: "MJ", bio: "Maya makes sure every event has a path, a quiet zone, and a contact for neighbors with access needs." },
-  { name: "Eli Park", role: "Youth program", neigh: "Birdland", initials: "EP", bio: "Junior at Amador Valley. Eli runs the student-led blocks of the planning committee with Hannah." },
-  { name: "Carla Mendoza", role: "Block captain", neigh: "Mohr Park", initials: "CM", bio: "Carla introduced fifteen new families to each other in her first year as block captain. Pure connection energy." },
-  { name: "Bilal Saeed", role: "Faith liaison", neigh: "Pleasanton Meadows", initials: "BS", bio: "Coordinates with the Islamic Center and the Sikh Gurdwara on programming and outreach." },
-  { name: "Maddie Lin", role: "Communications", neigh: "Ruby Hill", initials: "ML", bio: "Designer. Maddie made our brand, the postcards, and the t-shirts the volunteer crew wears." },
-  { name: "Carlos Rivera", role: "Logistics", neigh: "Val Vista", initials: "CR", bio: "Carlos owns the local hardware store and has lent us tents, tables, and his pickup truck more times than we can count." },
-  { name: "Beatrice Owens", role: "Senior outreach", neigh: "Castlewood", initials: "BO", bio: "Bea has the spreadsheet of every senior in our network and calls each of them before every event." },
-  { name: "Ravi Mehta", role: "Network steward", neigh: "Stoneridge", initials: "RM", bio: "Ravi runs our weekly check-in for block captains. The convener of conveners." },
-  { name: "Tess O'Brien", role: "Block captain", neigh: "Heritage Valley", initials: "TO", bio: "Tess started a tool library in her garage, then a meal train, then a block of friends. Connection compounds." },
-  { name: "Dev Sharma", role: "Tech & data", neigh: "Downtown", initials: "DS", bio: "Backend, dashboards, the day-of seating tool. Dev keeps the systems humming." },
-  { name: "Olu Adebayo", role: "Block captain", neigh: "Pleasanton Heights", initials: "OA", bio: "Olu runs a quarterly block soup night that tripled in size in two years." },
-  { name: "Min-Jae Lee", role: "Photography", neigh: "Bridle Creek", initials: "ML", bio: "Documents portraits of neighbors at events. We'll have her work all over the dinner." },
-  { name: "Reagan Foster", role: "Volunteer crew", neigh: "Foothill", initials: "RF", bio: "Setup lead. The first to arrive, the last to leave, every single time." },
-  { name: "Sunita Iyer", role: "Faith liaison", neigh: "Stoneridge", initials: "SI", bio: "Coordinates with the Hindu Temple, the Synagogue, and the Quaker meetinghouse on space and people." },
-];
-
-function AboutPage({ go }) {
-  const [open, setOpen] = React.useState(null);
-  return (
-    <div className="page-fade">
-      <PageHeader eyebrow="About" title="A network of neighbors learning each other's names."
-        sub="Pleasanton Connects is a small nonprofit and a wider network of block captains, faith liaisons, and ordinary neighbors building a more connected Pleasanton." go={go} />
-      <section style={{ background: "var(--paper)", paddingTop: 72, paddingBottom: 72 }}>
-        <div className="container" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: 80, alignItems: "start" }}>
-          <div className="photo placeholder" style={{ aspectRatio: "4/5" }}>video: 90 seconds of the network at work</div>
-          <div>
-            <div className="eyebrow">Why we exist</div>
-            <h2 style={{ marginTop: 14, marginBottom: 24 }}>Pleasanton has good bones. We are the connective tissue.</h2>
-            <p style={{ fontSize: 18, color: "var(--ink-soft)" }}>
-              Pleasanton has parks, schools, libraries, and good intentions. What it doesn't always have is the small, steady work of neighbors knowing neighbors. That work is what we do.
-            </p>
-            <p style={{ fontSize: 17, color: "var(--ink-soft)" }}>
-              We started in 2023 with a single block party, fifteen households, and one observation: people who knew each other's names took better care of each other through everything that came after. We have been building out from there ever since.
-            </p>
-            <p style={{ fontSize: 17, color: "var(--ink-soft)" }}>
-              Today we are a 501(c)(3) supported by neighbor donations and a few civic partners. We run block captains, monthly newsletters, the State of Connection survey, and once a year — the Longest Table.
-            </p>
-          </div>
-        </div>
-      </section>
-      <section style={{ background: "var(--cream)" }}>
-        <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24, marginBottom: 64 }}>
-            {[
-              { title: "Goals", body: "Increase the number of neighbors who know each other by name within a half-mile radius. Reduce social isolation across age groups, with a focus on seniors and new families." },
-              { title: "Purpose", body: "Make connection the default, not the exception. Every program we run is judged by one question: did neighbors leave knowing more of each other?" },
-              { title: "Structure", body: "A small staff and board, a wider network of 30+ active volunteers, block captains across 15 neighborhoods, and partnerships with faith communities, schools, and the city." },
-            ].map((b) => (
-              <div key={b.title} className="card">
-                <div className="eyebrow">{b.title}</div>
-                <p style={{ marginTop: 12, marginBottom: 0, fontSize: 16, color: "var(--ink-soft)" }}>{b.body}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 28, flexWrap: "wrap", gap: 12 }}>
-            <div>
-              <div className="eyebrow">The network</div>
-              <h2 style={{ marginTop: 12 }}>{MEMBERS.length} neighbors making this happen.</h2>
-            </div>
-            <p style={{ color: "var(--muted)", fontSize: 14, maxWidth: "32ch", margin: 0 }}>Click anyone for a short bio. We don't list direct contact info — reach out via the contact page.</p>
-          </div>
-          <div className="member-grid">
-            {MEMBERS.map((m, i) => (
-              <button key={i} className="member-card" onClick={() => setOpen(m)}>
-                <div className="avatar">{m.initials}</div>
-                <div>
-                  <div className="name">{m.name}</div>
-                  <div className="meta">{m.role} · {m.neigh}</div>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-      <Modal open={!!open} onClose={() => setOpen(null)}>
-        {open && (
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 20 }}>
-              <div className="avatar" style={{ width: 72, height: 72, fontSize: 28, borderRadius: 14, background: "linear-gradient(135deg, var(--cream-warm), var(--rule))", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--serif)", color: "var(--brown)" }}>{open.initials}</div>
-              <div>
-                <h3 className="serif" style={{ fontSize: 28 }}>{open.name}</h3>
-                <div style={{ color: "var(--muted)", fontSize: 14 }}>{open.role} · {open.neigh}</div>
-              </div>
-            </div>
-            <p style={{ fontSize: 16, color: "var(--ink-soft)", margin: 0 }}>{open.bio}</p>
-          </div>
-        )}
-      </Modal>
-    </div>
-  );
-}
-
-function StatePage({ go }) {
-  return (
-    <div className="page-fade">
-      <PageHeader eyebrow="State of Connection" title="What we heard from 1,200 Pleasanton neighbors."
-        sub="The 2026 State of Connection report. A snapshot of how connected we feel, where the gaps are, and what we're doing about it." go={go} />
-      <section style={{ background: "var(--paper)", paddingTop: 56, paddingBottom: 56 }}>
-        <div className="container-narrow" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
-          <div style={{ fontSize: 13, color: "var(--muted)" }}>Published April 2026 · 28-page report · Survey n=1,217</div>
-          <button className="btn btn-cream" onClick={() => window.showToast("Downloading state-of-connection-2026.pdf")}>
-            <Icon.Download /> Download PDF
-          </button>
-        </div>
-      </section>
-      <article style={{ background: "var(--paper)", paddingBottom: 96 }}>
-        <div className="container-narrow" style={{ fontSize: 18, color: "var(--ink-soft)", lineHeight: 1.7 }}>
-          <h2 style={{ color: "var(--ink)", marginTop: 32, marginBottom: 16 }}>What we heard</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Across kitchen-table conversations, online surveys, and pop-up booths at the farmers' market, we heard from over a thousand neighbors about how connected they feel to Pleasanton today. The findings sort into three honest categories: what is working, what is fraying, and what we have not yet built.</p>
-          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. The most common words people used when describing what they wished for: name, hello, neighbor, table.</p>
-          <div className="pull-quote">
-            "I have lived here eleven years and I cannot name three people on my block. That feels wrong, and I don't know how to fix it on my own."
-            <div style={{ fontFamily: "var(--sans)", fontStyle: "normal", fontSize: 14, color: "var(--muted)", marginTop: 12, letterSpacing: "0.06em", textTransform: "uppercase" }}>— Survey respondent, Birdland</div>
-          </div>
-          <h2 style={{ color: "var(--ink)", marginTop: 56, marginBottom: 16 }}>Where Pleasanton is connected</h2>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore. Faith communities, schools, and youth sports leagues remain the strongest connective infrastructure in town. 68% of respondents named at least one of these three as a place where they regularly see the same neighbors and know their names.</p>
-          <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Block-level connection is unevenly strong: a third of respondents say they know most of their immediate neighbors well, while another third say they know none.</p>
-          <div className="stats" style={{ margin: "48px 0", padding: "32px 0", borderTop: "1px solid var(--rule)", borderBottom: "1px solid var(--rule)" }}>
-            <div className="stat"><div className="num">68%</div><div className="lbl">say faith, school, or sports is where they know neighbors</div></div>
-            <div className="stat"><div className="num">31%</div><div className="lbl">know most of their immediate neighbors well</div></div>
-            <div className="stat"><div className="num">29%</div><div className="lbl">know none of their immediate neighbors</div></div>
-          </div>
-          <h2 style={{ color: "var(--ink)", marginTop: 32, marginBottom: 16 }}>Where the gaps are</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Two groups stood out as least connected in our data: seniors who have outlived their immediate social network, and new arrivals in their first 18 months of living here. Both groups expressed strong desire for connection and weak knowledge of how to access existing channels.</p>
-          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The block, as a unit of connection, has thinned considerably since the early 2000s. Block parties are down 60%, and informal gatherings (a wave from the porch, a chat at the mailbox) are reported less than half as often as a decade ago.</p>
-          <div className="pull-quote">
-            "We moved here in February. By Halloween we still hadn't met a single neighbor on our street, and our daughter was the only kid trick-or-treating."
-          </div>
-          <h2 style={{ color: "var(--ink)", marginTop: 56, marginBottom: 16 }}>What we're doing about it</h2>
-          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. The Longest Table is one answer, but it is far from the only one. Our community plan, published alongside this report, lays out a five-year horizon of programs and the metrics we will measure ourselves against.</p>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit. We are scaling block captains from 15 to 40 neighborhoods. We are launching a new-arrival welcome program. We are doubling the number of intergenerational programs at the Senior Center.</p>
-          <div style={{ background: "var(--cream)", borderRadius: 14, padding: 32, margin: "48px 0", display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap", justifyContent: "space-between" }}>
-            <div>
-              <strong style={{ display: "block", marginBottom: 6, color: "var(--ink)" }}>Read the full plan</strong>
-              <div style={{ fontSize: 15, color: "var(--ink-soft)" }}>The Community Plan picks up where this report leaves off.</div>
-            </div>
-            <button className="btn btn-primary" onClick={() => go("plan")}>Community Plan →</button>
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", marginTop: 32 }}>
-            <button className="btn btn-cream" onClick={() => window.showToast("Downloading state-of-connection-2026.pdf")}>
-              <Icon.Download /> Download the full PDF
-            </button>
-          </div>
-        </div>
-      </article>
-    </div>
-  );
-}
-
-const PLAN_INITIATIVES = [
-  { id: "blocks", title: "Block Captains 40", body: "Scale from 15 to 40 active neighborhoods over three years." },
-  { id: "newcomer", title: "Newcomer Welcome", body: "A welcome packet, a porch visit, and a six-month check-in for every household new to Pleasanton." },
-  { id: "intergen", title: "Intergenerational programming", body: "Pair seniors with families through monthly meals, story circles, and skill swaps." },
-  { id: "table", title: "The Longest Table, annual", body: "Make the dinner a permanent, growing fixture of June." },
-  { id: "soc", title: "State of Connection, annual", body: "Publish the survey every year and use it to direct programming." },
-  { id: "youth", title: "Youth-led blocks", body: "Fund and support student-led connection programs in the high schools." },
-];
-
-function PlanPage({ go }) {
-  const [data, setData] = React.useState({ resonates: "", missing: "", interests: [], name: "", email: "" });
-  const [submitted, setSubmitted] = React.useState(false);
-  const toggle = (id) => setData((d) => ({ ...d, interests: d.interests.includes(id) ? d.interests.filter((x) => x !== id) : [...d.interests, id] }));
-  const submit = (e) => { e.preventDefault(); setSubmitted(true); window.scrollTo({ top: document.getElementById("feedback")?.offsetTop || 0, behavior: "smooth" }); };
-
-  return (
-    <div className="page-fade">
-      <PageHeader eyebrow="Community Plan" title="What we're building over the next five years."
-        sub="Six initiatives, one north star: every neighbor in Pleasanton knows the name of someone within a five-minute walk." go={go} />
-      <section style={{ background: "var(--paper)", padding: "72px 0" }}>
-        <div className="container-narrow" style={{ fontSize: 18, color: "var(--ink-soft)", lineHeight: 1.7 }}>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. The plan you're reading is the result of two years of conversations with neighbors, partner organizations, and the city. It is intentionally short. It is intentionally measurable. We will report on it every year alongside the State of Connection.</p>
-          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. We picked six initiatives. None of them is novel. All of them are hard. Together they describe a Pleasanton that takes care of itself one block, one table, one welcome packet at a time.</p>
-        </div>
-      </section>
-      <section style={{ background: "var(--cream)", padding: "0 0 72px" }}>
-        <div className="container">
-          <div className="eyebrow" style={{ marginBottom: 16, paddingTop: 72 }}>The six initiatives</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20 }}>
-            {PLAN_INITIATIVES.map((p, i) => (
-              <div key={p.id} className="card" style={{ display: "flex", gap: 20 }}>
-                <div className="serif" style={{ fontSize: 56, color: "var(--terracotta)", lineHeight: 1, minWidth: 60 }}>{String(i + 1).padStart(2, "0")}</div>
-                <div>
-                  <h3 className="serif" style={{ fontSize: 24, marginBottom: 8 }}>{p.title}</h3>
-                  <p style={{ fontSize: 15, color: "var(--ink-soft)", margin: 0 }}>{p.body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section id="feedback" style={{ background: "var(--paper)", padding: "72px 0" }}>
-        <div className="container-narrow">
-          {!submitted ? (
-            <form onSubmit={submit}>
-              <div className="eyebrow" style={{ marginBottom: 12 }}>Your turn</div>
-              <h2 style={{ marginBottom: 16, fontSize: 40 }}>Tell us what you think.</h2>
-              <p style={{ color: "var(--ink-soft)", marginBottom: 32 }}>The plan is a draft. Your read shapes the final.</p>
-              <div className="form-grid">
-                <div className="field">
-                  <label>What resonates?</label>
-                  <textarea value={data.resonates} onChange={(e) => setData({ ...data, resonates: e.target.value })} placeholder="The newcomer welcome especially..." />
-                </div>
-                <div className="field">
-                  <label>What's missing?</label>
-                  <textarea value={data.missing} onChange={(e) => setData({ ...data, missing: e.target.value })} placeholder="I didn't see anything about..." />
-                </div>
-                <div className="field">
-                  <label>Want to be involved in any of these?</label>
-                  <div className="chips" style={{ marginTop: 6 }}>
-                    {PLAN_INITIATIVES.map((p) => (
-                      <button key={p.id} type="button" className={`chip ${data.interests.includes(p.id) ? "is-on" : ""}`} onClick={() => toggle(p.id)}>
-                        {data.interests.includes(p.id) && <Icon.Check size={14} />} {p.title}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
-                  <div className="field">
-                    <label>Name <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
-                    <input type="text" value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} />
-                  </div>
-                  <div className="field">
-                    <label>Email <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional, but encouraged)</span></label>
-                    <input type="email" value={data.email} onChange={(e) => setData({ ...data, email: e.target.value })} placeholder="If you want a follow-up" />
-                  </div>
-                </div>
-                <div><button type="submit" className="btn btn-primary">Send feedback</button></div>
-              </div>
-            </form>
-          ) : (
-            <div className="ty-card">
-              <div className="check-circle"><Icon.Check size={28} /></div>
-              <h2 className="serif" style={{ fontSize: 40, marginBottom: 12 }}>Got it. Thank you.</h2>
-              <p style={{ color: "var(--ink-soft)", maxWidth: "44ch", margin: "0 auto 24px" }}>We read every response. If you left an email, you'll hear from us when the next draft of the plan goes out.</p>
-              <button className="btn btn-ghost" onClick={() => go("home")}>Back to home</button>
-            </div>
-          )}
-        </div>
-      </section>
-    </div>
-  );
-}
-
+/* ─── Signup, Contact ─── */
 function SignupPage({ go }) {
   const [data, setData] = React.useState({ name: "", email: "", newsletter: true, volunteer: false, keep: true });
   const [submitted, setSubmitted] = React.useState(false);
@@ -1923,14 +1694,8 @@ function ContactPage({ go }) {
               <strong style={{ color: "var(--ink)", display: "block" }}>Email</strong>
               hello@pleasantonconnects.org
             </p>
-            <p style={{ marginTop: 16, fontSize: 16, color: "var(--ink-soft)" }}>
-              <strong style={{ color: "var(--ink)", display: "block" }}>Mail</strong>
-              Pleasanton Connects<br/>
-              123 Main Street, Suite B<br/>
-              Pleasanton, CA 94566
-            </p>
             <p style={{ marginTop: 16, fontSize: 14, color: "var(--muted)" }}>
-              We don't list a phone — text us via the contact form and we'll reply by email or call back if you ask.
+              A real human reads every message. Replies usually within a couple of days.
             </p>
           </div>
           <form onSubmit={submit} noValidate>
@@ -2050,11 +1815,23 @@ function App() {
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
+  React.useEffect(() => {
+    if (route === "home" && window.__scrollAfterRoute) {
+      const id = window.__scrollAfterRoute;
+      window.__scrollAfterRoute = null;
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 80);
+    }
+  }, [route]);
+
   const go = (id) => {
     if (window.location.hash.replace(/^#\/?/, "") !== id) {
       window.location.hash = "#" + id;
     }
-    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    if (!window.__scrollAfterRoute) {
+      window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    }
   };
 
   let page;
@@ -2063,9 +1840,6 @@ function App() {
     case "volunteer": page = <VolunteerPage go={go} />; break;
     case "dish": page = <DishPage go={go} />; break;
     case "share": page = <SharePage go={go} />; break;
-    case "about": page = <AboutPage go={go} />; break;
-    case "state": page = <StatePage go={go} />; break;
-    case "plan": page = <PlanPage go={go} />; break;
     case "faq": page = <FaqPage go={go} />; break;
     case "sponsor": page = <SponsorPage go={go} />; break;
     case "signup": page = <SignupPage go={go} />; break;
