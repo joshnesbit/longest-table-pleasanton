@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pleasanton Connects · The Longest Table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --forest: #2f5d3a;
+  --forest-deep: #1f4429;
+  --forest-soft: #4a7a52;
+  --terracotta: #c76f3d;
+  --terracotta-deep: #a85a2c;
+  --brown: #7a4e2a;
+  --teal: #4a7a7e;
+  --gold: #d9a44a;
+  --cream: #f6efe3;
+  --cream-warm: #f1e8d6;
+  --paper: #fbf6ec;
+  --ink: #1f2a22;
+  --ink-soft: #3a463d;
+  --muted: #6f7a70;
+  --rule: #e3dac5;
+  --rule-soft: #ece4d0;
+  --serif: "Newsreader", "Tiempos Text", Georgia, "Times New Roman", serif;
+  --sans: "DM Sans", "Söhne", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+.serif { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; }
+.mono { font-family: var(--mono); }
+h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.015em; margin: 0; line-height: 1.08; text-wrap: balance; }
+h1 { font-size: clamp(40px, 5vw, 76px); }
+h2 { font-size: clamp(32px, 3.6vw, 52px); line-height: 1.1; }
+h3 { font-size: clamp(22px, 2vw, 30px); line-height: 1.2; }
+h4 { font-size: 20px; }
+p { margin: 0 0 1em; text-wrap: pretty; }
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--forest);
+}
+.container { width: min(1200px, 100% - 48px); margin: 0 auto; }
+.container-narrow { width: min(760px, 100% - 48px); margin: 0 auto; }
+.container-wide { width: min(1380px, 100% - 48px); margin: 0 auto; }
+section { padding: 96px 0; }
+@media (max-width: 720px) { section { padding: 64px 0; } }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
+  white-space: nowrap;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--forest); color: var(--paper); }
+.btn-primary:hover { background: var(--forest-deep); }
+.btn-terracotta { background: var(--terracotta); color: var(--paper); }
+.btn-terracotta:hover { background: var(--terracotta-deep); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+.btn-ghost:hover { background: var(--ink); color: var(--paper); }
+.btn-cream { background: var(--cream); color: var(--ink); border-color: var(--rule); }
+.btn-cream:hover { background: var(--cream-warm); }
+.btn-link {
+  background: none; border: 0; padding: 0;
+  font-family: var(--sans); font-size: 15px; cursor: pointer;
+  color: var(--forest); text-decoration: underline; text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+.btn-link:hover { color: var(--terracotta); }
+.form-grid { display: grid; gap: 22px; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.field .hint { font-size: 13px; color: var(--muted); margin-top: -2px; }
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="tel"],
+.field input[type="number"],
+.field select,
+.field textarea {
+  font-family: var(--sans);
+  font-size: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+  width: 100%;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--forest);
+  box-shadow: 0 0 0 3px rgba(47, 93, 58, 0.15);
+}
+.field textarea { min-height: 100px; resize: vertical; }
+.field-error input, .field-error select, .field-error textarea {
+  border-color: var(--terracotta-deep);
+  box-shadow: 0 0 0 3px rgba(167, 90, 44, 0.12);
+}
+.field .error-msg { font-size: 13px; color: var(--terracotta-deep); }
+.checks { display: flex; flex-direction: column; gap: 10px; }
+.check {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper);
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.check:hover { border-color: var(--forest-soft); }
+.check.is-on { border-color: var(--forest); background: rgba(47, 93, 58, 0.05); }
+.check input { margin-top: 4px; accent-color: var(--forest); }
+.check .check-title { font-weight: 500; }
+.check .check-desc { font-size: 14px; color: var(--muted); margin-top: 2px; }
+.check .check-meta { font-size: 13px; color: var(--forest); margin-top: 4px; font-weight: 500; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 999px;
+  border: 1px solid var(--rule); background: var(--paper);
+  font-size: 14px; cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.chip:hover { border-color: var(--forest-soft); }
+.chip.is-on { background: var(--forest); color: var(--paper); border-color: var(--forest); }
+.radio-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.radio-row label {
+  padding: 10px 18px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  background: var(--paper);
+}
+.radio-row input { display: none; }
+.radio-row label.is-on { background: var(--forest); color: var(--paper); border-color: var(--forest); }
+.card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 28px;
+}
+.card-warm {
+  background: var(--cream);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+}
+.divider { height: 1px; background: var(--rule); border: 0; margin: 0; }
+.kbd-rule {
+  border: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rule) 20%, var(--rule) 80%, transparent);
+  margin: 48px 0;
+}
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(31, 42, 34, 0.55);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200;
+  padding: 24px;
+  animation: fadeIn .2s ease;
+}
+.modal {
+  background: var(--paper);
+  border-radius: 16px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 86vh;
+  overflow: auto;
+  padding: 36px;
+  position: relative;
+  animation: pop .2s ease;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 36px; height: 36px; border-radius: 999px;
+  border: 1px solid var(--rule); background: var(--paper); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.modal-close:hover { background: var(--cream); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(47, 93, 58, 0.4); }
+  100% { box-shadow: 0 0 0 14px rgba(47, 93, 58, 0); }
+}
+.toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+  background: var(--ink); color: var(--paper);
+  padding: 12px 22px; border-radius: 999px;
+  font-size: 14px; z-index: 300;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  animation: pop .2s ease;
+}
+.hero {
+  position: relative;
+  min-height: 92vh;
+  color: var(--paper);
+  display: flex; align-items: flex-end;
+  overflow: hidden;
+  background: var(--ink);
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(1.05);
+}
+.hero-grad {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(31,42,34,0.35) 0%, rgba(31,42,34,0) 35%, rgba(31,42,34,0.6) 78%, rgba(31,42,34,0.92) 100%);
+}
+.hero-inner { position: relative; padding: 0 0 80px; width: 100%; }
+.hero h1 { font-size: clamp(48px, 7vw, 108px); line-height: 0.96; max-width: 16ch; }
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero p.lede { font-size: clamp(17px, 1.4vw, 21px); max-width: 56ch; opacity: 0.92; }
+.hero-date {
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(246, 239, 227, 0.14);
+  border: 1px solid rgba(246, 239, 227, 0.3);
+  backdrop-filter: blur(8px);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.hero-date .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--gold); animation: pulse-ring 2s infinite; }
+.logo-mark {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--serif); font-style: italic; font-size: 22px;
+  color: var(--forest);
+  text-decoration: none;
+  font-weight: 500;
+}
+.logo-mark .small { font-family: var(--sans); font-style: normal; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft); display: block; line-height: 1; }
+.logo-mark .stack { display: flex; flex-direction: column; gap: 3px; }
+.logo-img { height: 44px; width: auto; }
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(251, 246, 236, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s, background .2s;
+}
+.nav.scrolled { border-color: var(--rule); }
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0;
+}
+.nav-links { display: flex; align-items: center; gap: 6px; }
+.nav-link {
+  font-size: 14.5px; font-weight: 500;
+  padding: 8px 14px; border-radius: 999px;
+  background: none; border: 0; cursor: pointer;
+  color: var(--ink); text-decoration: none;
+  transition: background .15s;
+}
+.nav-link:hover { background: var(--cream); }
+.nav-link.active { background: var(--forest); color: var(--paper); }
+.nav-cta { margin-left: 8px; }
+.nav-mobile-btn { display: none; }
+@media (max-width: 880px) {
+  .nav-links { display: none; }
+  .nav-mobile-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ink); color: var(--paper);
+    padding: 10px 16px; border-radius: 999px; border: 0;
+    font-size: 14px; cursor: pointer;
+  }
+}
+.footer {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 80px 0 40px;
+}
+.footer a { color: var(--cream); text-decoration: none; }
+.footer a:hover { color: var(--gold); }
+.footer h4 { color: var(--paper); font-family: var(--sans); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 16px; }
+.footer .btn-link { white-space: nowrap; text-decoration: none; }
+.footer .btn-link:hover { color: var(--gold); text-decoration: none; }
+@media (max-width: 880px) {
+  .footer-grid { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 520px) {
+  .footer-grid { grid-template-columns: 1fr !important; }
+}
+.five-ways {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+}
+@media (max-width: 1100px) { .five-ways { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 720px) { .five-ways { grid-template-columns: 1fr 1fr; } }
+.way-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 28px 24px 24px;
+  display: flex; flex-direction: column;
+  gap: 14px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit; color: inherit;
+  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+.way-card:hover { transform: translateY(-3px); border-color: var(--forest); background: var(--cream); }
+.way-card .way-icon {
+  width: 56px; height: 56px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.way-card h3 { font-family: var(--serif); font-size: 26px; }
+.way-card p { font-size: 14px; color: var(--muted); margin: 0; min-height: 38px; }
+.way-card .way-cta { font-size: 14px; font-weight: 500; color: var(--forest); margin-top: auto; padding-top: 8px; }
+.way-card .way-cta::after { content: " →"; transition: transform .2s; display: inline-block; }
+.way-card:hover .way-cta::after { transform: translateX(4px); }
+.photo {
+  background: var(--rule-soft);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.photo.placeholder {
+  background-image:
+    repeating-linear-gradient(45deg, rgba(122, 78, 42, 0.08) 0 12px, rgba(122, 78, 42, 0.02) 12px 24px);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--brown);
+  font-family: var(--mono);
+  font-size: 12px;
+  text-align: center;
+  padding: 20px;
+  min-height: 200px;
+  border: 1px dashed rgba(122, 78, 42, 0.4);
+}
+.member-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 18px;
+}
+.member-card {
+  display: flex; flex-direction: column; gap: 10px;
+  cursor: pointer;
+  text-align: left;
+  background: none; border: 0; padding: 0; font: inherit; color: inherit;
+}
+.member-card .avatar {
+  aspect-ratio: 1;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--cream-warm), var(--rule));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 32px; color: var(--brown);
+  transition: transform .2s ease;
+}
+.member-card:hover .avatar { transform: scale(1.02); box-shadow: 0 8px 24px rgba(31, 42, 34, 0.12); }
+.member-card .meta { font-size: 13px; color: var(--muted); }
+.member-card .name { font-family: var(--serif); font-size: 19px; }
+.pull-quote {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.2;
+  color: var(--ink);
+  border-left: 3px solid var(--terracotta);
+  padding: 8px 0 8px 24px;
+  margin: 32px 0;
+  font-style: italic;
+}
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px; }
+.stat .num { font-family: var(--serif); font-size: 56px; line-height: 1; color: var(--forest); }
+.stat .lbl { font-size: 14px; color: var(--muted); margin-top: 6px; }
+.share-block {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 20px;
+}
+.share-block .share-head {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.share-block pre {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 15px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px;
+  background: var(--cream); color: var(--forest);
+  font-size: 12px; letter-spacing: 0.04em; font-weight: 500;
+}
+.tag.terra { background: rgba(199, 111, 61, 0.14); color: var(--terracotta-deep); }
+.tag.teal { background: rgba(74, 122, 126, 0.14); color: var(--teal); }
+.page-fade { animation: fadeUp .35s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.ty-card {
+  background: var(--cream);
+  border-radius: 18px;
+  padding: 56px 48px;
+  text-align: center;
+  border: 1px solid var(--rule);
+}
+.ty-card .check-circle {
+  width: 64px; height: 64px; border-radius: 999px;
+  background: var(--forest); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 28px;
+}
+.mobile-menu {
+  position: fixed; inset: 0; background: var(--paper);
+  z-index: 100;
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 8px;
+  animation: fadeIn .2s ease;
+}
+.mobile-menu .mm-close {
+  align-self: flex-end;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  font: inherit;
+  cursor: pointer;
+}
+.mobile-menu .nav-link { font-size: 28px; padding: 16px 0; font-family: var(--serif); }
+.email-preview {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 14px;
+}
+.email-preview .ep-head {
+  background: var(--cream);
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 12px; color: var(--muted);
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.email-preview .ep-body { padding: 24px 28px; }
+.email-preview .ep-body p { margin: 0 0 12px; line-height: 1.55; }
+.tree-mark { width: 36px; height: 36px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+<script type="text/babel">
+/* ─── Icons ─── */
+const Icon = {
+  Ticket: ({ size = 28, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8z" />
+      <path d="M14 6v12" strokeDasharray="2 3" />
+    </svg>
+  ),
+  Table: ({ size = 28, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9h18" />
+      <path d="M5 9v9" />
+      <path d="M19 9v9" />
+      <path d="M3 12h18" />
+      <path d="M9 6v3" />
+      <path d="M15 6v3" />
+    </svg>
+  ),
+  Hands: ({ size = 28, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="7" r="3" />
+      <path d="M5 21c0-4 3-7 7-7s7 3 7 7" />
+      <path d="M2 17l3-2" />
+      <path d="M22 17l-3-2" />
+    </svg>
+  ),
+  Plate: ({ size = 28, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="5" />
+      <path d="M12 7v10" />
+    </svg>
+  ),
+  Megaphone: ({ size = 28, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 11v2a1 1 0 0 0 1 1h3l8 5V5L7 10H4a1 1 0 0 0-1 1z" />
+      <path d="M19 8a4 4 0 0 1 0 8" />
+    </svg>
+  ),
+  Calendar: ({ size = 18, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 9h18M8 3v4M16 3v4" />
+    </svg>
+  ),
+  MapPin: ({ size = 18, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </svg>
+  ),
+  Clock: ({ size = 18, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
+    </svg>
+  ),
+  Arrow: ({ size = 16, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  ),
+  ExternalArrow: ({ size = 14, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 17 17 7M9 7h8v8" />
+    </svg>
+  ),
+  Copy: ({ size = 16, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="8" y="8" width="12" height="12" rx="2" />
+      <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
+    </svg>
+  ),
+  Download: ({ size = 16, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 4v12M6 12l6 6 6-6M4 20h16" />
+    </svg>
+  ),
+  Check: ({ size = 16, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12l5 5L20 7" />
+    </svg>
+  ),
+  Menu: ({ size = 18, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round">
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </svg>
+  ),
+  X: ({ size = 18, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  ),
+  Heart: ({ size = 28, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12c-2.5 4.5-9.5 9-9.5 9z" />
+    </svg>
+  ),
+  Quote: ({ size = 32, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <path d="M9 7c-3 0-5 2-5 5v5h5v-5H7c0-2 1-3 2-3V7zm9 0c-3 0-5 2-5 5v5h5v-5h-2c0-2 1-3 2-3V7z" />
+    </svg>
+  ),
+};
+
+/* ─── Shared chrome: Nav, Footer, Toast, Modal ─── */
+const NAV_ITEMS = [
+  { id: "home", label: "Longest Table" },
+  { id: "about", label: "About" },
+  { id: "state", label: "State of Connection" },
+  { id: "plan", label: "Community Plan" },
+  { id: "signup", label: "Sign Up" },
+  { id: "contact", label: "Contact" },
+];
+
+function Nav({ route, go }) {
+  const [scrolled, setScrolled] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 4);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const onRoute = route.split("/")[0];
+  const homeActive = ["home", "host", "volunteer", "dish", "share"].includes(onRoute);
+  const isOn = (id) => {
+    if (id === "home") return homeActive;
+    return onRoute === id;
+  };
+
+  return (
+    <React.Fragment>
+      <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
+        <div className="container nav-inner">
+          <a className="logo-mark" href="#home" onClick={(e) => { e.preventDefault(); go("home"); }}>
+            <img src="assets/pleasanton-connects-logo.png" alt="Pleasanton Connects" className="logo-img" />
+          </a>
+          <div className="nav-links">
+            {NAV_ITEMS.map((item) => (
+              <button key={item.id} className={`nav-link ${isOn(item.id) ? "active" : ""}`} onClick={() => go(item.id)}>
+                {item.label}
+              </button>
+            ))}
+            <a className="btn btn-terracotta nav-cta" href="https://eventbrite.com" target="_blank" rel="noreferrer"
+              onClick={(e) => { e.preventDefault(); window.showToast("Opens Eventbrite in a new tab"); }}>
+              RSVP <Icon.ExternalArrow />
+            </a>
+          </div>
+          <button className="nav-mobile-btn" onClick={() => setOpen(true)}>
+            <Icon.Menu /> Menu
+          </button>
+        </div>
+      </nav>
+      {open && (
+        <div className="mobile-menu">
+          <button className="mm-close" onClick={() => setOpen(false)}>
+            <Icon.X /> Close
+          </button>
+          {NAV_ITEMS.map((item) => (
+            <button key={item.id} className={`nav-link ${isOn(item.id) ? "active" : ""}`}
+              onClick={() => { go(item.id); setOpen(false); }}>
+              {item.label}
+            </button>
+          ))}
+          <a className="btn btn-terracotta" style={{ marginTop: 24, alignSelf: "flex-start" }}
+            href="https://eventbrite.com" target="_blank" rel="noreferrer"
+            onClick={(e) => { e.preventDefault(); window.showToast("Opens Eventbrite in a new tab"); setOpen(false); }}>
+            RSVP on Eventbrite <Icon.ExternalArrow />
+          </a>
+        </div>
+      )}
+    </React.Fragment>
+  );
+}
+
+function Footer({ go }) {
+  return (
+    <footer className="footer">
+      <div className="container footer-grid" style={{ display: "grid", gridTemplateColumns: "1.6fr 1.1fr 1.2fr 1.1fr", gap: 40 }}>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
+            <img src="assets/pleasanton-connects-logo.png" alt="Pleasanton Connects" style={{ height: 56, filter: "brightness(1.4)" }} />
+          </div>
+          <p style={{ color: "var(--cream)", opacity: 0.8, maxWidth: "32ch", fontSize: 14 }}>
+            We are a network of neighbors building a more connected Pleasanton, one block, table, and conversation at a time.
+          </p>
+        </div>
+        <div>
+          <h4>Pages</h4>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14 }}>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("home")}>Longest Table</button></li>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("about")}>About</button></li>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("state")}>State of Connection</button></li>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("plan")}>Community Plan</button></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Get involved</h4>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14 }}>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("host")}>Host a table</button></li>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("volunteer")}>Volunteer</button></li>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("dish")}>Bring a dish</button></li>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("share")}>Spread the word</button></li>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("signup")}>Sign up for updates</button></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14 }}>
+            <li><a href="#" onClick={(e) => { e.preventDefault(); go("contact"); }}>hello@pleasantonconnects.org</a></li>
+            <li><a href="#" onClick={(e) => e.preventDefault()}>Instagram</a></li>
+            <li><a href="#" onClick={(e) => e.preventDefault()}>Nextdoor</a></li>
+            <li><a href="#" onClick={(e) => e.preventDefault()}>Newsletter</a></li>
+          </ul>
+        </div>
+      </div>
+      <div className="container" style={{ marginTop: 56, paddingTop: 24, borderTop: "1px solid rgba(246, 239, 227, 0.15)", display: "flex", justifyContent: "space-between", fontSize: 13, color: "var(--cream)", opacity: 0.6 }}>
+        <span>© 2026 Pleasanton Connects · A neighbor-led nonprofit</span>
+        <span>Pleasanton, California</span>
+      </div>
+    </footer>
+  );
+}
+
+function ToastHost() {
+  const [msg, setMsg] = React.useState(null);
+  React.useEffect(() => {
+    window.showToast = (m) => {
+      setMsg(m);
+      window.clearTimeout(window.__toastT);
+      window.__toastT = setTimeout(() => setMsg(null), 2400);
+    };
+  }, []);
+  if (!msg) return null;
+  return <div className="toast">{msg}</div>;
+}
+
+function Modal({ open, onClose, children }) {
+  React.useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open, onClose]);
+  if (!open) return null;
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose} aria-label="Close"><Icon.X /></button>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Home page ─── */
+function Hero({ go }) {
+  return (
+    <section className="hero" style={{ padding: 0 }}>
+      <div className="hero-bg" style={{ backgroundImage: "url(assets/longest-table-hero.png)" }}></div>
+      <div className="hero-grad"></div>
+      <div className="container hero-inner">
+        <div className="hero-date" style={{ marginBottom: 28 }}>
+          <span className="dot"></span>
+          <span>Saturday, June 6, 2026 · 5:30 pm · Downtown Pleasanton</span>
+        </div>
+        <h1 className="serif">
+          1,000 neighbors.<br/>
+          One <em>long</em> table.<br/>
+          One evening.
+        </h1>
+        <p className="lede" style={{ marginTop: 24 }}>
+          The Longest Table is an outdoor community dinner along Main Street. We share food we made for each other, sit beside neighbors we have not met, and remember what a town feels like.
+        </p>
+        <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 32 }}>
+          <a className="btn btn-terracotta" href="https://eventbrite.com" target="_blank" rel="noreferrer"
+            onClick={(e) => { e.preventDefault(); window.showToast("Opens Eventbrite in a new tab"); }}>
+            RSVP on Eventbrite <Icon.ExternalArrow />
+          </a>
+          <button className="btn" style={{ background: "rgba(246, 239, 227, 0.14)", color: "var(--paper)", border: "1px solid rgba(246, 239, 227, 0.4)" }}
+            onClick={() => { document.getElementById("five-ways")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}>
+            Other ways to join in
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhatWhy() {
+  const [calOpen, setCalOpen] = React.useState(false);
+  return (
+    <section style={{ background: "var(--paper)" }}>
+      <div className="container" style={{ display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: 80, alignItems: "center" }}>
+        <div>
+          <div className="eyebrow">The Longest Table</div>
+          <h2 style={{ marginTop: 16, marginBottom: 28 }}>A town remembers itself over a shared meal.</h2>
+          <p style={{ fontSize: 18, color: "var(--ink-soft)" }}>
+            On Saturday, June 6, we are setting one continuous table down Main Street and inviting every neighbor in Pleasanton to sit at it. Hosts will claim sections and bring their people. Volunteers will set up, serve, and clean up. Everyone brings something to share.
+          </p>
+          <p style={{ fontSize: 18, color: "var(--ink-soft)" }}>
+            It is not a fundraiser. It is not a festival. It is one long evening of neighbors finding each other.
+          </p>
+          <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap", position: "relative" }}>
+            <button className="btn btn-cream" onClick={() => setCalOpen((v) => !v)}>
+              <Icon.Calendar /> Add to calendar
+            </button>
+            <a className="btn-link" href="https://maps.google.com" target="_blank" rel="noreferrer"
+              onClick={(e) => { e.preventDefault(); window.showToast("Opens Google Maps"); }}
+              style={{ alignSelf: "center" }}>
+              See location on map →
+            </a>
+            {calOpen && (
+              <div style={{ position: "absolute", top: "calc(100% + 8px)", left: 0, background: "var(--paper)", border: "1px solid var(--rule)", borderRadius: 12, padding: 8, boxShadow: "0 12px 36px rgba(0,0,0,0.1)", display: "flex", flexDirection: "column", minWidth: 180, zIndex: 10 }}>
+                {["Google", "Apple", "Outlook"].map((p) => (
+                  <button key={p} className="btn-link"
+                    style={{ textDecoration: "none", padding: "10px 14px", textAlign: "left", borderRadius: 8, color: "var(--ink)" }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "var(--cream)"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                    onClick={() => { setCalOpen(false); window.showToast(`Added to ${p} Calendar`); }}>
+                    {p} Calendar
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div className="card-warm" style={{ padding: 24, gridColumn: "span 2" }}>
+            <div className="eyebrow" style={{ marginBottom: 6 }}>The details</div>
+            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "14px 16px", marginTop: 16, alignItems: "start" }}>
+              <Icon.Calendar />
+              <div>
+                <div style={{ fontWeight: 500 }}>Saturday, June 6, 2026</div>
+                <div style={{ color: "var(--muted)", fontSize: 14 }}>Rain date: Sunday, June 7</div>
+              </div>
+              <Icon.Clock />
+              <div>
+                <div style={{ fontWeight: 500 }}>5:30 pm — 9:00 pm</div>
+                <div style={{ color: "var(--muted)", fontSize: 14 }}>Doors open at 5:00 for table seating</div>
+              </div>
+              <Icon.MapPin />
+              <div>
+                <div style={{ fontWeight: 500 }}>Main Street, between Neal and St. Mary</div>
+                <div style={{ color: "var(--muted)", fontSize: 14 }}>Downtown Pleasanton, CA</div>
+              </div>
+            </div>
+          </div>
+          <div className="photo placeholder" style={{ aspectRatio: "1", gridColumn: "span 1" }}>
+            photo: hosts setting up the table at golden hour
+          </div>
+          <div className="photo placeholder" style={{ aspectRatio: "1", gridColumn: "span 1" }}>
+            photo: kids running between chairs
+          </div>
+        </div>
+      </div>
+      <hr className="kbd-rule" style={{ width: "min(1200px, 100% - 48px)", margin: "96px auto" }} />
+      <div className="container" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32 }}>
+        <div className="stat">
+          <div className="num">1,000</div>
+          <div className="lbl">Seats we are setting along Main Street</div>
+        </div>
+        <div className="stat">
+          <div className="num">~125</div>
+          <div className="lbl">Hosts we need to claim a section and fill it</div>
+        </div>
+        <div className="stat">
+          <div className="num">$0</div>
+          <div className="lbl">Cost to attend. RSVP is free.</div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const WAYS = [
+  { id: "rsvp", icon: "Ticket", color: "var(--terracotta)", bg: "rgba(199, 111, 61, 0.14)", title: "RSVP", desc: "Grab a free ticket on Eventbrite. Takes about a minute.", cta: "RSVP on Eventbrite", href: "https://eventbrite.com", external: true },
+  { id: "host", icon: "Table", color: "var(--forest)", bg: "rgba(47, 93, 58, 0.12)", title: "Host a table", desc: "Claim 8–12 seats and bring your people. The fastest path to 1,000.", cta: "Become a host" },
+  { id: "volunteer", icon: "Hands", color: "var(--teal)", bg: "rgba(74, 122, 126, 0.14)", title: "Volunteer", desc: "Set up, greet, steward a table, document, or help us clean up.", cta: "Sign up to help" },
+  { id: "dish", icon: "Plate", color: "var(--brown)", bg: "rgba(122, 78, 42, 0.14)", title: "Bring a dish", desc: "We are not catering 1,000. We are feeding each other.", cta: "Tell us what you'll bring" },
+  { id: "share", icon: "Megaphone", color: "var(--gold)", bg: "rgba(217, 164, 74, 0.18)", title: "Spread the word", desc: "Copy, posters, and a personal invite template you can send today.", cta: "Open the toolkit" },
+];
+
+function FiveWays({ go }) {
+  return (
+    <section id="five-ways" style={{ background: "var(--cream)" }}>
+      <div className="container">
+        <div style={{ maxWidth: 720, marginBottom: 56 }}>
+          <div className="eyebrow">Get involved</div>
+          <h2 style={{ marginTop: 16 }}>Five ways to join in.</h2>
+          <p style={{ fontSize: 18, color: "var(--ink-soft)", marginTop: 16 }}>
+            Whatever your bandwidth, there is a place for you at the table — and at least one before it.
+          </p>
+        </div>
+        <div className="five-ways">
+          {WAYS.map((w) => {
+            const IconCmp = Icon[w.icon];
+            return (
+              <button key={w.id} className="way-card"
+                onClick={() => {
+                  if (w.external) { window.showToast("Opens Eventbrite in a new tab"); return; }
+                  go(w.id);
+                }}>
+                <div className="way-icon" style={{ background: w.bg, color: w.color }}>
+                  <IconCmp size={28} />
+                </div>
+                <h3>{w.title}</h3>
+                <p>{w.desc}</p>
+                <div className="way-cta">{w.cta}</div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Sponsors() {
+  const partners = ["Pleasanton Library", "Downtown Association", "Tri-Valley YMCA", "Amador Valley HS", "Senior Center", "Faith Council", "Rotary Club", "Local Bakers"];
+  return (
+    <section style={{ background: "var(--paper)", padding: "72px 0" }}>
+      <div className="container">
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 32 }}>
+          <p style={{ margin: 0, fontSize: 16, color: "var(--ink-soft)", maxWidth: "44ch" }}>
+            Made possible with neighbors and partners across Pleasanton.
+          </p>
+          <a className="btn-link" href="#" onClick={(e) => { e.preventDefault(); window.showToast("Partner inquiry form coming soon"); }}>
+            Become a partner →
+          </a>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: "var(--rule)", border: "1px solid var(--rule)", borderRadius: 14, overflow: "hidden" }}>
+          {partners.map((p) => (
+            <div key={p} style={{ background: "var(--paper)", padding: "32px 16px", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--muted)", fontFamily: "var(--serif)", fontSize: 18, fontStyle: "italic", textAlign: "center", minHeight: 100 }}>
+              {p}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Home({ go }) {
+  return (
+    <div className="page-fade">
+      <Hero go={go} />
+      <WhatWhy />
+      <FiveWays go={go} />
+      <Sponsors />
+    </div>
+  );
+}
+
+/* ─── Form pages ─── */
+function PageHeader({ eyebrow, title, sub, go, backTo = "home", backLabel = "Back to home" }) {
+  return (
+    <header style={{ background: "var(--cream)", padding: "120px 0 56px", borderBottom: "1px solid var(--rule)" }}>
+      <div className="container-narrow">
+        <button className="btn-link" onClick={() => go(backTo)} style={{ marginBottom: 24, fontSize: 14 }}>
+          ← {backLabel}
+        </button>
+        <div className="eyebrow">{eyebrow}</div>
+        <h1 className="serif" style={{ fontSize: "clamp(40px, 5vw, 64px)", marginTop: 12, marginBottom: 18 }}>{title}</h1>
+        <p style={{ fontSize: 18, color: "var(--ink-soft)", maxWidth: "60ch" }}>{sub}</p>
+      </div>
+    </header>
+  );
+}
+
+function ThankYou({ title, body, emailPreview, go }) {
+  return (
+    <div className="container-narrow" style={{ padding: "72px 0" }}>
+      <div className="ty-card">
+        <div className="check-circle"><Icon.Check size={28} /></div>
+        <h2 className="serif" style={{ fontSize: 40, marginBottom: 12 }}>{title}</h2>
+        <p style={{ fontSize: 17, color: "var(--ink-soft)", maxWidth: "44ch", margin: "0 auto 28px" }}>{body}</p>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          <button className="btn btn-primary" onClick={() => go("home")}>Back to home</button>
+          <button className="btn btn-ghost" onClick={() => go("share")}>Help spread the word</button>
+        </div>
+      </div>
+      {emailPreview && (
+        <div style={{ marginTop: 48 }}>
+          <div className="eyebrow" style={{ marginBottom: 12 }}>What just landed in your inbox</div>
+          <div className="email-preview">
+            <div className="ep-head">
+              From: hello@pleasantonconnects.org &nbsp; · &nbsp; Subject: {emailPreview.subject}
+            </div>
+            <div className="ep-body">
+              <img src="assets/pleasanton-connects-logo.png" alt="" style={{ height: 56, marginBottom: 18 }} />
+              {emailPreview.body.map((p, i) => <p key={i}>{p}</p>)}
+              <p style={{ marginTop: 24, color: "var(--muted)" }}>— The Pleasanton Connects team</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function HostPage({ go }) {
+  const [data, setData] = React.useState({ name: "", email: "", phone: "", seats: 10, who: "", prior: "", notes: "" });
+  const [errors, setErrors] = React.useState({});
+  const [submitted, setSubmitted] = React.useState(false);
+  const set = (k, v) => setData((d) => ({ ...d, [k]: v }));
+
+  const submit = (e) => {
+    e.preventDefault();
+    const errs = {};
+    if (!data.name.trim()) errs.name = "Tell us your name";
+    if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "We need a valid email to confirm";
+    if (!data.prior) errs.prior = "Quick yes or no helps us match you";
+    if (data.seats < 4 || data.seats > 20) errs.seats = "Somewhere between 4 and 20, please";
+    setErrors(errs);
+    if (Object.keys(errs).length) return;
+    setSubmitted(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  if (submitted) {
+    return (
+      <div className="page-fade">
+        <PageHeader eyebrow="You're in" title="Thank you for hosting." sub="A small act with an outsized impact. We'll be in touch within a week with your table assignment and dish coordination." go={go} />
+        <ThankYou go={go}
+          title={`See you June 6, ${data.name.split(" ")[0]}.`}
+          body={`We saved ${data.seats} seats with your name on them. Start thinking about who you'll bring — your block, your coworkers, your faith community, your soccer parents.`}
+          emailPreview={{
+            subject: "You're hosting a table at the Longest Table",
+            body: [
+              `Hi ${data.name.split(" ")[0]},`,
+              `Thank you for stepping up to host. Hosting a section of the Longest Table is one of the most direct ways to fill a thousand seats with neighbors who actually know each other.`,
+              `Here's what happens next: in the next week, we'll send you your table number and the names of nearby hosts. Two weeks before the event, we'll send a dish-coordination note so we are not all bringing potato salad. The day before, we'll send a final logistics email with parking, setup window, and a phone number for the host lead.`,
+              `If anything changes for you, just reply to this email.`,
+            ],
+          }}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="page-fade">
+      <PageHeader eyebrow="Host a Table" title="Claim a section. Bring your people."
+        sub="Hosting is the fastest way to fill 1,000 seats. Pick a number, gather your circle (8 to 12 is the sweet spot), and we'll handle the rest." go={go} />
+      <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
+        <div style={{ marginBottom: 48, padding: 24, borderRadius: 14, background: "var(--cream)", border: "1px solid var(--rule)", display: "grid", gridTemplateColumns: "auto 1fr", gap: 18, alignItems: "start" }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: "var(--forest)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Icon.Table size={22} />
+          </div>
+          <div>
+            <strong style={{ display: "block", marginBottom: 6 }}>What hosting actually means</strong>
+            <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>
+              You get a section of the table with your name on it, you invite 8 to 12 people you know, and you make sure everyone shows up. We assign your spot, coordinate dishes across hosts, and handle setup. You bring the people.
+            </p>
+          </div>
+        </div>
+        <div className="form-grid">
+          <div className="field">
+            <label>Your name</label>
+            <input type="text" value={data.name} onChange={(e) => set("name", e.target.value)} placeholder="First and last" />
+            {errors.name && <div className="error-msg">{errors.name}</div>}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+            <div className="field">
+              <label>Email</label>
+              <input type="email" value={data.email} onChange={(e) => set("email", e.target.value)} placeholder="you@email.com" />
+              {errors.email && <div className="error-msg">{errors.email}</div>}
+            </div>
+            <div className="field">
+              <label>Phone <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+              <input type="tel" value={data.phone} onChange={(e) => set("phone", e.target.value)} placeholder="(925) 555-0100" />
+            </div>
+          </div>
+          <div className="field">
+            <label>How many seats do you want to host?</label>
+            <div className="hint">8 to 12 works best. Pick what feels comfortable.</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 8 }}>
+              <input type="range" min="4" max="20" value={data.seats} onChange={(e) => set("seats", Number(e.target.value))} style={{ flex: 1, accentColor: "var(--forest)" }} />
+              <div style={{ minWidth: 70, textAlign: "right", fontFamily: "var(--serif)", fontSize: 32, color: "var(--forest)" }}>{data.seats}</div>
+            </div>
+            {errors.seats && <div className="error-msg">{errors.seats}</div>}
+          </div>
+          <div className="field">
+            <label>Tell us about who you're bringing <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+            <div className="hint">Neighbors from your block, coworkers, faith community, your kid's soccer team — whatever feels right.</div>
+            <textarea value={data.who} onChange={(e) => set("who", e.target.value)} placeholder="A mix of folks from my street and a few coworkers..." />
+          </div>
+          <div className="field">
+            <label>Have you hosted a Longest Table or similar event before?</label>
+            <div className="radio-row">
+              {["Yes", "No"].map((opt) => (
+                <label key={opt} className={data.prior === opt ? "is-on" : ""}>
+                  <input type="radio" name="prior" value={opt} checked={data.prior === opt} onChange={() => set("prior", opt)} />
+                  {opt}
+                </label>
+              ))}
+            </div>
+            {errors.prior && <div className="error-msg">{errors.prior}</div>}
+          </div>
+          <div className="field">
+            <label>Anything we should know? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+            <textarea value={data.notes} onChange={(e) => set("notes", e.target.value)} placeholder="Accessibility notes, dietary considerations across your group, etc." />
+          </div>
+          <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
+            <button type="submit" className="btn btn-primary">I'm in. Save my section.</button>
+            <span style={{ fontSize: 13, color: "var(--muted)" }}>You'll get a confirmation email right away.</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+const VOL_ROLES = [
+  { id: "setup", title: "Setup crew", desc: "Tables, chairs, linens, lights. The transformation crew.", time: "1:00 — 5:00 pm" },
+  { id: "greet", title: "Greeters", desc: "Welcome arrivals, point them to their section, hand out a small program.", time: "5:00 — 6:30 pm" },
+  { id: "stewards", title: "Table stewards", desc: "Keep your assigned section flowing — water, conversation prompts, dish handoff.", time: "5:30 — 9:00 pm" },
+  { id: "cleanup", title: "Cleanup crew", desc: "Take it all back down so Main Street is ready for Sunday morning.", time: "9:00 — 11:00 pm" },
+  { id: "photo", title: "Photo & social", desc: "Capture the night. Share it as it happens. We'll provide a shot list.", time: "5:00 — 9:30 pm" },
+  { id: "access", title: "Accessibility hosts", desc: "Help neighbors with mobility, sensory, or other access needs find their seat and feel at home.", time: "5:00 — 9:00 pm" },
+];
+const AVAIL = [
+  { id: "am", label: "Setup AM (afternoon)" },
+  { id: "pm", label: "Event PM (5:30 — 9:00)" },
+  { id: "ev", label: "Cleanup evening (9:00 — 11:00)" },
+];
+
+function VolunteerPage({ go }) {
+  const [data, setData] = React.useState({ name: "", email: "", phone: "", roles: [], avail: [], access: "", notes: "" });
+  const [errors, setErrors] = React.useState({});
+  const [submitted, setSubmitted] = React.useState(false);
+  const set = (k, v) => setData((d) => ({ ...d, [k]: v }));
+  const toggle = (k, v) => setData((d) => ({ ...d, [k]: d[k].includes(v) ? d[k].filter((x) => x !== v) : [...d[k], v] }));
+
+  const submit = (e) => {
+    e.preventDefault();
+    const errs = {};
+    if (!data.name.trim()) errs.name = "Tell us your name";
+    if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "We need a valid email";
+    if (!data.phone.trim()) errs.phone = "We text day-of updates, so we need a number";
+    if (!data.roles.length) errs.roles = "Pick at least one role";
+    if (!data.avail.length) errs.avail = "Pick at least one window";
+    setErrors(errs);
+    if (Object.keys(errs).length) return;
+    setSubmitted(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  if (submitted) {
+    return (
+      <div className="page-fade">
+        <PageHeader eyebrow="You're on the crew" title="Thank you for showing up."
+          sub="The event runs because neighbors like you decided to spend a Saturday helping. We'll get you a role and a time within the week." go={go} />
+        <ThankYou go={go}
+          title={`Welcome to the crew, ${data.name.split(" ")[0]}.`}
+          body={`We logged your interest in ${data.roles.length} role${data.roles.length > 1 ? "s" : ""}. Expect a note from your role lead within the week with details and a t-shirt size question.`}
+          emailPreview={{
+            subject: "You're volunteering at the Longest Table",
+            body: [
+              `Hi ${data.name.split(" ")[0]},`,
+              `Thank you for signing up to volunteer. Without folks like you we don't hit a thousand seats.`,
+              `Here is what happens next. Within a week your role lead will reach out to confirm your spot, ask about t-shirt size, and answer questions. The week of, you'll get a logistics email with arrival time, where to check in, and a contact number.`,
+              `If your availability changes, just reply to this email.`,
+            ],
+          }}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="page-fade">
+      <PageHeader eyebrow="Volunteer" title="It takes a small army to feed a town."
+        sub="Pick a role, pick a window, and we'll match you with a lead. Most volunteers commit two to four hours." go={go} />
+      <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
+        <div className="form-grid">
+          <div className="field">
+            <label>Your name</label>
+            <input type="text" value={data.name} onChange={(e) => set("name", e.target.value)} placeholder="First and last" />
+            {errors.name && <div className="error-msg">{errors.name}</div>}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+            <div className="field">
+              <label>Email</label>
+              <input type="email" value={data.email} onChange={(e) => set("email", e.target.value)} placeholder="you@email.com" />
+              {errors.email && <div className="error-msg">{errors.email}</div>}
+            </div>
+            <div className="field">
+              <label>Phone</label>
+              <input type="tel" value={data.phone} onChange={(e) => set("phone", e.target.value)} placeholder="(925) 555-0100" />
+              {errors.phone && <div className="error-msg">{errors.phone}</div>}
+            </div>
+          </div>
+          <div className="field">
+            <label>Which roles interest you?</label>
+            <div className="hint">Pick as many as you're open to. We'll confirm your role with the lead.</div>
+            <div className="checks" style={{ marginTop: 8 }}>
+              {VOL_ROLES.map((r) => {
+                const on = data.roles.includes(r.id);
+                return (
+                  <label key={r.id} className={`check ${on ? "is-on" : ""}`}>
+                    <input type="checkbox" checked={on} onChange={() => toggle("roles", r.id)} />
+                    <div>
+                      <div className="check-title">{r.title}</div>
+                      <div className="check-desc">{r.desc}</div>
+                      <div className="check-meta">{r.time}</div>
+                    </div>
+                  </label>
+                );
+              })}
+            </div>
+            {errors.roles && <div className="error-msg">{errors.roles}</div>}
+          </div>
+          <div className="field">
+            <label>What's your availability that day?</label>
+            <div className="chips" style={{ marginTop: 6 }}>
+              {AVAIL.map((a) => (
+                <button key={a.id} type="button" className={`chip ${data.avail.includes(a.id) ? "is-on" : ""}`} onClick={() => toggle("avail", a.id)}>
+                  {data.avail.includes(a.id) && <Icon.Check size={14} />} {a.label}
+                </button>
+              ))}
+            </div>
+            {errors.avail && <div className="error-msg">{errors.avail}</div>}
+          </div>
+          <div className="field">
+            <label>Any access needs we should know about? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+            <textarea value={data.access} onChange={(e) => set("access", e.target.value)} placeholder="Anything that helps us match you to the right role and shift." />
+          </div>
+          <div className="field">
+            <label>Anything else? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+            <textarea value={data.notes} onChange={(e) => set("notes", e.target.value)} placeholder="" />
+          </div>
+          <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
+            <button type="submit" className="btn btn-primary">Sign me up</button>
+            <span style={{ fontSize: 13, color: "var(--muted)" }}>Your role lead will reach out within a week.</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+const ALLERGENS = ["Nuts", "Dairy", "Gluten", "Shellfish", "Egg", "Soy", "Sesame"];
+const DIETS = ["Vegetarian", "Vegan", "Neither"];
+
+function DishPage({ go }) {
+  const [data, setData] = React.useState({ name: "", email: "", dish: "", servings: 12, allergens: [], diet: "", needsServingDish: "" });
+  const [errors, setErrors] = React.useState({});
+  const [submitted, setSubmitted] = React.useState(false);
+  const set = (k, v) => setData((d) => ({ ...d, [k]: v }));
+  const toggle = (k, v) => setData((d) => ({ ...d, [k]: d[k].includes(v) ? d[k].filter((x) => x !== v) : [...d[k], v] }));
+
+  const submit = (e) => {
+    e.preventDefault();
+    const errs = {};
+    if (!data.name.trim()) errs.name = "Tell us your name";
+    if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "We need a valid email";
+    if (!data.dish.trim()) errs.dish = "Even a tentative answer helps us coordinate";
+    if (!data.diet) errs.diet = "One quick pick";
+    if (!data.needsServingDish) errs.needsServingDish = "Yes or no";
+    setErrors(errs);
+    if (Object.keys(errs).length) return;
+    setSubmitted(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  if (submitted) {
+    return (
+      <div className="page-fade">
+        <PageHeader eyebrow="Logged" title="Thank you for cooking."
+          sub="Every dish is one less seat going hungry. We'll send dropoff details two days before." go={go} />
+        <ThankYou go={go}
+          title={`We saved a spot for your ${data.dish.toLowerCase()}.`}
+          body={`We'll coordinate so we don't end up with twelve trays of pasta salad. Day-of dropoff details are coming two days before the event.`}
+          emailPreview={{
+            subject: "Dish logged for the Longest Table",
+            body: [
+              `Hi ${data.name.split(" ")[0]},`,
+              `Thanks for offering to bring a ${data.dish.toLowerCase()} (~${data.servings} servings). It's on the list.`,
+              `Two days before, we'll send a dropoff window and a labeled spot for your tray. We'll also send a printable allergen card for the front of your dish. ${data.needsServingDish === "Yes" ? "We'll have a serving dish and utensils ready for you." : ""}`,
+              `If your plans change, just reply.`,
+            ],
+          }}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="page-fade">
+      <PageHeader eyebrow="Bring a Dish" title="A potluck for a thousand."
+        sub="We are not catering this. We are feeding each other. Family recipes welcome. Store-bought welcome too." go={go} />
+      <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
+        <div className="form-grid">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+            <div className="field">
+              <label>Your name</label>
+              <input type="text" value={data.name} onChange={(e) => set("name", e.target.value)} placeholder="First and last" />
+              {errors.name && <div className="error-msg">{errors.name}</div>}
+            </div>
+            <div className="field">
+              <label>Email</label>
+              <input type="email" value={data.email} onChange={(e) => set("email", e.target.value)} placeholder="you@email.com" />
+              {errors.email && <div className="error-msg">{errors.email}</div>}
+            </div>
+          </div>
+          <div className="field">
+            <label>What are you thinking of bringing?</label>
+            <div className="hint">A tentative answer is fine. We'll balance the menu across hosts.</div>
+            <input type="text" value={data.dish} onChange={(e) => set("dish", e.target.value)} placeholder="My grandma's tamales / a big salad / lemon bars" />
+            {errors.dish && <div className="error-msg">{errors.dish}</div>}
+          </div>
+          <div className="field">
+            <label>Roughly how many servings?</label>
+            <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 8 }}>
+              <input type="range" min="4" max="40" value={data.servings} onChange={(e) => set("servings", Number(e.target.value))} style={{ flex: 1, accentColor: "var(--forest)" }} />
+              <div style={{ minWidth: 90, textAlign: "right", fontFamily: "var(--serif)", fontSize: 28, color: "var(--forest)" }}>~{data.servings}</div>
+            </div>
+          </div>
+          <div className="field">
+            <label>Any allergens? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(check all that apply)</span></label>
+            <div className="chips" style={{ marginTop: 6 }}>
+              {ALLERGENS.map((a) => (
+                <button key={a} type="button" className={`chip ${data.allergens.includes(a) ? "is-on" : ""}`} onClick={() => toggle("allergens", a)}>
+                  {data.allergens.includes(a) && <Icon.Check size={14} />} {a}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="field">
+            <label>Vegetarian, vegan, or neither?</label>
+            <div className="radio-row">
+              {DIETS.map((d) => (
+                <label key={d} className={data.diet === d ? "is-on" : ""}>
+                  <input type="radio" name="diet" value={d} checked={data.diet === d} onChange={() => set("diet", d)} />
+                  {d}
+                </label>
+              ))}
+            </div>
+            {errors.diet && <div className="error-msg">{errors.diet}</div>}
+          </div>
+          <div className="field">
+            <label>Need a serving dish or utensils from us?</label>
+            <div className="radio-row">
+              {["Yes", "No"].map((d) => (
+                <label key={d} className={data.needsServingDish === d ? "is-on" : ""}>
+                  <input type="radio" name="serv" value={d} checked={data.needsServingDish === d} onChange={() => set("needsServingDish", d)} />
+                  {d}
+                </label>
+              ))}
+            </div>
+            {errors.needsServingDish && <div className="error-msg">{errors.needsServingDish}</div>}
+          </div>
+          <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
+            <button type="submit" className="btn btn-primary">Add my dish</button>
+            <span style={{ fontSize: 13, color: "var(--muted)" }}>Dropoff details land two days before.</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+/* ─── Share page ─── */
+const SHARE_BLOCKS = [
+  { channel: "Instagram caption", body: `One long table. 1,000 neighbors. One Saturday evening on Main Street.\n\nThe Longest Table is back — June 6, 5:30pm. RSVP free, bring a dish, sit next to someone you don't know yet. That's it. That's the whole event.\n\n🔗 link in bio\n#PleasantonConnects #LongestTable` },
+  { channel: "Facebook post", body: `Hey neighbors — on Saturday, June 6 we are setting one continuous table down Main Street and inviting all of Pleasanton to dinner. No tickets, no fundraiser. Just neighbors eating together. Bring a dish, bring a friend, bring yourself. RSVP at pleasantonconnects.org.` },
+  { channel: "Nextdoor", body: `For my fellow Pleasanton neighbors: The Longest Table dinner is back on June 6 from 5:30 to 9pm on Main Street. We are aiming for 1,000 of us at one long table. It's free. Hosts are claiming sections of 8–12 — would love to see our block represented. Details and signup at pleasantonconnects.org.` },
+  { channel: "Text to a neighbor", body: `Hey — there's a community dinner happening June 6 down Main Street. Free, just bring a dish. I think we should go. Want to grab seats together? pleasantonconnects.org` },
+];
+
+function CopyBlock({ channel, body }) {
+  const [copied, setCopied] = React.useState(false);
+  const onCopy = async () => {
+    try { await navigator.clipboard.writeText(body); } catch (e) {}
+    setCopied(true);
+    window.showToast(`${channel} copied`);
+    setTimeout(() => setCopied(false), 1800);
+  };
+  return (
+    <div className="share-block">
+      <div className="share-head">
+        <span>{channel}</span>
+        <button className="btn-link" onClick={onCopy} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--forest)", textDecoration: "none" }}>
+          {copied ? <React.Fragment><Icon.Check size={14} /> Copied</React.Fragment> : <React.Fragment><Icon.Copy size={14} /> Copy</React.Fragment>}
+        </button>
+      </div>
+      <pre>{body}</pre>
+    </div>
+  );
+}
+
+function SharePage({ go }) {
+  const [shared, setShared] = React.useState({ name: "", channels: [] });
+  const [submitted, setSubmitted] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const toggleC = (c) => setShared((s) => ({ ...s, channels: s.channels.includes(c) ? s.channels.filter((x) => x !== c) : [...s.channels, c] }));
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (!shared.channels.length) { setError("Pick at least one channel so we can thank you properly."); return; }
+    setSubmitted(true);
+    window.showToast("Thanks for sharing");
+  };
+
+  return (
+    <div className="page-fade">
+      <PageHeader eyebrow="Spread the word" title="The fastest way to fill 1,000 seats."
+        sub="Word of mouth fills tables. We wrote the copy so you don't have to. Pick a channel, hit copy, send it to your people." go={go} />
+      <section style={{ background: "var(--paper)", padding: "72px 0" }}>
+        <div className="container-narrow">
+          <div className="eyebrow" style={{ marginBottom: 16 }}>Pre-written copy</div>
+          <div style={{ display: "grid", gap: 16 }}>
+            {SHARE_BLOCKS.map((b) => <CopyBlock key={b.channel} {...b} />)}
+          </div>
+        </div>
+      </section>
+      <section style={{ background: "var(--cream)", paddingTop: 72, paddingBottom: 72 }}>
+        <div className="container-narrow">
+          <div className="eyebrow" style={{ marginBottom: 16 }}>Graphics</div>
+          <h2 style={{ marginBottom: 24, fontSize: 36 }}>Drop-in posters and social graphics.</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+              <div style={{ aspectRatio: "1", backgroundImage: "url(assets/longest-table-hero.png)", backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 40%, rgba(31,42,34,0.85))", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: 20, color: "var(--paper)" }}>
+                  <div className="serif" style={{ fontSize: 28, lineHeight: 1.05 }}>The Longest Table</div>
+                  <div style={{ fontSize: 13, marginTop: 4, opacity: 0.85 }}>June 6 · 5:30pm · Main Street</div>
+                </div>
+              </div>
+              <div style={{ padding: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ fontSize: 13, color: "var(--muted)" }}>Square — 1080×1080</div>
+                <button className="btn-link" onClick={() => window.showToast("Downloading 1080×1080.png")} style={{ display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none" }}>
+                  <Icon.Download size={14} /> Download
+                </button>
+              </div>
+            </div>
+            <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+              <div style={{ aspectRatio: "9/16", backgroundImage: "url(assets/longest-table-hero.png)", backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(31,42,34,0.7), transparent 40%, rgba(31,42,34,0.85))", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 24, color: "var(--paper)" }}>
+                  <div style={{ fontFamily: "var(--sans)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase" }}>Pleasanton Connects</div>
+                  <div>
+                    <div className="serif" style={{ fontSize: 32, lineHeight: 0.95 }}>1,000 neighbors. One long table.</div>
+                    <div style={{ fontSize: 13, marginTop: 8, opacity: 0.85 }}>June 6 · 5:30pm · Main Street</div>
+                  </div>
+                </div>
+              </div>
+              <div style={{ padding: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ fontSize: 13, color: "var(--muted)" }}>Story — 1080×1920</div>
+                <button className="btn-link" onClick={() => window.showToast("Downloading 1080×1920.png")} style={{ display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none" }}>
+                  <Icon.Download size={14} /> Download
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section style={{ background: "var(--paper)", padding: "72px 0" }}>
+        <div className="container-narrow">
+          <div className="eyebrow" style={{ marginBottom: 16 }}>Personal invite template</div>
+          <h2 style={{ marginBottom: 16, fontSize: 36 }}>Send it to your block, your coworkers, your faith community.</h2>
+          <p style={{ color: "var(--ink-soft)", marginBottom: 28 }}>
+            The shorter and more personal, the better. Edit a line, attach a graphic, send it out.
+          </p>
+          <CopyBlock channel="Personal invite (email or text)"
+            body={`Hi [name] —\n\nI'm hosting a table at the Longest Table on June 6 — a community dinner with 1,000 neighbors on Main Street, downtown Pleasanton. 5:30 to 9pm.\n\nIt's free, it's outside, kids and dogs welcome. I'd love for you to sit at my section. Would you come?\n\nMore info and the RSVP link: pleasantonconnects.org`} />
+        </div>
+      </section>
+      <section style={{ background: "var(--cream)", padding: "72px 0" }}>
+        <div className="container-narrow">
+          {!submitted ? (
+            <form onSubmit={submit}>
+              <div className="eyebrow" style={{ marginBottom: 16 }}>Tell us you shared</div>
+              <h2 style={{ marginBottom: 16, fontSize: 36 }}>Did you send it? We'd love to know.</h2>
+              <p style={{ color: "var(--ink-soft)", marginBottom: 28 }}>
+                Helps us thank you, and helps us see which channels actually move the needle.
+              </p>
+              <div className="form-grid">
+                <div className="field">
+                  <label>Your name <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+                  <input type="text" value={shared.name} onChange={(e) => setShared((s) => ({ ...s, name: e.target.value }))} placeholder="First name is fine" />
+                </div>
+                <div className="field">
+                  <label>Where did you share?</label>
+                  <div className="chips" style={{ marginTop: 6 }}>
+                    {["Instagram", "Facebook", "Nextdoor", "Text", "Email", "Slack", "Other"].map((c) => (
+                      <button key={c} type="button" className={`chip ${shared.channels.includes(c) ? "is-on" : ""}`} onClick={() => { toggleC(c); setError(""); }}>
+                        {shared.channels.includes(c) && <Icon.Check size={14} />} {c}
+                      </button>
+                    ))}
+                  </div>
+                  {error && <div className="error-msg">{error}</div>}
+                </div>
+                <div><button type="submit" className="btn btn-primary">Log it</button></div>
+              </div>
+            </form>
+          ) : (
+            <div className="ty-card">
+              <div className="check-circle"><Icon.Check size={28} /></div>
+              <h2 className="serif" style={{ fontSize: 36, marginBottom: 12 }}>Thank you for sharing.</h2>
+              <p style={{ color: "var(--ink-soft)", maxWidth: "44ch", margin: "0 auto 24px" }}>
+                One forwarded message tonight equals two more neighbors at the table on June 6. Truly.
+              </p>
+              <button className="btn btn-ghost" onClick={() => go("home")}>Back to home</button>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ─── About, State, Plan, Signup, Contact ─── */
+const MEMBERS = [
+  { name: "Asha Patel", role: "Co-founder", neigh: "Vintage Hills", initials: "AP", bio: "Asha grew up in Pleasanton and came back after a decade in Oakland to raise her kids near her parents. She started Pleasanton Connects after realizing she didn't know any of her neighbors' names." },
+  { name: "Marcus Whitfield", role: "Co-founder", neigh: "Downtown", initials: "MW", bio: "Marcus runs a small architecture practice on Main Street. He's the one who suggested 'what if we just put one really long table down the street.'" },
+  { name: "Linh Tran", role: "Network steward", neigh: "Mohr Park", initials: "LT", bio: "Linh coordinates between block captains and city contacts. Former PTA president, current believer in showing up." },
+  { name: "Robert Kim", role: "Block captain", neigh: "Birdland", initials: "RK", bio: "Robert has lived on the same Birdland street for 27 years and knows every household. The original neighborhood node." },
+  { name: "Diana Reyes", role: "Block captain", neigh: "Val Vista", initials: "DR", bio: "Runs a small bakery from her home kitchen. Diana believes any problem can be solved with the right loaf of bread on the table." },
+  { name: "Tom Erickson", role: "Logistics lead", neigh: "Castlewood", initials: "TE", bio: "Retired event producer. Tom is the reason we have a permit, a tent contingency, and a real Plan B." },
+  { name: "Priya Shah", role: "Communications", neigh: "Stoneridge", initials: "PS", bio: "Priya writes everything you read on this site, in the newsletter, and on the postcards in your mailbox." },
+  { name: "Jamal Ortiz", role: "Volunteer lead", neigh: "Downtown", initials: "JO", bio: "Coaches youth basketball at the Y. Jamal can rally fifty people for a Saturday morning in about three text messages." },
+  { name: "Hannah Cho", role: "Youth program", neigh: "Ruby Hill", initials: "HC", bio: "High school senior. Hannah leads our student volunteer corps and is the reason there are kids on the planning committee at all." },
+  { name: "Sam Goldberg", role: "Faith liaison", neigh: "Bridle Creek", initials: "SG", bio: "Bridges the dozen-plus faith communities that have lent kitchens, parking lots, and people to this network." },
+  { name: "Nora Albright", role: "Senior outreach", neigh: "Pleasanton Heights", initials: "NA", bio: "Nora makes sure neighbors who don't use Instagram still hear about every event. Phone tree royalty." },
+  { name: "David Nguyen", role: "Tech & data", neigh: "Mission Park", initials: "DN", bio: "Keeps the website running and the signups flowing into the right inboxes. Software engineer by day." },
+  { name: "Alicia Brennan", role: "Block captain", neigh: "Foothill", initials: "AB", bio: "Alicia turned a single block party into a quarterly tradition. Then she started knocking on doors three streets over." },
+  { name: "Kenji Sato", role: "Photography", neigh: "Downtown", initials: "KS", bio: "Documents the network. The aerial photo on the home page is his." },
+  { name: "Yara Haddad", role: "Translation", neigh: "Stoneridge", initials: "YH", bio: "Translates outreach materials into Spanish, Mandarin, and Arabic. Believes every neighbor should hear about this in the language their family speaks at home." },
+  { name: "Frank Delaney", role: "Block captain", neigh: "Vintage Hills", initials: "FD", bio: "Frank has lived on his block for forty years and is on a first-name basis with every household. He's why his block has 100% participation." },
+  { name: "Maya Johnson", role: "Accessibility lead", neigh: "Mohr Park", initials: "MJ", bio: "Maya makes sure every event has a path, a quiet zone, and a contact for neighbors with access needs." },
+  { name: "Eli Park", role: "Youth program", neigh: "Birdland", initials: "EP", bio: "Junior at Amador Valley. Eli runs the student-led blocks of the planning committee with Hannah." },
+  { name: "Carla Mendoza", role: "Block captain", neigh: "Mohr Park", initials: "CM", bio: "Carla introduced fifteen new families to each other in her first year as block captain. Pure connection energy." },
+  { name: "Bilal Saeed", role: "Faith liaison", neigh: "Pleasanton Meadows", initials: "BS", bio: "Coordinates with the Islamic Center and the Sikh Gurdwara on programming and outreach." },
+  { name: "Maddie Lin", role: "Communications", neigh: "Ruby Hill", initials: "ML", bio: "Designer. Maddie made our brand, the postcards, and the t-shirts the volunteer crew wears." },
+  { name: "Carlos Rivera", role: "Logistics", neigh: "Val Vista", initials: "CR", bio: "Carlos owns the local hardware store and has lent us tents, tables, and his pickup truck more times than we can count." },
+  { name: "Beatrice Owens", role: "Senior outreach", neigh: "Castlewood", initials: "BO", bio: "Bea has the spreadsheet of every senior in our network and calls each of them before every event." },
+  { name: "Ravi Mehta", role: "Network steward", neigh: "Stoneridge", initials: "RM", bio: "Ravi runs our weekly check-in for block captains. The convener of conveners." },
+  { name: "Tess O'Brien", role: "Block captain", neigh: "Heritage Valley", initials: "TO", bio: "Tess started a tool library in her garage, then a meal train, then a block of friends. Connection compounds." },
+  { name: "Dev Sharma", role: "Tech & data", neigh: "Downtown", initials: "DS", bio: "Backend, dashboards, the day-of seating tool. Dev keeps the systems humming." },
+  { name: "Olu Adebayo", role: "Block captain", neigh: "Pleasanton Heights", initials: "OA", bio: "Olu runs a quarterly block soup night that tripled in size in two years." },
+  { name: "Min-Jae Lee", role: "Photography", neigh: "Bridle Creek", initials: "ML", bio: "Documents portraits of neighbors at events. We'll have her work all over the dinner." },
+  { name: "Reagan Foster", role: "Volunteer crew", neigh: "Foothill", initials: "RF", bio: "Setup lead. The first to arrive, the last to leave, every single time." },
+  { name: "Sunita Iyer", role: "Faith liaison", neigh: "Stoneridge", initials: "SI", bio: "Coordinates with the Hindu Temple, the Synagogue, and the Quaker meetinghouse on space and people." },
+];
+
+function AboutPage({ go }) {
+  const [open, setOpen] = React.useState(null);
+  return (
+    <div className="page-fade">
+      <PageHeader eyebrow="About" title="A network of neighbors learning each other's names."
+        sub="Pleasanton Connects is a small nonprofit and a wider network of block captains, faith liaisons, and ordinary neighbors building a more connected Pleasanton." go={go} />
+      <section style={{ background: "var(--paper)", paddingTop: 72, paddingBottom: 72 }}>
+        <div className="container" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: 80, alignItems: "start" }}>
+          <div className="photo placeholder" style={{ aspectRatio: "4/5" }}>video: 90 seconds of the network at work</div>
+          <div>
+            <div className="eyebrow">Why we exist</div>
+            <h2 style={{ marginTop: 14, marginBottom: 24 }}>Pleasanton has good bones. We are the connective tissue.</h2>
+            <p style={{ fontSize: 18, color: "var(--ink-soft)" }}>
+              Pleasanton has parks, schools, libraries, and good intentions. What it doesn't always have is the small, steady work of neighbors knowing neighbors. That work is what we do.
+            </p>
+            <p style={{ fontSize: 17, color: "var(--ink-soft)" }}>
+              We started in 2023 with a single block party, fifteen households, and one observation: people who knew each other's names took better care of each other through everything that came after. We have been building out from there ever since.
+            </p>
+            <p style={{ fontSize: 17, color: "var(--ink-soft)" }}>
+              Today we are a 501(c)(3) supported by neighbor donations and a few civic partners. We run block captains, monthly newsletters, the State of Connection survey, and once a year — the Longest Table.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section style={{ background: "var(--cream)" }}>
+        <div className="container">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24, marginBottom: 64 }}>
+            {[
+              { title: "Goals", body: "Increase the number of neighbors who know each other by name within a half-mile radius. Reduce social isolation across age groups, with a focus on seniors and new families." },
+              { title: "Purpose", body: "Make connection the default, not the exception. Every program we run is judged by one question: did neighbors leave knowing more of each other?" },
+              { title: "Structure", body: "A small staff and board, a wider network of 30+ active volunteers, block captains across 15 neighborhoods, and partnerships with faith communities, schools, and the city." },
+            ].map((b) => (
+              <div key={b.title} className="card">
+                <div className="eyebrow">{b.title}</div>
+                <p style={{ marginTop: 12, marginBottom: 0, fontSize: 16, color: "var(--ink-soft)" }}>{b.body}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 28, flexWrap: "wrap", gap: 12 }}>
+            <div>
+              <div className="eyebrow">The network</div>
+              <h2 style={{ marginTop: 12 }}>{MEMBERS.length} neighbors making this happen.</h2>
+            </div>
+            <p style={{ color: "var(--muted)", fontSize: 14, maxWidth: "32ch", margin: 0 }}>Click anyone for a short bio. We don't list direct contact info — reach out via the contact page.</p>
+          </div>
+          <div className="member-grid">
+            {MEMBERS.map((m, i) => (
+              <button key={i} className="member-card" onClick={() => setOpen(m)}>
+                <div className="avatar">{m.initials}</div>
+                <div>
+                  <div className="name">{m.name}</div>
+                  <div className="meta">{m.role} · {m.neigh}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+      <Modal open={!!open} onClose={() => setOpen(null)}>
+        {open && (
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 20 }}>
+              <div className="avatar" style={{ width: 72, height: 72, fontSize: 28, borderRadius: 14, background: "linear-gradient(135deg, var(--cream-warm), var(--rule))", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--serif)", color: "var(--brown)" }}>{open.initials}</div>
+              <div>
+                <h3 className="serif" style={{ fontSize: 28 }}>{open.name}</h3>
+                <div style={{ color: "var(--muted)", fontSize: 14 }}>{open.role} · {open.neigh}</div>
+              </div>
+            </div>
+            <p style={{ fontSize: 16, color: "var(--ink-soft)", margin: 0 }}>{open.bio}</p>
+          </div>
+        )}
+      </Modal>
+    </div>
+  );
+}
+
+function StatePage({ go }) {
+  return (
+    <div className="page-fade">
+      <PageHeader eyebrow="State of Connection" title="What we heard from 1,200 Pleasanton neighbors."
+        sub="The 2026 State of Connection report. A snapshot of how connected we feel, where the gaps are, and what we're doing about it." go={go} />
+      <section style={{ background: "var(--paper)", paddingTop: 56, paddingBottom: 56 }}>
+        <div className="container-narrow" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+          <div style={{ fontSize: 13, color: "var(--muted)" }}>Published April 2026 · 28-page report · Survey n=1,217</div>
+          <button className="btn btn-cream" onClick={() => window.showToast("Downloading state-of-connection-2026.pdf")}>
+            <Icon.Download /> Download PDF
+          </button>
+        </div>
+      </section>
+      <article style={{ background: "var(--paper)", paddingBottom: 96 }}>
+        <div className="container-narrow" style={{ fontSize: 18, color: "var(--ink-soft)", lineHeight: 1.7 }}>
+          <h2 style={{ color: "var(--ink)", marginTop: 32, marginBottom: 16 }}>What we heard</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Across kitchen-table conversations, online surveys, and pop-up booths at the farmers' market, we heard from over a thousand neighbors about how connected they feel to Pleasanton today. The findings sort into three honest categories: what is working, what is fraying, and what we have not yet built.</p>
+          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. The most common words people used when describing what they wished for: name, hello, neighbor, table.</p>
+          <div className="pull-quote">
+            "I have lived here eleven years and I cannot name three people on my block. That feels wrong, and I don't know how to fix it on my own."
+            <div style={{ fontFamily: "var(--sans)", fontStyle: "normal", fontSize: 14, color: "var(--muted)", marginTop: 12, letterSpacing: "0.06em", textTransform: "uppercase" }}>— Survey respondent, Birdland</div>
+          </div>
+          <h2 style={{ color: "var(--ink)", marginTop: 56, marginBottom: 16 }}>Where Pleasanton is connected</h2>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore. Faith communities, schools, and youth sports leagues remain the strongest connective infrastructure in town. 68% of respondents named at least one of these three as a place where they regularly see the same neighbors and know their names.</p>
+          <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Block-level connection is unevenly strong: a third of respondents say they know most of their immediate neighbors well, while another third say they know none.</p>
+          <div className="stats" style={{ margin: "48px 0", padding: "32px 0", borderTop: "1px solid var(--rule)", borderBottom: "1px solid var(--rule)" }}>
+            <div className="stat"><div className="num">68%</div><div className="lbl">say faith, school, or sports is where they know neighbors</div></div>
+            <div className="stat"><div className="num">31%</div><div className="lbl">know most of their immediate neighbors well</div></div>
+            <div className="stat"><div className="num">29%</div><div className="lbl">know none of their immediate neighbors</div></div>
+          </div>
+          <h2 style={{ color: "var(--ink)", marginTop: 32, marginBottom: 16 }}>Where the gaps are</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Two groups stood out as least connected in our data: seniors who have outlived their immediate social network, and new arrivals in their first 18 months of living here. Both groups expressed strong desire for connection and weak knowledge of how to access existing channels.</p>
+          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The block, as a unit of connection, has thinned considerably since the early 2000s. Block parties are down 60%, and informal gatherings (a wave from the porch, a chat at the mailbox) are reported less than half as often as a decade ago.</p>
+          <div className="pull-quote">
+            "We moved here in February. By Halloween we still hadn't met a single neighbor on our street, and our daughter was the only kid trick-or-treating."
+          </div>
+          <h2 style={{ color: "var(--ink)", marginTop: 56, marginBottom: 16 }}>What we're doing about it</h2>
+          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. The Longest Table is one answer, but it is far from the only one. Our community plan, published alongside this report, lays out a five-year horizon of programs and the metrics we will measure ourselves against.</p>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit. We are scaling block captains from 15 to 40 neighborhoods. We are launching a new-arrival welcome program. We are doubling the number of intergenerational programs at the Senior Center.</p>
+          <div style={{ background: "var(--cream)", borderRadius: 14, padding: 32, margin: "48px 0", display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap", justifyContent: "space-between" }}>
+            <div>
+              <strong style={{ display: "block", marginBottom: 6, color: "var(--ink)" }}>Read the full plan</strong>
+              <div style={{ fontSize: 15, color: "var(--ink-soft)" }}>The Community Plan picks up where this report leaves off.</div>
+            </div>
+            <button className="btn btn-primary" onClick={() => go("plan")}>Community Plan →</button>
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 32 }}>
+            <button className="btn btn-cream" onClick={() => window.showToast("Downloading state-of-connection-2026.pdf")}>
+              <Icon.Download /> Download the full PDF
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+  );
+}
+
+const PLAN_INITIATIVES = [
+  { id: "blocks", title: "Block Captains 40", body: "Scale from 15 to 40 active neighborhoods over three years." },
+  { id: "newcomer", title: "Newcomer Welcome", body: "A welcome packet, a porch visit, and a six-month check-in for every household new to Pleasanton." },
+  { id: "intergen", title: "Intergenerational programming", body: "Pair seniors with families through monthly meals, story circles, and skill swaps." },
+  { id: "table", title: "The Longest Table, annual", body: "Make the dinner a permanent, growing fixture of June." },
+  { id: "soc", title: "State of Connection, annual", body: "Publish the survey every year and use it to direct programming." },
+  { id: "youth", title: "Youth-led blocks", body: "Fund and support student-led connection programs in the high schools." },
+];
+
+function PlanPage({ go }) {
+  const [data, setData] = React.useState({ resonates: "", missing: "", interests: [], name: "", email: "" });
+  const [submitted, setSubmitted] = React.useState(false);
+  const toggle = (id) => setData((d) => ({ ...d, interests: d.interests.includes(id) ? d.interests.filter((x) => x !== id) : [...d.interests, id] }));
+  const submit = (e) => { e.preventDefault(); setSubmitted(true); window.scrollTo({ top: document.getElementById("feedback")?.offsetTop || 0, behavior: "smooth" }); };
+
+  return (
+    <div className="page-fade">
+      <PageHeader eyebrow="Community Plan" title="What we're building over the next five years."
+        sub="Six initiatives, one north star: every neighbor in Pleasanton knows the name of someone within a five-minute walk." go={go} />
+      <section style={{ background: "var(--paper)", padding: "72px 0" }}>
+        <div className="container-narrow" style={{ fontSize: 18, color: "var(--ink-soft)", lineHeight: 1.7 }}>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. The plan you're reading is the result of two years of conversations with neighbors, partner organizations, and the city. It is intentionally short. It is intentionally measurable. We will report on it every year alongside the State of Connection.</p>
+          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. We picked six initiatives. None of them is novel. All of them are hard. Together they describe a Pleasanton that takes care of itself one block, one table, one welcome packet at a time.</p>
+        </div>
+      </section>
+      <section style={{ background: "var(--cream)", padding: "0 0 72px" }}>
+        <div className="container">
+          <div className="eyebrow" style={{ marginBottom: 16, paddingTop: 72 }}>The six initiatives</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20 }}>
+            {PLAN_INITIATIVES.map((p, i) => (
+              <div key={p.id} className="card" style={{ display: "flex", gap: 20 }}>
+                <div className="serif" style={{ fontSize: 56, color: "var(--terracotta)", lineHeight: 1, minWidth: 60 }}>{String(i + 1).padStart(2, "0")}</div>
+                <div>
+                  <h3 className="serif" style={{ fontSize: 24, marginBottom: 8 }}>{p.title}</h3>
+                  <p style={{ fontSize: 15, color: "var(--ink-soft)", margin: 0 }}>{p.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section id="feedback" style={{ background: "var(--paper)", padding: "72px 0" }}>
+        <div className="container-narrow">
+          {!submitted ? (
+            <form onSubmit={submit}>
+              <div className="eyebrow" style={{ marginBottom: 12 }}>Your turn</div>
+              <h2 style={{ marginBottom: 16, fontSize: 40 }}>Tell us what you think.</h2>
+              <p style={{ color: "var(--ink-soft)", marginBottom: 32 }}>The plan is a draft. Your read shapes the final.</p>
+              <div className="form-grid">
+                <div className="field">
+                  <label>What resonates?</label>
+                  <textarea value={data.resonates} onChange={(e) => setData({ ...data, resonates: e.target.value })} placeholder="The newcomer welcome especially..." />
+                </div>
+                <div className="field">
+                  <label>What's missing?</label>
+                  <textarea value={data.missing} onChange={(e) => setData({ ...data, missing: e.target.value })} placeholder="I didn't see anything about..." />
+                </div>
+                <div className="field">
+                  <label>Want to be involved in any of these?</label>
+                  <div className="chips" style={{ marginTop: 6 }}>
+                    {PLAN_INITIATIVES.map((p) => (
+                      <button key={p.id} type="button" className={`chip ${data.interests.includes(p.id) ? "is-on" : ""}`} onClick={() => toggle(p.id)}>
+                        {data.interests.includes(p.id) && <Icon.Check size={14} />} {p.title}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+                  <div className="field">
+                    <label>Name <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+                    <input type="text" value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} />
+                  </div>
+                  <div className="field">
+                    <label>Email <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional, but encouraged)</span></label>
+                    <input type="email" value={data.email} onChange={(e) => setData({ ...data, email: e.target.value })} placeholder="If you want a follow-up" />
+                  </div>
+                </div>
+                <div><button type="submit" className="btn btn-primary">Send feedback</button></div>
+              </div>
+            </form>
+          ) : (
+            <div className="ty-card">
+              <div className="check-circle"><Icon.Check size={28} /></div>
+              <h2 className="serif" style={{ fontSize: 40, marginBottom: 12 }}>Got it. Thank you.</h2>
+              <p style={{ color: "var(--ink-soft)", maxWidth: "44ch", margin: "0 auto 24px" }}>We read every response. If you left an email, you'll hear from us when the next draft of the plan goes out.</p>
+              <button className="btn btn-ghost" onClick={() => go("home")}>Back to home</button>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function SignupPage({ go }) {
+  const [data, setData] = React.useState({ name: "", email: "", newsletter: true, volunteer: false, keep: true });
+  const [submitted, setSubmitted] = React.useState(false);
+  const [err, setErr] = React.useState({});
+
+  const submit = (e) => {
+    e.preventDefault();
+    const errs = {};
+    if (!data.name.trim()) errs.name = "Tell us your name";
+    if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "Valid email please";
+    if (!data.newsletter && !data.volunteer && !data.keep) errs.opts = "Pick at least one";
+    setErr(errs);
+    if (Object.keys(errs).length) return;
+    setSubmitted(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  if (submitted) {
+    return (
+      <div className="page-fade">
+        <PageHeader eyebrow="You're on the list" title="Welcome." sub="We'll be in touch when there's something worth your inbox." go={go} />
+        <ThankYou go={go} title={`Hi ${data.name.split(" ")[0]}.`}
+          body="We'll send you a welcome note in the next day, then nothing until there's news. Promise."
+          emailPreview={{
+            subject: "Welcome to Pleasanton Connects",
+            body: [
+              `Hi ${data.name.split(" ")[0]},`,
+              `Thanks for signing up. You're on the list for what you opted into and nothing more.`,
+              `If you're wondering where to start, the Longest Table on June 6 is a great first step. Hosting a table is even better.`,
+            ],
+          }}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="page-fade">
+      <PageHeader eyebrow="Sign Up" title="Stay in the loop." sub="Pick what you want to hear about. We send less than you'd expect." go={go} />
+      <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
+        <div className="form-grid">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+            <div className="field">
+              <label>Your name</label>
+              <input type="text" value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} />
+              {err.name && <div className="error-msg">{err.name}</div>}
+            </div>
+            <div className="field">
+              <label>Email</label>
+              <input type="email" value={data.email} onChange={(e) => setData({ ...data, email: e.target.value })} />
+              {err.email && <div className="error-msg">{err.email}</div>}
+            </div>
+          </div>
+          <div className="field">
+            <label>What do you want to hear about?</label>
+            <div className="checks" style={{ marginTop: 8 }}>
+              {[
+                { k: "newsletter", t: "Monthly newsletter", d: "What the network is up to. About once a month, never more." },
+                { k: "volunteer", t: "General volunteer interest", d: "Volunteer opportunities beyond the Longest Table." },
+                { k: "keep", t: "Keep me posted on Pleasanton Connects", d: "Big-picture announcements only — new programs, the State of Connection, the Plan." },
+              ].map((c) => (
+                <label key={c.k} className={`check ${data[c.k] ? "is-on" : ""}`}>
+                  <input type="checkbox" checked={data[c.k]} onChange={() => setData((d) => ({ ...d, [c.k]: !d[c.k] }))} />
+                  <div>
+                    <div className="check-title">{c.t}</div>
+                    <div className="check-desc">{c.d}</div>
+                  </div>
+                </label>
+              ))}
+            </div>
+            {err.opts && <div className="error-msg">{err.opts}</div>}
+          </div>
+          <div><button type="submit" className="btn btn-primary">Sign me up</button></div>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+function ContactPage({ go }) {
+  const [data, setData] = React.useState({ name: "", email: "", message: "" });
+  const [err, setErr] = React.useState({});
+  const [submitted, setSubmitted] = React.useState(false);
+
+  const submit = (e) => {
+    e.preventDefault();
+    const errs = {};
+    if (!data.name.trim()) errs.name = "Tell us your name";
+    if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "Valid email please";
+    if (!data.message.trim()) errs.message = "Tell us what you want to say";
+    setErr(errs);
+    if (Object.keys(errs).length) return;
+    setSubmitted(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  if (submitted) {
+    return (
+      <div className="page-fade">
+        <PageHeader eyebrow="Message received" title="Thanks for reaching out." sub="A real human will reply within a couple of days." go={go} />
+        <ThankYou go={go} title="We got it."
+          body="Replies come from a Pleasanton Connects team member, not a bot."
+          emailPreview={{
+            subject: "We got your message",
+            body: [
+              `Hi ${data.name.split(" ")[0]},`,
+              `Thanks for reaching out. We read every message. Someone from our team will write back within a couple of days.`,
+              `In the meantime, the Longest Table on June 6 might be the answer to whatever you wrote in.`,
+            ],
+          }}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="page-fade">
+      <PageHeader eyebrow="Contact" title="Say hi."
+        sub="Questions, ideas, kind words, complaints. They all come to the same inbox and a real person reads them." go={go} />
+      <section style={{ padding: "56px 0 96px" }}>
+        <div className="container-narrow" style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 64 }}>
+          <div>
+            <div className="eyebrow">Direct</div>
+            <p style={{ marginTop: 12, fontSize: 16, color: "var(--ink-soft)" }}>
+              <strong style={{ color: "var(--ink)", display: "block" }}>Email</strong>
+              hello@pleasantonconnects.org
+            </p>
+            <p style={{ marginTop: 16, fontSize: 16, color: "var(--ink-soft)" }}>
+              <strong style={{ color: "var(--ink)", display: "block" }}>Mail</strong>
+              Pleasanton Connects<br/>
+              123 Main Street, Suite B<br/>
+              Pleasanton, CA 94566
+            </p>
+            <p style={{ marginTop: 16, fontSize: 14, color: "var(--muted)" }}>
+              We don't list a phone — text us via the contact form and we'll reply by email or call back if you ask.
+            </p>
+          </div>
+          <form onSubmit={submit} noValidate>
+            <div className="form-grid">
+              <div className="field">
+                <label>Your name</label>
+                <input type="text" value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} />
+                {err.name && <div className="error-msg">{err.name}</div>}
+              </div>
+              <div className="field">
+                <label>Email</label>
+                <input type="email" value={data.email} onChange={(e) => setData({ ...data, email: e.target.value })} />
+                {err.email && <div className="error-msg">{err.email}</div>}
+              </div>
+              <div className="field">
+                <label>Message</label>
+                <textarea value={data.message} onChange={(e) => setData({ ...data, message: e.target.value })} style={{ minHeight: 160 }} />
+                {err.message && <div className="error-msg">{err.message}</div>}
+              </div>
+              <div><button type="submit" className="btn btn-primary">Send</button></div>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ─── App ─── */
+function App() {
+  const parseHash = () => (window.location.hash || "#home").replace(/^#\/?/, "") || "home";
+  const [route, setRoute] = React.useState(parseHash());
+
+  React.useEffect(() => {
+    const onHash = () => setRoute(parseHash());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const go = (id) => {
+    if (window.location.hash.replace(/^#\/?/, "") !== id) {
+      window.location.hash = "#" + id;
+    }
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  };
+
+  let page;
+  switch (route) {
+    case "host": page = <HostPage go={go} />; break;
+    case "volunteer": page = <VolunteerPage go={go} />; break;
+    case "dish": page = <DishPage go={go} />; break;
+    case "share": page = <SharePage go={go} />; break;
+    case "about": page = <AboutPage go={go} />; break;
+    case "state": page = <StatePage go={go} />; break;
+    case "plan": page = <PlanPage go={go} />; break;
+    case "signup": page = <SignupPage go={go} />; break;
+    case "contact": page = <ContactPage go={go} />; break;
+    case "home":
+    default: page = <Home go={go} />;
+  }
+
+  return (
+    <React.Fragment>
+      <Nav route={route} go={go} />
+      <main key={route}>{page}</main>
+      <Footer go={go} />
+      <ToastHost />
+    </React.Fragment>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+</body>
+</html>
