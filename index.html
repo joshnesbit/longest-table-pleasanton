@@ -1545,6 +1545,9 @@ function VolunteerPage({ go }) {
 
 
 /* ─── Share — toolkit blocks + small "tell us you shared" form ─── */
+// TODO: update SITE_URL once the final domain is chosen.
+const SITE_URL = "longest-table-pleasanton.vercel.app";
+
 function CopyBlock({ channel, body }) {
   const [copied, setCopied] = React.useState(false);
   const onCopy = async () => {
@@ -1567,10 +1570,10 @@ function CopyBlock({ channel, body }) {
 }
 
 const SHARE_BLOCKS = [
-  { channel: "Instagram caption", body: `One long table. 1,000 neighbors. One Saturday evening on Main Street.\n\nThe Longest Table is back — June 6, 6:30pm. RSVP free, bring a dish, sit next to someone you don't know yet. That's it. That's the whole event.\n\n🔗 link in bio\n#PleasantonConnects #LongestTable` },
-  { channel: "Facebook post", body: `Hey neighbors — on Saturday, June 6 we are setting one continuous table down Main Street and inviting all of Pleasanton to dinner. No tickets, no fundraiser. Just neighbors eating together. Bring a dish, bring a friend, bring yourself. RSVP at pleasantonconnects.org.` },
-  { channel: "Nextdoor", body: `For my fellow Pleasanton neighbors: The Longest Table dinner is back on June 6 from 6:30 to 8pm on Main Street. We are aiming for 1,000 of us at one long table. It's free. Captains are claiming sections of 8–10 — would love to see our block represented. Details and signup at pleasantonconnects.org.` },
-  { channel: "Text to a neighbor", body: `Hey — there's a community dinner happening June 6 down Main Street. Free, just bring a dish. I think we should go. Want to grab seats together? pleasantonconnects.org` },
+  { channel: "Instagram caption", body: `Saturday June 6 · Main Street · 6:30pm.\n\nA bunch of us are putting one long table down Main Street and bringing dinner. 1,000 neighbors invited. Bring something to eat, sit next to someone you haven't met. That's the whole thing.\n\nFree. RSVP at the link in bio.\n\n#LongestTablePleasanton` },
+  { channel: "Facebook post", body: `Hey Pleasanton — on Saturday June 6 a bunch of us are putting one (almost) continuous table down Main Street and inviting the whole town to dinner. Bring something to eat, bring a friend, sit next to someone new. It's free, no fundraiser, no pitch. Just neighbors eating together. RSVP at ${SITE_URL}.` },
+  { channel: "Nextdoor", body: `Neighbors — The Longest Table is happening Saturday June 6, 6:30 to 8pm on Main Street. The plan: 1,000 of us at one long table, eating dinner together. It's free. Table captains are claiming 8 to 10-seat sections — I'd love to see our block represented. Details and RSVP at ${SITE_URL}.` },
+  { channel: "Text to a neighbor", body: `Hey — free neighborhood dinner June 6 on Main Street. 1,000 of us at one long table. Bring something to eat. Wanna grab seats together? ${SITE_URL}` },
 ];
 
 function SharePage({ go }) {
@@ -1602,11 +1605,14 @@ function SharePage({ go }) {
 
   return (
     <div className="page-fade">
-      <PageHeader eyebrow="Spread the word" title="The fastest way to fill 1,000 seats."
-        sub="Word of mouth fills tables. We wrote the copy so you don't have to. Pick a channel, hit copy, send it to your people." go={go} />
+      <PageHeader eyebrow="Spread the word" title="Tell your people."
+        sub="Word of mouth is how this thing fills up. Pick a channel, copy a message, send it to a friend or two. That's it." go={go} />
       <section style={{ background: "var(--paper)", padding: "72px 0" }}>
         <div className="container-narrow">
-          <div className="eyebrow" style={{ marginBottom: 16 }}>Pre-written copy</div>
+          <div className="eyebrow" style={{ marginBottom: 16 }}>Ready-to-send messages</div>
+          <p style={{ color: "var(--ink-soft)", marginBottom: 24 }}>
+            Tweak them, make them yours, or copy as is. Whatever feels right.
+          </p>
           <div style={{ display: "grid", gap: 16 }}>
             {SHARE_BLOCKS.map((b) => <CopyBlock key={b.channel} {...b} />)}
           </div>
@@ -1615,7 +1621,7 @@ function SharePage({ go }) {
       <section style={{ background: "var(--cream)", paddingTop: 72, paddingBottom: 72 }}>
         <div className="container-narrow">
           <div className="eyebrow" style={{ marginBottom: 16 }}>Graphics</div>
-          <h2 style={{ marginBottom: 24, fontSize: 36 }}>Drop-in posters and social graphics.</h2>
+          <h2 style={{ marginBottom: 24, fontSize: 36 }}>Posters and social graphics.</h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div className="card" style={{ padding: 0, overflow: "hidden" }}>
               <div style={{ aspectRatio: "1", backgroundImage: "url(assets/longest-table-hero.png)", backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
@@ -1653,23 +1659,23 @@ function SharePage({ go }) {
       </section>
       <section style={{ background: "var(--paper)", padding: "72px 0" }}>
         <div className="container-narrow">
-          <div className="eyebrow" style={{ marginBottom: 16 }}>Personal invite template</div>
-          <h2 style={{ marginBottom: 16, fontSize: 36 }}>Send it to your block, your coworkers, your faith community.</h2>
+          <div className="eyebrow" style={{ marginBottom: 16 }}>Personal invite</div>
+          <h2 style={{ marginBottom: 16, fontSize: 36 }}>Or send a personal note.</h2>
           <p style={{ color: "var(--ink-soft)", marginBottom: 28 }}>
-            The shorter and more personal, the better. Edit a line, attach a graphic, send it out.
+            A short message from a friend goes a lot further than a public post. Tweak this and send it to your block, your coworkers, your folks.
           </p>
           <CopyBlock channel="Personal invite (email or text)"
-            body={`Hi [name] —\n\nI'm hosting a table at the Longest Table on June 6 — a community dinner with 1,000 neighbors on Main Street, downtown Pleasanton. 6:30 to 8pm.\n\nIt's free, it's outside, kids and dogs welcome. I'd love for you to sit at my section. Would you come?\n\nMore info and the RSVP link: pleasantonconnects.org`} />
+            body={`Hi [name] —\n\nI'm captaining a table at the Longest Table on June 6 — a community dinner along Main Street, downtown Pleasanton. 6:30 to 8pm.\n\nIt's free, outside, kids welcome. Bring something to eat and sit with my crew. Would you come?\n\nMore info and the RSVP link: ${SITE_URL}`} />
         </div>
       </section>
       <section style={{ background: "var(--cream)", padding: "72px 0" }}>
         <div className="container-narrow">
           {!submitted ? (
             <form onSubmit={submit}>
-              <div className="eyebrow" style={{ marginBottom: 16 }}>Tell us you shared</div>
-              <h2 style={{ marginBottom: 16, fontSize: 36 }}>Did you send it? We'd love to know.</h2>
+              <div className="eyebrow" style={{ marginBottom: 16 }}>Let us know</div>
+              <h2 style={{ marginBottom: 16, fontSize: 36 }}>Did you share it?</h2>
               <p style={{ color: "var(--ink-soft)", marginBottom: 28 }}>
-                Helps us thank you, and helps us see which channels actually move the needle.
+                We'd love to thank you. And it helps us learn what's working as we keep building.
               </p>
               <Honeypot value={honeypot} onChange={setHoneypot} />
               <div className="form-grid">
@@ -1701,7 +1707,7 @@ function SharePage({ go }) {
               <div className="check-circle"><Icon.Check size={28} /></div>
               <h2 className="serif" style={{ fontSize: 36, marginBottom: 12 }}>Thank you for sharing.</h2>
               <p style={{ color: "var(--ink-soft)", maxWidth: "44ch", margin: "0 auto 24px" }}>
-                One forwarded message tonight equals two more neighbors at the table on June 6. Truly.
+                Every forward fills a seat. We appreciate it.
               </p>
               <button className="btn btn-ghost" onClick={() => go("home")}>Back to home</button>
             </div>
