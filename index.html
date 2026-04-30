@@ -1544,6 +1544,35 @@ function VolunteerPage({ go }) {
 }
 
 
+/* ─── Share — toolkit blocks + small "tell us you shared" form ─── */
+function CopyBlock({ channel, body }) {
+  const [copied, setCopied] = React.useState(false);
+  const onCopy = async () => {
+    try { await navigator.clipboard.writeText(body); } catch {}
+    setCopied(true);
+    window.showToast(`${channel} copied`);
+    setTimeout(() => setCopied(false), 1800);
+  };
+  return (
+    <div className="share-block">
+      <div className="share-head">
+        <span>{channel}</span>
+        <button className="btn-link" onClick={onCopy} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--forest)", textDecoration: "none" }}>
+          {copied ? <React.Fragment><Icon.Check size={14} /> Copied</React.Fragment> : <React.Fragment><Icon.Copy size={14} /> Copy</React.Fragment>}
+        </button>
+      </div>
+      <pre>{body}</pre>
+    </div>
+  );
+}
+
+const SHARE_BLOCKS = [
+  { channel: "Instagram caption", body: `One long table. 1,000 neighbors. One Saturday evening on Main Street.\n\nThe Longest Table is back — June 6, 6:30pm. RSVP free, bring a dish, sit next to someone you don't know yet. That's it. That's the whole event.\n\n🔗 link in bio\n#PleasantonConnects #LongestTable` },
+  { channel: "Facebook post", body: `Hey neighbors — on Saturday, June 6 we are setting one continuous table down Main Street and inviting all of Pleasanton to dinner. No tickets, no fundraiser. Just neighbors eating together. Bring a dish, bring a friend, bring yourself. RSVP at pleasantonconnects.org.` },
+  { channel: "Nextdoor", body: `For my fellow Pleasanton neighbors: The Longest Table dinner is back on June 6 from 6:30 to 8pm on Main Street. We are aiming for 1,000 of us at one long table. It's free. Captains are claiming sections of 8–10 — would love to see our block represented. Details and signup at pleasantonconnects.org.` },
+  { channel: "Text to a neighbor", body: `Hey — there's a community dinner happening June 6 down Main Street. Free, just bring a dish. I think we should go. Want to grab seats together? pleasantonconnects.org` },
+];
+
 function SharePage({ go }) {
   const [shared, setShared] = React.useState({ name: "", channels: [] });
   const [submitting, setSubmitting] = React.useState(false);
