@@ -880,7 +880,7 @@ const EVENT = {
   endUTC:   "20260607T030000Z",
   startISO: "2026-06-07T01:30:00Z",
   endISO:   "2026-06-07T03:00:00Z",
-  location: "Main Street, between Neal and St. Mary, Downtown Pleasanton, CA",
+  location: "Main Street, Pleasanton, CA",
   details:  "An outdoor community dinner along Main Street. Bring something to eat and meet the people who live near you. Free RSVP required. https://longest-table-pleasanton.vercel.app",
 };
 
@@ -936,7 +936,7 @@ function downloadICS() {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Main Street between Neal St and St Mary St, Pleasanton, CA")}`;
+const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Main Street, Pleasanton, CA")}`;
 
 function WhatWhy() {
   const [calOpen, setCalOpen] = React.useState(false);
@@ -1004,7 +1004,7 @@ function WhatWhy() {
             </div>
             <Icon.MapPin />
             <div>
-              <div style={{ fontWeight: 500 }}>Main Street, between Neal and St. Mary</div>
+              <div style={{ fontWeight: 500 }}>Main Street</div>
               <div style={{ color: "var(--muted)", fontSize: 14 }}>Downtown Pleasanton, CA</div>
             </div>
           </div>
