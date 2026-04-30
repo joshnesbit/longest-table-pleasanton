@@ -11,10 +11,12 @@ const TABLES = {
   contact: 'contacts',
   volunteer: 'volunteers',
   host: 'hosts',
-  dish: 'dishes',
+  donation: 'donations',
   share: 'shares',
   signup: 'signups',
 };
+
+const DONATION_CATEGORIES = new Set(['monetary', 'tshirts', 'kids_zone', 'food', 'other']);
 
 const isEmail = (s) => typeof s === 'string' && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.trim());
 const trim = (s) => (typeof s === 'string' ? s.trim() : '');
@@ -47,9 +49,8 @@ function validate(form, d) {
     case 'volunteer':
       if (!trim(d.name)) return 'Name required';
       if (!isEmail(d.email)) return 'Valid email required';
-      if (!trim(d.phone)) return 'Phone required';
+      if (!trim(d.phone)) return 'Mobile number required';
       if (!Array.isArray(d.roles) || !d.roles.length) return 'Pick at least one role';
-      if (!Array.isArray(d.avail) || !d.avail.length) return 'Pick at least one window';
       return null;
     case 'host':
       if (!trim(d.name)) return 'Name required';
@@ -57,12 +58,11 @@ function validate(form, d) {
       if (!d.prior) return 'Prior experience answer required';
       if (!Number.isFinite(d.seats) || d.seats < 4 || d.seats > 20) return 'Seats must be 4–20';
       return null;
-    case 'dish':
+    case 'donation':
       if (!trim(d.name)) return 'Name required';
       if (!isEmail(d.email)) return 'Valid email required';
-      if (!trim(d.dish)) return 'Dish required';
-      if (!d.diet) return 'Diet required';
-      if (!d.needsServingDish) return 'Serving dish answer required';
+      if (!d.category || !DONATION_CATEGORIES.has(d.category)) return 'Pick what you would like to contribute';
+      if (d.category === 'food' && !trim(d.foodDetails)) return 'Tell us a bit about the dish';
       return null;
     case 'share':
       if (!Array.isArray(d.channels) || !d.channels.length) return 'Pick at least one channel';
@@ -83,8 +83,7 @@ function row(form, d) {
     case 'volunteer':
       return {
         name: trim(d.name), email: trim(d.email), phone: trim(d.phone),
-        roles: d.roles, availability: d.avail,
-        access_needs: nz(d.access), notes: nz(d.notes),
+        roles: d.roles,
       };
     case 'host':
       return {
@@ -92,11 +91,13 @@ function row(form, d) {
         seats: d.seats, who: nz(d.who),
         prior_experience: d.prior, notes: nz(d.notes),
       };
-    case 'dish':
+    case 'donation':
       return {
-        name: trim(d.name), email: trim(d.email), dish: trim(d.dish),
-        servings: Number(d.servings), allergens: d.allergens || [],
-        diet: d.diet, needs_serving_dish: d.needsServingDish === 'Yes',
+        name: trim(d.name), email: trim(d.email),
+        phone: nz(d.phone), organization: nz(d.organization),
+        category: d.category,
+        food_details: nz(d.foodDetails),
+        notes: nz(d.notes),
       };
     case 'share':
       return { name: nz(d.name), channels: d.channels };

@@ -321,11 +321,12 @@ section { padding: 96px 0; }
 }
 .five-ways {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
-@media (max-width: 1100px) { .five-ways { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 720px) { .five-ways { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1180px) { .five-ways { grid-template-columns: repeat(6, 1fr); } }
+@media (max-width: 880px) { .five-ways { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .five-ways { grid-template-columns: 1fr; } }
 .way-card {
   background: var(--paper);
   border: 1px solid var(--rule);
@@ -672,7 +673,7 @@ function Nav({ route, go }) {
   }, []);
 
   const onRoute = route.split("/")[0];
-  const homeActive = ["home", "host", "volunteer", "dish", "share", "sponsor"].includes(onRoute);
+  const homeActive = ["home", "host", "volunteer", "donate", "share", "sponsor"].includes(onRoute);
   const isOn = (id) => {
     if (id === "home") return homeActive;
     return onRoute === id;
@@ -779,9 +780,8 @@ function Footer({ go }) {
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14 }}>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("host")}>Host a table</button></li>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("volunteer")}>Volunteer</button></li>
-            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("dish")}>Bring a dish</button></li>
+            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("donate")}>Bring something / Donate</button></li>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("share")}>Spread the word</button></li>
-            <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("sponsor")}>Sponsor</button></li>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("signup")}>Sign up for updates</button></li>
           </ul>
         </div>
@@ -849,20 +849,22 @@ function Hero({ go }) {
         </div>
         <h1 className="serif">
           1,000 neighbors.<br/>
-          One <em>long</em> table.<br/>
-          One evening.
+          One <em>long</em> table.
         </h1>
-        <p className="lede" style={{ marginTop: 24 }}>
-          The Longest Table is an outdoor community dinner along Main Street. We share food we made for each other, sit beside neighbors we have not met, and remember what a town feels like.
+        <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(20px, 2vw, 28px)", marginTop: 18, maxWidth: "32ch", lineHeight: 1.25 }}>
+          Bring something to eat and meet the people who live near you.
+        </p>
+        <p className="lede" style={{ marginTop: 22 }}>
+          The Longest Table is an outdoor community dinner along Main Street. A time to share a meal together, sit beside neighbors we have not met, and have some fun.
         </p>
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 32 }}>
           <a className="btn btn-terracotta" href="https://eventbrite.com" target="_blank" rel="noreferrer"
-            onClick={(e) => { e.preventDefault(); window.showToast("Opens Eventbrite in a new tab"); }}>
+            onClick={(e) => { e.preventDefault(); window.showToast("Eventbrite link coming soon"); }}>
             RSVP on Eventbrite <Icon.ExternalArrow />
           </a>
           <button className="btn" style={{ background: "rgba(246, 239, 227, 0.14)", color: "var(--paper)", border: "1px solid rgba(246, 239, 227, 0.4)" }}
             onClick={() => { document.getElementById("five-ways")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}>
-            Other ways to join in
+            Other ways to join
           </button>
         </div>
       </div>
@@ -876,13 +878,15 @@ function WhatWhy() {
     <section style={{ background: "var(--paper)" }}>
       <div className="container" style={{ display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: 80, alignItems: "center" }}>
         <div>
-          <div className="eyebrow">The Longest Table</div>
-          <h2 style={{ marginTop: 16, marginBottom: 28 }}>A town remembers itself over a shared meal.</h2>
-          <p style={{ fontSize: 18, color: "var(--ink-soft)" }}>
-            On Saturday, June 6, we are setting one continuous table down Main Street and inviting every neighbor in Pleasanton to sit at it. Hosts will claim sections and bring their people. Volunteers will set up, serve, and clean up. Everyone brings something to share.
+          <div className="eyebrow">About</div>
+          <p style={{ fontSize: 18, color: "var(--ink-soft)", marginTop: 16 }}>
+            Last summer, Pleasanton Connects kicked off a community-wide listening tour to understand how our community builds connections. Let's start this summer by gathering together, meeting our neighbors, making new friends, and celebrating our community.
           </p>
           <p style={{ fontSize: 18, color: "var(--ink-soft)" }}>
-            It is not a fundraiser. It is not a festival. It is one long evening of neighbors finding each other.
+            For our first public event, let's have some fun! On Saturday, June 6, we are setting one (almost) continuous table down Main Street and inviting every neighbor in Pleasanton to sit at it. You'll have the opportunity to make some new friends and find out more about what Pleasanton Connects is planning for next year.
+          </p>
+          <p style={{ fontSize: 18, color: "var(--ink-soft)" }}>
+            Looking forward to seeing you there!
           </p>
           <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap", position: "relative" }}>
             <button className="btn btn-cream" onClick={() => setCalOpen((v) => !v)}>
@@ -936,8 +940,8 @@ function WhatWhy() {
           <div className="lbl">Seats we are setting along Main Street</div>
         </div>
         <div className="stat">
-          <div className="num">~125</div>
-          <div className="lbl">Hosts we need to claim a section and fill it</div>
+          <div className="num">~100</div>
+          <div className="lbl">Table captains we need to claim a section and fill it</div>
         </div>
         <div className="stat">
           <div className="num">$0</div>
@@ -949,33 +953,35 @@ function WhatWhy() {
 }
 
 const WAYS = [
-  { id: "rsvp", icon: "Ticket", color: "var(--terracotta)", bg: "rgba(199, 111, 61, 0.14)", title: "RSVP", desc: "Grab a free ticket on Eventbrite. Takes about a minute.", cta: "RSVP on Eventbrite", href: "https://eventbrite.com", external: true },
-  { id: "host", icon: "Table", color: "var(--forest)", bg: "rgba(47, 93, 58, 0.12)", title: "Host a table", desc: "Claim 8–12 seats and bring your people. The fastest path to 1,000.", cta: "Become a host" },
-  { id: "volunteer", icon: "Hands", color: "var(--teal)", bg: "rgba(74, 122, 126, 0.14)", title: "Volunteer", desc: "Set up, greet, steward a table, document, or help us clean up.", cta: "Sign up to help" },
-  { id: "dish", icon: "Plate", color: "var(--brown)", bg: "rgba(122, 78, 42, 0.14)", title: "Bring a dish", desc: "We are not catering 1,000. We are feeding each other.", cta: "Tell us what you'll bring" },
-  { id: "share", icon: "Megaphone", color: "var(--gold)", bg: "rgba(217, 164, 74, 0.18)", title: "Spread the word", desc: "Copy, posters, and a personal invite template you can send today.", cta: "Open the toolkit" },
+  { id: "host", icon: "Table", color: "var(--forest)", bg: "rgba(47, 93, 58, 0.12)", title: "Host a Table", desc: "Sign up to volunteer as a table captain and RSVP for you and your crew.", cta: "Become a table captain" },
+  { id: "rsvp", icon: "Ticket", color: "var(--terracotta)", bg: "rgba(199, 111, 61, 0.14)", title: "Join Us", desc: "Have a smaller group? Grab a free ticket for 1 or more and get ready to make new friends.", cta: "RSVP on Eventbrite", external: "eventbrite" },
+  { id: "volunteer", icon: "Hands", color: "var(--teal)", bg: "rgba(74, 122, 126, 0.14)", title: "Volunteer", desc: "Organize, set up, greet, or help us clean up.", cta: "Sign up to help" },
+  { id: "donation", icon: "Heart", color: "var(--brown)", bg: "rgba(122, 78, 42, 0.14)", title: "Bring something to share", desc: "A dish, a donation, or something else.", cta: "Tell us what you'll bring", goTo: "donate" },
+  { id: "share", icon: "Megaphone", color: "var(--gold)", bg: "rgba(217, 164, 74, 0.18)", title: "Spread the word", desc: "Copy, posters, and a personal invite template you can send today.", cta: "Invite your neighbors" },
+  { id: "pickup", icon: "Plate", color: "var(--teal)", bg: "rgba(74, 122, 126, 0.14)", title: "Make it easy", desc: "Order dinner from a participating Longest Table restaurant for pickup that evening.", cta: "See the flyer", external: "flyer" },
 ];
 
 function FiveWays({ go }) {
+  const handle = (w) => {
+    if (w.external === "eventbrite") return window.showToast("Eventbrite link coming soon");
+    if (w.external === "flyer") return window.showToast("Flyer link coming soon");
+    go(w.goTo || w.id);
+  };
   return (
     <section id="five-ways" style={{ background: "var(--cream)" }}>
       <div className="container">
         <div style={{ maxWidth: 720, marginBottom: 56 }}>
           <div className="eyebrow">Get involved</div>
-          <h2 style={{ marginTop: 16 }}>Five ways to contribute.</h2>
+          <h2 style={{ marginTop: 16 }}>Six ways to contribute.</h2>
           <p style={{ fontSize: 18, color: "var(--ink-soft)", marginTop: 16 }}>
-            Whatever your bandwidth, there is a place for you at the table — and at least one before it.
+            Whatever your bandwidth, there is a place for you at the table!
           </p>
         </div>
         <div className="five-ways">
           {WAYS.map((w) => {
             const IconCmp = Icon[w.icon];
             return (
-              <button key={w.id} className="way-card"
-                onClick={() => {
-                  if (w.external) { window.showToast("Opens Eventbrite in a new tab"); return; }
-                  go(w.id);
-                }}>
+              <button key={w.id} className="way-card" onClick={() => handle(w)}>
                 <div className="way-icon" style={{ background: w.bg, color: w.color }}>
                   <IconCmp size={28} />
                 </div>
@@ -992,15 +998,15 @@ function FiveWays({ go }) {
 }
 
 function Sponsors({ go }) {
-  const partners = ["Pleasanton Downtown Association", "Pleasanton Connects"];
+  const partners = ["Pleasanton Downtown Association", "Pleasanton Connects", "Workday Foundation"];
   return (
     <section style={{ background: "var(--paper)", padding: "72px 0" }}>
       <div className="container">
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 32 }}>
-          <p style={{ margin: 0, fontSize: 16, color: "var(--ink-soft)", maxWidth: "52ch" }}>
-            This event is organized in partnership with the <strong style={{ color: "var(--ink)" }}>Pleasanton Downtown Association</strong> and <strong style={{ color: "var(--ink)" }}>Pleasanton Connects</strong>.
+          <p style={{ margin: 0, fontSize: 16, color: "var(--ink-soft)", maxWidth: "60ch" }}>
+            This event is organized in partnership with the <strong style={{ color: "var(--ink)" }}>Pleasanton Downtown Association</strong>, <strong style={{ color: "var(--ink)" }}>Pleasanton Connects</strong>, and the <strong style={{ color: "var(--ink)" }}>Workday Foundation</strong>.
           </p>
-          <button className="btn-link" onClick={() => go("sponsor")}>
+          <button className="btn-link" onClick={() => go("donate")}>
             Become a sponsor →
           </button>
         </div>
@@ -1023,16 +1029,16 @@ function SponsorCTA({ go }) {
         <div>
           <div className="eyebrow" style={{ color: "var(--gold)" }}>Sponsor the table</div>
           <h2 className="serif" style={{ marginTop: 14, color: "var(--paper)" }}>Help us seat 1,000 neighbors.</h2>
-          <p style={{ marginTop: 16, opacity: 0.85, fontSize: 17, maxWidth: "48ch" }}>
-            Tables, chairs, lights, permits, insurance, and a stipend for the small crew that makes this run. Donations from local businesses and neighbors keep the dinner free.
+          <p style={{ marginTop: 16, opacity: 0.85, fontSize: 17, maxWidth: "52ch" }}>
+            Tables, chairs, permits, insurance and more. Donations from local businesses and neighbors help keep the dinner free.
           </p>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
-          <button className="btn btn-terracotta" onClick={() => go("sponsor")}>
-            Sponsor this event <Icon.Arrow size={14} />
+          <button className="btn btn-terracotta" onClick={() => go("donate")}>
+            Sponsor the event <Icon.Arrow size={14} />
           </button>
           <button className="btn-link" style={{ color: "var(--cream)" }} onClick={() => go("contact")}>
-            Or get in touch about partnerships →
+            Or get in touch with questions →
           </button>
         </div>
       </div>
@@ -1044,10 +1050,18 @@ function Why() {
   return (
     <section id="why" style={{ background: "var(--paper)" }}>
       <div className="container-narrow">
-        <div className="eyebrow">Why</div>
-        <h2 style={{ marginTop: 14, marginBottom: 24 }}>A town remembers itself over a shared meal.</h2>
-        <div style={{ background: "var(--cream)", border: "1px dashed var(--rule)", borderRadius: 14, padding: "32px 28px", fontFamily: "var(--mono)", fontSize: 13, color: "var(--brown)" }}>
-          [Why section copy coming soon — adapted from the original About page.]
+        <div className="eyebrow">About Pleasanton Connects</div>
+        <h2 style={{ marginTop: 14, marginBottom: 24 }}>A network of local leaders strengthening Pleasanton's social fabric.</h2>
+        <p style={{ fontSize: 18, color: "var(--ink-soft)" }}>
+          Pleasanton Connects is a network of local community leaders meeting monthly with a goal of strengthening social connection across Pleasanton.
+        </p>
+        <p style={{ fontSize: 18, color: "var(--ink-soft)" }}>
+          Our journey began last summer with a community-wide listening tour to better understand how our neighbors build real-life connections. The Longest Table is our first major public event. We look forward to sharing with you what we've learned and the work we plan to do over the next year to help strengthen Pleasanton's social fabric. We want to move beyond digital distractions and create opportunities for neighbors to connect.
+        </p>
+        <div style={{ marginTop: 12 }}>
+          <a className="btn-link" href="https://pleasantonconnects.org" target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            Learn more about Pleasanton Connects <Icon.ExternalArrow />
+          </a>
         </div>
       </div>
     </section>
@@ -1235,20 +1249,31 @@ function HostPage({ go }) {
 
   return (
     <div className="page-fade">
-      <PageHeader eyebrow="Host a Table" title="Claim a section. Bring your people."
-        sub="Hosting is the fastest way to fill 1,000 seats. Pick a number, gather your circle (8 to 12 is the sweet spot), and we'll handle the rest." go={go} />
-      <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
-        <div style={{ marginBottom: 48, padding: 24, borderRadius: 14, background: "var(--cream)", border: "1px solid var(--rule)", display: "grid", gridTemplateColumns: "auto 1fr", gap: 18, alignItems: "start" }}>
-          <div style={{ width: 44, height: 44, borderRadius: 12, background: "var(--forest)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Icon.Table size={22} />
+      <PageHeader eyebrow="Host a Table" title="Become a table captain."
+        sub="Table captains are the secret ingredient. You take ownership of a small slice of Main Street — invite your friends, family, neighbors, and coworkers to fill an 8 to 10-seat section, and coordinate what everyone is bringing to eat. Two quick steps below." go={go} />
+      <section className="container-narrow" style={{ paddingTop: 56 }}>
+        <div style={{ display: "grid", gap: 18, marginBottom: 32 }}>
+          <div className="card" style={{ display: "flex", gap: 18, alignItems: "flex-start" }}>
+            <div className="serif" style={{ fontSize: 36, color: "var(--terracotta)", lineHeight: 1, minWidth: 48 }}>01</div>
+            <div>
+              <strong style={{ display: "block", marginBottom: 4 }}>Sign up as a captain (form below)</strong>
+              <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>Tell us your name and contact info so we can assign you a section and coordinate dish details across captains.</p>
+            </div>
           </div>
-          <div>
-            <strong style={{ display: "block", marginBottom: 6 }}>What hosting actually means</strong>
-            <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>
-              You get a section of the table with your name on it, you invite 8 to 12 people you know, and you make sure everyone shows up. We assign your spot, coordinate dishes across hosts, and handle setup. You bring the people.
-            </p>
+          <div className="card" style={{ display: "flex", gap: 18, alignItems: "flex-start" }}>
+            <div className="serif" style={{ fontSize: 36, color: "var(--terracotta)", lineHeight: 1, minWidth: 48 }}>02</div>
+            <div style={{ flex: 1 }}>
+              <strong style={{ display: "block", marginBottom: 4 }}>RSVP your full crew on Eventbrite</strong>
+              <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)", marginBottom: 12 }}>Register a ticket for every person at your table — yourself, family, friends. Family of four = four tickets.</p>
+              <a className="btn btn-terracotta" href="https://eventbrite.com" target="_blank" rel="noreferrer"
+                onClick={(e) => { e.preventDefault(); window.showToast("Eventbrite link coming soon"); }}>
+                RSVP your crew on Eventbrite <Icon.ExternalArrow />
+              </a>
+            </div>
           </div>
         </div>
+      </section>
+      <form className="container-narrow" style={{ padding: "16px 0 96px" }} onSubmit={submit} noValidate>
 
         <Honeypot value={honeypot} onChange={setHoneypot} />
 
@@ -1313,21 +1338,15 @@ function HostPage({ go }) {
 }
 
 const VOL_ROLES = [
-  { id: "setup", title: "Setup crew", desc: "Tables, chairs, linens, lights. The transformation crew.", time: "3:00 — 6:30 pm" },
-  { id: "greet", title: "Greeters", desc: "Welcome arrivals, point them to their section, hand out a small program.", time: "6:00 — 7:00 pm" },
-  { id: "stewards", title: "Table stewards", desc: "Keep your assigned section flowing — water, conversation prompts, dish handoff.", time: "6:30 — 8:00 pm" },
-  { id: "cleanup", title: "Cleanup crew", desc: "Take it all back down so Main Street is ready for Sunday morning.", time: "8:00 — 10:00 pm" },
-  { id: "photo", title: "Photo & social", desc: "Capture the night. Share it as it happens. We'll provide a shot list.", time: "6:00 — 8:30 pm" },
-  { id: "access", title: "Accessibility hosts", desc: "Help neighbors with mobility, sensory, or other access needs find their seat and feel at home.", time: "6:00 — 8:00 pm" },
-];
-const AVAIL = [
-  { id: "am", label: "Setup (3:00 — 6:30)" },
-  { id: "pm", label: "Event (6:30 — 8:00)" },
-  { id: "ev", label: "Cleanup (8:00 — 10:00)" },
+  { id: "captain", title: "Table Captain", desc: "Act as a \"mini-host\" by claiming a section, filling 8–10 seats with your own crew, and coordinating your table's food and decor." },
+  { id: "setup", title: "Set Up", desc: "Help us build connection by arranging tables, chairs, and tablecloths, zones and table numbers along Main Street before the guests arrive." },
+  { id: "greeting", title: "Greeting", desc: "Welcome neighbors at our entry points, help them check in, and hand out name tags to get the conversation started." },
+  { id: "hosting", title: "Hosting", desc: "Help attendees who come alone or in small groups find their seats and introduce them to new friends." },
+  { id: "cleanup", title: "Clean Up", desc: "Keep our downtown beautiful by helping to stack chairs, fold tables, and clear away trash after the dinner." },
 ];
 
 function VolunteerPage({ go }) {
-  const [data, setData] = React.useState({ name: "", email: "", phone: "", roles: [], avail: [], access: "", notes: "" });
+  const [data, setData] = React.useState({ name: "", email: "", phone: "", roles: [] });
   const [errors, setErrors] = React.useState({});
   const [submitting, setSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
@@ -1341,9 +1360,8 @@ function VolunteerPage({ go }) {
     const errs = {};
     if (!data.name.trim()) errs.name = "Tell us your name";
     if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "We need a valid email";
-    if (!data.phone.trim()) errs.phone = "We text day-of updates, so we need a number";
+    if (!data.phone.trim()) errs.phone = "We need a mobile number for day-of updates";
     if (!data.roles.length) errs.roles = "Pick at least one role";
-    if (!data.avail.length) errs.avail = "Pick at least one window";
     if (!captcha.data) errs.captcha = "Verification still loading";
     setErrors(errs);
     if (Object.keys(errs).length) return;
@@ -1362,30 +1380,39 @@ function VolunteerPage({ go }) {
   if (submitted) {
     return (
       <div className="page-fade">
-        <PageHeader eyebrow="You're on the crew" title="Thank you for showing up."
-          sub="The event runs because neighbors like you decided to spend a Saturday helping. We'll get you a role and a time within the week." go={go} />
+        <PageHeader eyebrow="You're on the crew" title="Thank you for showing up." sub="We'll be in touch with details on your role and where to be." go={go} />
         <ThankYou go={go}
           title={`Welcome to the crew, ${data.name.split(" ")[0]}.`}
-          body={`We logged your interest in ${data.roles.length} role${data.roles.length > 1 ? "s" : ""}. Expect a note from your role lead within the week with details and a t-shirt size question.`}
-          emailPreview={{
-            subject: "You're volunteering at the Longest Table",
-            body: [
-              `Hi ${data.name.split(" ")[0]},`,
-              `Thank you for signing up to volunteer. Without folks like you we don't hit a thousand seats.`,
-              `Here is what happens next. Within a week your role lead will reach out to confirm your spot, ask about t-shirt size, and answer questions. The week of, you'll get a logistics email with arrival time, where to check in, and a contact number.`,
-              `If your availability changes, just reply to this email.`,
-            ],
-          }}
-        />
+          body={`We logged your interest in ${data.roles.length} role${data.roles.length > 1 ? "s" : ""}. Expect a note from your role lead with the details soon.`} />
       </div>
     );
   }
 
   return (
     <div className="page-fade">
-      <PageHeader eyebrow="Volunteer" title="It takes a small army to feed a town."
-        sub="Pick a role, pick a window, and we'll match you with a lead. Most volunteers commit two to four hours." go={go} />
-      <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
+      <PageHeader eyebrow="Volunteer" title="Volunteer for the Longest Table."
+        sub="Whatever your bandwidth, there is a place for you at the table! We are looking for 1,000 neighbors to join us on Saturday, June 6, 2026, but we need a dedicated crew to make the magic happen." go={go} />
+
+      <section className="container-narrow" style={{ paddingTop: 56 }}>
+        <div className="eyebrow" style={{ marginBottom: 14 }}>Volunteer roles</div>
+        <div style={{ display: "grid", gap: 14, marginBottom: 24 }}>
+          {VOL_ROLES.map((r) => (
+            <div key={r.id} className="card" style={{ padding: "20px 22px" }}>
+              <strong style={{ display: "block", marginBottom: 4 }}>{r.title}</strong>
+              <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>{r.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="card-warm" style={{ padding: "20px 22px", marginBottom: 8, borderRadius: 14 }}>
+          <strong style={{ display: "block", marginBottom: 6 }}>A note for Table Captains</strong>
+          <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>
+            You are the secret ingredient to a successful Longest Table! As a captain, you take ownership of a small slice of Main Street. You'll invite your friends, family, neighbors, and coworkers to fill an 8 to 10-seat section and coordinate what everyone is bringing to eat. You have full license to decorate your table to make it uniquely yours! If you are volunteering as a Table Captain, please <a href="https://eventbrite.com" target="_blank" rel="noreferrer" onClick={(e) => { e.preventDefault(); window.showToast("Eventbrite link coming soon"); }} style={{ color: "var(--forest)", textDecoration: "underline" }}>RSVP on Eventbrite</a> for your entire table as a group.
+          </p>
+        </div>
+      </section>
+
+      <form className="container-narrow" style={{ padding: "32px 0 96px" }} onSubmit={submit} noValidate>
         <Honeypot value={honeypot} onChange={setHoneypot} />
         <div className="form-grid">
           <div className="field">
@@ -1400,14 +1427,14 @@ function VolunteerPage({ go }) {
               {errors.email && <div className="error-msg">{errors.email}</div>}
             </div>
             <div className="field">
-              <label>Phone</label>
+              <label>Mobile number</label>
               <input type="tel" value={data.phone} onChange={(e) => set("phone", e.target.value)} placeholder="(925) 555-0100" />
               {errors.phone && <div className="error-msg">{errors.phone}</div>}
             </div>
           </div>
           <div className="field">
-            <label>Which roles interest you?</label>
-            <div className="hint">Pick as many as you're open to. We'll confirm your role with the lead.</div>
+            <label>Volunteer role</label>
+            <div className="hint">Pick all that interest you. We'll confirm your role with the lead.</div>
             <div className="checks" style={{ marginTop: 8 }}>
               {VOL_ROLES.map((r) => {
                 const on = data.roles.includes(r.id);
@@ -1416,8 +1443,6 @@ function VolunteerPage({ go }) {
                     <input type="checkbox" checked={on} onChange={() => toggle("roles", r.id)} />
                     <div>
                       <div className="check-title">{r.title}</div>
-                      <div className="check-desc">{r.desc}</div>
-                      <div className="check-meta">{r.time}</div>
                     </div>
                   </label>
                 );
@@ -1425,205 +1450,22 @@ function VolunteerPage({ go }) {
             </div>
             {errors.roles && <div className="error-msg">{errors.roles}</div>}
           </div>
-          <div className="field">
-            <label>What's your availability that day?</label>
-            <div className="chips" style={{ marginTop: 6 }}>
-              {AVAIL.map((a) => (
-                <button key={a.id} type="button" className={`chip ${data.avail.includes(a.id) ? "is-on" : ""}`} onClick={() => toggle("avail", a.id)}>
-                  {data.avail.includes(a.id) && <Icon.Check size={14} />} {a.label}
-                </button>
-              ))}
-            </div>
-            {errors.avail && <div className="error-msg">{errors.avail}</div>}
-          </div>
-          <div className="field">
-            <label>Any access needs we should know about? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
-            <textarea value={data.access} onChange={(e) => set("access", e.target.value)} placeholder="Anything that helps us match you to the right role and shift." />
-          </div>
-          <div className="field">
-            <label>Anything else? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
-            <textarea value={data.notes} onChange={(e) => set("notes", e.target.value)} placeholder="" />
-          </div>
           <CaptchaField captcha={captcha} error={errors.captcha} />
           {errors.submit && <div className="error-msg">{errors.submit}</div>}
           <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
             <button type="submit" className="btn btn-primary" disabled={submitting}>
-              {submitting ? "Saving…" : "Sign me up"}
+              {submitting ? "Saving…" : "Sign me up!"}
             </button>
-            <span style={{ fontSize: 13, color: "var(--muted)" }}>Your role lead will reach out within a week.</span>
           </div>
+          <p style={{ fontSize: 13, color: "var(--muted)", marginTop: 8, marginBottom: 0 }}>
+            Your contact information will only be used to coordinate your volunteer commitment. Data will be used for the purposes of this event only and deleted after the event concludes.
+          </p>
         </div>
       </form>
     </div>
   );
 }
 
-const ALLERGENS = ["Nuts", "Dairy", "Gluten", "Shellfish", "Egg", "Soy", "Sesame"];
-const DIETS = ["Vegetarian", "Vegan", "Neither"];
-
-function DishPage({ go }) {
-  const [data, setData] = React.useState({ name: "", email: "", dish: "", servings: 12, allergens: [], diet: "", needsServingDish: "" });
-  const [errors, setErrors] = React.useState({});
-  const [submitting, setSubmitting] = React.useState(false);
-  const [submitted, setSubmitted] = React.useState(false);
-  const [honeypot, setHoneypot] = React.useState("");
-  const captcha = useCaptcha();
-  const set = (k, v) => setData((d) => ({ ...d, [k]: v }));
-  const toggle = (k, v) => setData((d) => ({ ...d, [k]: d[k].includes(v) ? d[k].filter((x) => x !== v) : [...d[k], v] }));
-
-  const submit = async (e) => {
-    e.preventDefault();
-    const errs = {};
-    if (!data.name.trim()) errs.name = "Tell us your name";
-    if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "We need a valid email";
-    if (!data.dish.trim()) errs.dish = "Even a tentative answer helps us coordinate";
-    if (!data.diet) errs.diet = "One quick pick";
-    if (!data.needsServingDish) errs.needsServingDish = "Yes or no";
-    if (!captcha.data) errs.captcha = "Verification still loading";
-    setErrors(errs);
-    if (Object.keys(errs).length) return;
-    setSubmitting(true);
-    const res = await submitForm({ form: "dish", data, captcha, honeypot });
-    setSubmitting(false);
-    if (!res.ok) {
-      if (res.captcha) { captcha.refresh(); setErrors({ captcha: res.error }); return; }
-      setErrors({ submit: res.error });
-      return;
-    }
-    setSubmitted(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  if (submitted) {
-    return (
-      <div className="page-fade">
-        <PageHeader eyebrow="Logged" title="Thank you for cooking."
-          sub="Every dish is one less seat going hungry. We'll send dropoff details two days before." go={go} />
-        <ThankYou go={go}
-          title={`We saved a spot for your ${data.dish.toLowerCase()}.`}
-          body={`We'll coordinate so we don't end up with twelve trays of pasta salad. Day-of dropoff details are coming two days before the event.`}
-          emailPreview={{
-            subject: "Dish logged for the Longest Table",
-            body: [
-              `Hi ${data.name.split(" ")[0]},`,
-              `Thanks for offering to bring a ${data.dish.toLowerCase()} (~${data.servings} servings). It's on the list.`,
-              `Two days before, we'll send a dropoff window and a labeled spot for your tray. We'll also send a printable allergen card for the front of your dish. ${data.needsServingDish === "Yes" ? "We'll have a serving dish and utensils ready for you." : ""}`,
-              `If your plans change, just reply.`,
-            ],
-          }}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div className="page-fade">
-      <PageHeader eyebrow="Bring a Dish" title="A potluck for a thousand."
-        sub="We are not catering this. We are feeding each other. Family recipes welcome. Store-bought welcome too." go={go} />
-      <form className="container-narrow" style={{ padding: "56px 0 96px" }} onSubmit={submit} noValidate>
-        <Honeypot value={honeypot} onChange={setHoneypot} />
-        <div className="form-grid">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
-            <div className="field">
-              <label>Your name</label>
-              <input type="text" value={data.name} onChange={(e) => set("name", e.target.value)} placeholder="First and last" />
-              {errors.name && <div className="error-msg">{errors.name}</div>}
-            </div>
-            <div className="field">
-              <label>Email</label>
-              <input type="email" value={data.email} onChange={(e) => set("email", e.target.value)} placeholder="you@email.com" />
-              {errors.email && <div className="error-msg">{errors.email}</div>}
-            </div>
-          </div>
-          <div className="field">
-            <label>What are you thinking of bringing?</label>
-            <div className="hint">A tentative answer is fine. We'll balance the menu across hosts.</div>
-            <input type="text" value={data.dish} onChange={(e) => set("dish", e.target.value)} placeholder="My grandma's tamales / a big salad / lemon bars" />
-            {errors.dish && <div className="error-msg">{errors.dish}</div>}
-          </div>
-          <div className="field">
-            <label>Roughly how many servings?</label>
-            <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 8 }}>
-              <input type="range" min="4" max="40" value={data.servings} onChange={(e) => set("servings", Number(e.target.value))} style={{ flex: 1, accentColor: "var(--forest)" }} />
-              <div style={{ minWidth: 90, textAlign: "right", fontFamily: "var(--serif)", fontSize: 28, color: "var(--forest)" }}>~{data.servings}</div>
-            </div>
-          </div>
-          <div className="field">
-            <label>Any allergens? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(check all that apply)</span></label>
-            <div className="chips" style={{ marginTop: 6 }}>
-              {ALLERGENS.map((a) => (
-                <button key={a} type="button" className={`chip ${data.allergens.includes(a) ? "is-on" : ""}`} onClick={() => toggle("allergens", a)}>
-                  {data.allergens.includes(a) && <Icon.Check size={14} />} {a}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="field">
-            <label>Vegetarian, vegan, or neither?</label>
-            <div className="radio-row">
-              {DIETS.map((d) => (
-                <label key={d} className={data.diet === d ? "is-on" : ""}>
-                  <input type="radio" name="diet" value={d} checked={data.diet === d} onChange={() => set("diet", d)} />
-                  {d}
-                </label>
-              ))}
-            </div>
-            {errors.diet && <div className="error-msg">{errors.diet}</div>}
-          </div>
-          <div className="field">
-            <label>Need a serving dish or utensils from us?</label>
-            <div className="radio-row">
-              {["Yes", "No"].map((d) => (
-                <label key={d} className={data.needsServingDish === d ? "is-on" : ""}>
-                  <input type="radio" name="serv" value={d} checked={data.needsServingDish === d} onChange={() => set("needsServingDish", d)} />
-                  {d}
-                </label>
-              ))}
-            </div>
-            {errors.needsServingDish && <div className="error-msg">{errors.needsServingDish}</div>}
-          </div>
-          <CaptchaField captcha={captcha} error={errors.captcha} />
-          {errors.submit && <div className="error-msg">{errors.submit}</div>}
-          <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
-            <button type="submit" className="btn btn-primary" disabled={submitting}>
-              {submitting ? "Saving…" : "Add my dish"}
-            </button>
-            <span style={{ fontSize: 13, color: "var(--muted)" }}>Dropoff details land two days before.</span>
-          </div>
-        </div>
-      </form>
-    </div>
-  );
-}
-
-/* ─── Share page ─── */
-const SHARE_BLOCKS = [
-  { channel: "Instagram caption", body: `One long table. 1,000 neighbors. One Saturday evening on Main Street.\n\nThe Longest Table is back — June 6, 6:30pm. RSVP free, bring a dish, sit next to someone you don't know yet. That's it. That's the whole event.\n\n🔗 link in bio\n#PleasantonConnects #LongestTable` },
-  { channel: "Facebook post", body: `Hey neighbors — on Saturday, June 6 we are setting one continuous table down Main Street and inviting all of Pleasanton to dinner. No tickets, no fundraiser. Just neighbors eating together. Bring a dish, bring a friend, bring yourself. RSVP at pleasantonconnects.org.` },
-  { channel: "Nextdoor", body: `For my fellow Pleasanton neighbors: The Longest Table dinner is back on June 6 from 6:30 to 8pm on Main Street. We are aiming for 1,000 of us at one long table. It's free. Hosts are claiming sections of 8–12 — would love to see our block represented. Details and signup at pleasantonconnects.org.` },
-  { channel: "Text to a neighbor", body: `Hey — there's a community dinner happening June 6 down Main Street. Free, just bring a dish. I think we should go. Want to grab seats together? pleasantonconnects.org` },
-];
-
-function CopyBlock({ channel, body }) {
-  const [copied, setCopied] = React.useState(false);
-  const onCopy = async () => {
-    try { await navigator.clipboard.writeText(body); } catch (e) {}
-    setCopied(true);
-    window.showToast(`${channel} copied`);
-    setTimeout(() => setCopied(false), 1800);
-  };
-  return (
-    <div className="share-block">
-      <div className="share-head">
-        <span>{channel}</span>
-        <button className="btn-link" onClick={onCopy} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--forest)", textDecoration: "none" }}>
-          {copied ? <React.Fragment><Icon.Check size={14} /> Copied</React.Fragment> : <React.Fragment><Icon.Copy size={14} /> Copy</React.Fragment>}
-        </button>
-      </div>
-      <pre>{body}</pre>
-    </div>
-  );
-}
 
 function SharePage({ go }) {
   const [shared, setShared] = React.useState({ name: "", channels: [] });
@@ -1913,8 +1755,8 @@ function ContactPage({ go }) {
 
   return (
     <div className="page-fade">
-      <PageHeader eyebrow="Contact" title="Say hi."
-        sub="Questions, ideas, kind words, complaints. They all come to the same inbox and a real person reads them." go={go} />
+      <PageHeader eyebrow="Contact" title="Get in touch."
+        sub="Have a question we didn't cover? Want to learn more about sponsoring a section of the table? Or maybe you just want to say hi? Fill out the form below and one of our organizers will get back to you." go={go} />
       <section style={{ padding: "56px 0 96px" }}>
         <div className="container-narrow" style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 64 }}>
           <div>
@@ -1949,7 +1791,7 @@ function ContactPage({ go }) {
               {err.submit && <div className="error-msg">{err.submit}</div>}
               <div>
                 <button type="submit" className="btn btn-primary" disabled={submitting}>
-                  {submitting ? "Sending…" : "Send"}
+                  {submitting ? "Sending…" : "Send Message"}
                 </button>
               </div>
             </div>
@@ -1961,79 +1803,172 @@ function ContactPage({ go }) {
 }
 
 /* ─── FAQ ─── */
+const FAQS = [
+  { q: "Is there a cost to attend?", a: "Nope! RSVPing for the event is completely free. We rely on local sponsors and donations to keep this a gift to the community." },
+  { q: "Do I need a ticket to attend?", a: "Yes. Please register all the people in your party. If you are a family of 4, please register for 4 tickets." },
+  { q: "What if I can no longer make it?", a: "Please let us know as soon as possible! Since we are aiming to seat 1,000 neighbors, knowing your seat is available allows us to invite someone from the waitlist." },
+  { q: "Do I bring my own food?", a: "Yes! Coordinate with your Table Captain or bring food for your small crew. You can also pre-order a family-style meal from one of our amazing Downtown Pleasanton restaurants. And don't forget your drinks!" },
+  { q: "Can we bring alcohol?", a: "Not this time! Please refrain from bringing alcoholic beverages to the table. If you'd like a drink, you are more than welcome to visit one of our wonderful downtown bars or restaurants and enjoy it there. Just a friendly reminder to please keep those beverages within the premises of the bar or restaurant." },
+  { q: "What should I bring besides food?", a: "Think of this as a giant picnic. To help reduce waste, you can bring your own reusable plates and utensils. If you are a Table Captain, don't forget your table decorations!" },
+  { q: "Is this a family friendly event?", a: "Absolutely! When you register, please be sure to register the kids too. Everyone will have a seat at the big table." },
+  { q: "Anything fun for the kids?", a: "We will have a kids zone where the kids can play or pick up something fun to take back to the table (first come, first served, until we run out). Please ensure at least one parent or guardian is with a child in the kid zone at all times." },
+  { q: "What happens if it rains?", a: "We'll be keeping a close eye on the weather. If things look soggy, we will communicate a rain date or cancellation via email to all registered guests." },
+];
+
 function FaqPage({ go }) {
   return (
     <div className="page-fade">
       <PageHeader eyebrow="FAQ" title="Frequently asked questions."
         sub="The short answers to the questions we get most. Don't see yours? Send a note via the contact page." go={go} />
-      <section className="container-narrow" style={{ padding: "72px 0 96px" }}>
-        <div style={{ background: "var(--cream)", border: "1px solid var(--rule)", borderRadius: 18, padding: "48px 32px", textAlign: "center" }}>
-          <div style={{ fontFamily: "var(--mono)", fontSize: 12, letterSpacing: "0.06em", color: "var(--brown)", marginBottom: 14 }}>
-            placeholder
-          </div>
-          <h2 className="serif" style={{ fontSize: 36, marginBottom: 12 }}>Copy coming soon.</h2>
-          <p style={{ color: "var(--ink-soft)", maxWidth: "48ch", margin: "0 auto 28px" }}>
-            We're collecting the questions neighbors have been asking and writing the clearest possible answers. Check back in a few days.
-          </p>
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <button className="btn btn-primary" onClick={() => go("contact")}>Ask us something</button>
-            <button className="btn btn-ghost" onClick={() => go("home")}>Back to home</button>
-          </div>
+      <section className="container-narrow" style={{ padding: "56px 0 96px" }}>
+        <div style={{ display: "grid", gap: 16 }}>
+          {FAQS.map((f) => (
+            <div key={f.q} className="card" style={{ padding: "22px 26px" }}>
+              <h3 className="serif" style={{ fontSize: 22, marginBottom: 10 }}>{f.q}</h3>
+              <p style={{ margin: 0, fontSize: 16, color: "var(--ink-soft)" }}>{f.a}</p>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: 40, padding: "28px 32px", background: "var(--cream)", border: "1px solid var(--rule)", borderRadius: 14, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+          <strong>Any other questions?</strong>
+          <button className="btn btn-primary" onClick={() => go("contact")}>Contact us</button>
         </div>
       </section>
     </div>
   );
 }
 
-/* ─── Sponsor ─── */
-function SponsorPage({ go }) {
-  const TIERS = [
-    { name: "Friend of the Table", amount: "$100+", body: "Help cover linens, lights, and a single section of the table." },
-    { name: "Block Sponsor", amount: "$500+", body: "Underwrite an entire section of the table. Your name on a placard at that section." },
-    { name: "Main Street Sponsor", amount: "$2,500+", body: "Underwrite a major piece of the production: tents, sound, or the volunteer t-shirts." },
-    { name: "Anchor Sponsor", amount: "$10,000+", body: "Make the whole night possible. Recognition on the home page, the program, and the postcards." },
-  ];
+/* ─── Donate ─── */
+const DONATION_OPTIONS = [
+  { id: "monetary", label: "A monetary pledge" },
+  { id: "tshirts", label: "T-shirts for volunteers" },
+  { id: "kids_zone", label: "Items for the Kids Zone" },
+  { id: "food", label: "Food or drinks for the community table" },
+  { id: "other", label: "Other" },
+];
+
+function DonatePage({ go }) {
+  const [data, setData] = React.useState({ name: "", email: "", phone: "", organization: "", category: "", foodDetails: "", notes: "" });
+  const [errors, setErrors] = React.useState({});
+  const [submitting, setSubmitting] = React.useState(false);
+  const [submitted, setSubmitted] = React.useState(false);
+  const [honeypot, setHoneypot] = React.useState("");
+  const captcha = useCaptcha();
+  const set = (k, v) => setData((d) => ({ ...d, [k]: v }));
+
+  const submit = async (e) => {
+    e.preventDefault();
+    const errs = {};
+    if (!data.name.trim()) errs.name = "Tell us your name";
+    if (!data.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) errs.email = "We need a valid email";
+    if (!data.category) errs.category = "Pick what you'd like to contribute";
+    if (data.category === "food" && !data.foodDetails.trim()) errs.foodDetails = "Tell us a bit about the dish so we can plan around allergens and servings";
+    if (!captcha.data) errs.captcha = "Verification still loading";
+    setErrors(errs);
+    if (Object.keys(errs).length) return;
+    setSubmitting(true);
+    const res = await submitForm({ form: "donation", data, captcha, honeypot });
+    setSubmitting(false);
+    if (!res.ok) {
+      if (res.captcha) { captcha.refresh(); setErrors({ captcha: res.error }); return; }
+      setErrors({ submit: res.error });
+      return;
+    }
+    setSubmitted(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  if (submitted) {
+    return (
+      <div className="page-fade">
+        <PageHeader eyebrow="Thank you" title="We got it." sub="One of our organizers will follow up with details." go={go} />
+        <ThankYou go={go}
+          title={`Thanks, ${data.name.split(" ")[0]}.`}
+          body="We logged your contribution and we'll be in touch shortly with next steps." />
+      </div>
+    );
+  }
+
   return (
     <div className="page-fade">
-      <PageHeader eyebrow="Sponsor" title="Help fund a free dinner for 1,000 neighbors."
-        sub="The Longest Table is free to attend. It's not free to produce. Local businesses and individual donors close the gap so every neighbor in Pleasanton can sit at this table." go={go} />
+      <PageHeader eyebrow="Donate" title="Help make The Longest Table happen."
+        sub="Tables, chairs, permits, insurance and more. Donations from local businesses and neighbors help keep the dinner free." go={go} />
 
-      <section className="container-narrow" style={{ padding: "56px 0 32px" }}>
-        <div style={{ background: "var(--cream)", border: "1px dashed var(--rule)", borderRadius: 14, padding: 24, fontFamily: "var(--mono)", fontSize: 13, color: "var(--brown)" }}>
-          [donation link and tax-deductible details to be added — Pleasanton Connects is a 501(c)(3)]
-        </div>
-      </section>
-
-      <section className="container-narrow" style={{ padding: "32px 0" }}>
-        <div className="eyebrow" style={{ marginBottom: 12 }}>Sponsorship tiers</div>
-        <h2 className="serif" style={{ fontSize: 36, marginBottom: 28 }}>Where your gift goes.</h2>
-        <div style={{ display: "grid", gap: 14 }}>
-          {TIERS.map((t) => (
-            <div key={t.name} className="card" style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 18, alignItems: "center" }}>
-              <div>
-                <strong style={{ display: "block", marginBottom: 4 }}>{t.name}</strong>
-                <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>{t.body}</p>
-              </div>
-              <div className="serif" style={{ fontSize: 22, color: "var(--forest)", whiteSpace: "nowrap" }}>{t.amount}</div>
+      <form className="container-narrow" style={{ padding: "56px 0 32px" }} onSubmit={submit} noValidate>
+        <div className="eyebrow" style={{ marginBottom: 12 }}>Tell us how you'd like to contribute</div>
+        <Honeypot value={honeypot} onChange={setHoneypot} />
+        <div className="form-grid">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+            <div className="field">
+              <label>Your name</label>
+              <input type="text" value={data.name} onChange={(e) => set("name", e.target.value)} placeholder="First and last" />
+              {errors.name && <div className="error-msg">{errors.name}</div>}
             </div>
-          ))}
-        </div>
-      </section>
+            <div className="field">
+              <label>Email</label>
+              <input type="email" value={data.email} onChange={(e) => set("email", e.target.value)} placeholder="you@email.com" />
+              {errors.email && <div className="error-msg">{errors.email}</div>}
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+            <div className="field">
+              <label>Phone <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+              <input type="tel" value={data.phone} onChange={(e) => set("phone", e.target.value)} placeholder="(925) 555-0100" />
+            </div>
+            <div className="field">
+              <label>Organization or business <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+              <input type="text" value={data.organization} onChange={(e) => set("organization", e.target.value)} placeholder="If you're contributing on behalf of one" />
+            </div>
+          </div>
 
-      <section className="container-narrow" style={{ padding: "32px 0 96px" }}>
-        <div style={{ background: "var(--forest)", color: "var(--paper)", borderRadius: 18, padding: "40px 32px", textAlign: "center" }}>
-          <h3 className="serif" style={{ fontSize: 28, marginBottom: 12, color: "var(--paper)" }}>Ready to give?</h3>
-          <p style={{ maxWidth: "44ch", margin: "0 auto 24px", opacity: 0.92, fontSize: 16 }}>
-            Donation link is being finalized. In the meantime, reach out and we'll send wire details, a check-by-mail address, or invoice your business directly.
-          </p>
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <button className="btn btn-terracotta" onClick={() => window.showToast("Donation link coming soon")}>
-              Donate <Icon.Arrow size={14} />
-            </button>
-            <button className="btn" style={{ background: "transparent", color: "var(--paper)", border: "1px solid rgba(246,239,227,0.4)" }} onClick={() => go("contact")}>
-              Contact us
+          <div className="field">
+            <label>What would you like to contribute?</label>
+            <div className="checks" style={{ marginTop: 8 }}>
+              {DONATION_OPTIONS.map((o) => (
+                <label key={o.id} className={`check ${data.category === o.id ? "is-on" : ""}`}>
+                  <input type="radio" name="donation_category" value={o.id} checked={data.category === o.id} onChange={() => set("category", o.id)} />
+                  <div>
+                    <div className="check-title">{o.label}</div>
+                  </div>
+                </label>
+              ))}
+            </div>
+            {errors.category && <div className="error-msg">{errors.category}</div>}
+          </div>
+
+          {data.category === "food" && (
+            <div className="field">
+              <label>About the dish</label>
+              <div className="hint">
+                We don't want there to be a barrier for participation. If you are donating a dish to share, we'll have a small community table where food is available for anyone. Please let us know what dish you'd like to bring, any common allergens, and approximately how many people it will serve.
+              </div>
+              <textarea value={data.foodDetails} onChange={(e) => set("foodDetails", e.target.value)} placeholder="Vegetable lasagna — contains gluten and dairy — serves about 12" />
+              {errors.foodDetails && <div className="error-msg">{errors.foodDetails}</div>}
+            </div>
+          )}
+
+          <div className="field">
+            <label>Anything else you'd like to tell us about what you'd like to donate? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
+            <textarea value={data.notes} onChange={(e) => set("notes", e.target.value)} />
+          </div>
+
+          <CaptchaField captcha={captcha} error={errors.captcha} />
+          {errors.submit && <div className="error-msg">{errors.submit}</div>}
+
+          <div>
+            <button type="submit" className="btn btn-primary" disabled={submitting}>
+              {submitting ? "Sending…" : "Send"}
             </button>
           </div>
+        </div>
+      </form>
+
+      <section className="container-narrow" style={{ padding: "16px 0 96px" }}>
+        <div style={{ background: "var(--cream)", border: "1px solid var(--rule)", borderRadius: 14, padding: "24px 28px" }}>
+          <strong style={{ display: "block", marginBottom: 6 }}>Sponsoring the event</strong>
+          <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>
+            If you'd like to sponsor the event, please reach out to the Pleasanton Downtown Association: <a href="mailto:gabrielle@pleasantondowntown.net" style={{ color: "var(--forest)", textDecoration: "underline" }}>gabrielle@pleasantondowntown.net</a>
+          </p>
         </div>
       </section>
     </div>
@@ -2074,10 +2009,10 @@ function App() {
   switch (route) {
     case "host": page = <HostPage go={go} />; break;
     case "volunteer": page = <VolunteerPage go={go} />; break;
-    case "dish": page = <DishPage go={go} />; break;
     case "share": page = <SharePage go={go} />; break;
     case "faq": page = <FaqPage go={go} />; break;
-    case "sponsor": page = <SponsorPage go={go} />; break;
+    case "donate": page = <DonatePage go={go} />; break;
+    case "sponsor": page = <DonatePage go={go} />; break;
     case "signup": page = <SignupPage go={go} />; break;
     case "contact": page = <ContactPage go={go} />; break;
     case "home":
