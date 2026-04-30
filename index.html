@@ -872,6 +872,72 @@ function Hero({ go }) {
   );
 }
 
+// Event constants — used by calendar/map helpers and the details card.
+const EVENT = {
+  title: "The Longest Table — Pleasanton",
+  // 2026-06-06 6:30pm Pacific (PDT, UTC-7) → 2026-06-07T01:30:00Z … 03:00:00Z
+  startUTC: "20260607T013000Z",
+  endUTC:   "20260607T030000Z",
+  startISO: "2026-06-07T01:30:00Z",
+  endISO:   "2026-06-07T03:00:00Z",
+  location: "Main Street, between Neal and St. Mary, Downtown Pleasanton, CA",
+  details:  "An outdoor community dinner along Main Street. Bring something to eat and meet the people who live near you. Free RSVP required. https://longest-table-pleasanton.vercel.app",
+};
+
+function googleCalendarUrl() {
+  const p = new URLSearchParams({
+    action: "TEMPLATE",
+    text: EVENT.title,
+    dates: `${EVENT.startUTC}/${EVENT.endUTC}`,
+    details: EVENT.details,
+    location: EVENT.location,
+  });
+  return `https://calendar.google.com/calendar/render?${p.toString()}`;
+}
+
+function outlookCalendarUrl() {
+  const p = new URLSearchParams({
+    path: "/calendar/action/compose",
+    rru: "addevent",
+    subject: EVENT.title,
+    startdt: EVENT.startISO,
+    enddt: EVENT.endISO,
+    body: EVENT.details,
+    location: EVENT.location,
+  });
+  return `https://outlook.live.com/calendar/0/deeplink/compose?${p.toString()}`;
+}
+
+function downloadICS() {
+  const ics = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Pleasanton Connects//Longest Table//EN",
+    "CALSCALE:GREGORIAN",
+    "BEGIN:VEVENT",
+    `UID:longest-table-2026-06-06@pleasantonconnects.org`,
+    `DTSTAMP:${EVENT.startUTC}`,
+    `DTSTART:${EVENT.startUTC}`,
+    `DTEND:${EVENT.endUTC}`,
+    `SUMMARY:${EVENT.title}`,
+    `LOCATION:${EVENT.location}`,
+    `DESCRIPTION:${EVENT.details.replace(/\n/g, "\\n")}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "longest-table-pleasanton.ics";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Main Street between Neal St and St Mary St, Pleasanton, CA")}`;
+
 function WhatWhy() {
   const [calOpen, setCalOpen] = React.useState(false);
   return (
@@ -892,22 +958,33 @@ function WhatWhy() {
             <button className="btn btn-cream" onClick={() => setCalOpen((v) => !v)}>
               <Icon.Calendar /> Add to calendar
             </button>
-            <a className="btn-link" href="https://maps.google.com" target="_blank" rel="noreferrer"
-              onClick={(e) => { e.preventDefault(); window.showToast("Opens Google Maps"); }}
+            <a className="btn-link" href={MAP_URL} target="_blank" rel="noreferrer"
               style={{ alignSelf: "center" }}>
               See location on map →
             </a>
             {calOpen && (
-              <div style={{ position: "absolute", top: "calc(100% + 8px)", left: 0, background: "var(--paper)", border: "1px solid var(--rule)", borderRadius: 12, padding: 8, boxShadow: "0 12px 36px rgba(0,0,0,0.1)", display: "flex", flexDirection: "column", minWidth: 180, zIndex: 10 }}>
-                {["Google", "Apple", "Outlook"].map((p) => (
-                  <button key={p} className="btn-link"
-                    style={{ textDecoration: "none", padding: "10px 14px", textAlign: "left", borderRadius: 8, color: "var(--ink)" }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = "var(--cream)"}
-                    onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
-                    onClick={() => { setCalOpen(false); window.showToast(`Added to ${p} Calendar`); }}>
-                    {p} Calendar
-                  </button>
-                ))}
+              <div style={{ position: "absolute", top: "calc(100% + 8px)", left: 0, background: "var(--paper)", border: "1px solid var(--rule)", borderRadius: 12, padding: 8, boxShadow: "0 12px 36px rgba(0,0,0,0.1)", display: "flex", flexDirection: "column", minWidth: 200, zIndex: 10 }}>
+                <a className="btn-link" href={googleCalendarUrl()} target="_blank" rel="noreferrer"
+                  style={{ textDecoration: "none", padding: "10px 14px", textAlign: "left", borderRadius: 8, color: "var(--ink)" }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = "var(--cream)"}
+                  onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                  onClick={() => setCalOpen(false)}>
+                  Google Calendar
+                </a>
+                <button className="btn-link"
+                  style={{ textDecoration: "none", padding: "10px 14px", textAlign: "left", borderRadius: 8, color: "var(--ink)" }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = "var(--cream)"}
+                  onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                  onClick={() => { setCalOpen(false); downloadICS(); }}>
+                  Apple Calendar (.ics)
+                </button>
+                <a className="btn-link" href={outlookCalendarUrl()} target="_blank" rel="noreferrer"
+                  style={{ textDecoration: "none", padding: "10px 14px", textAlign: "left", borderRadius: 8, color: "var(--ink)" }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = "var(--cream)"}
+                  onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                  onClick={() => setCalOpen(false)}>
+                  Outlook Calendar
+                </a>
               </div>
             )}
           </div>
