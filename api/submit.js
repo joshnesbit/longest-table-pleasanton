@@ -9,7 +9,7 @@ const supabase = createClient(
 );
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-const FROM_ADDR = 'The Longest Table <notifications@ltpleasanton.org>';
+const FROM_ADDR = 'LT Pleasanton <notifications@ltpleasanton.org>';
 const TEAM_INBOX = 'pleasantonconnects@gmail.com';
 const SPONSOR_INBOX = 'gabrielle@pleasantondowntown.net';
 const SITE = 'https://ltpleasanton.org';
