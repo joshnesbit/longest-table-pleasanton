@@ -129,38 +129,39 @@ function firstName(name) {
 // Returns { subject, text, replyTo? } for the user-facing confirmation, or null.
 function confirmationEmail(form, d) {
   const first = firstName(d.name);
+  const sig = `— The Pleasanton Connects Team\n${SITE}`;
   switch (form) {
     case 'contact':
       return {
         subject: 'We got your message',
-        text: `Hi ${first},\n\nThanks for reaching out about The Longest Table. We read every message and someone from our team will write back within a couple of days.\n\nIn the meantime, you can RSVP for the event on Eventbrite:\n${EVENTBRITE}\n\n— The Longest Table team\n${SITE}`,
+        text: `Hi ${first},\n\nThanks for reaching out about the Longest Table event in Pleasanton. We read every message and someone from our team will write back within a couple of days.\n\nIn the meantime, you can RSVP for the event on Eventbrite:\n${EVENTBRITE}\n\n${sig}`,
         replyTo: TEAM_INBOX,
       };
     case 'donation':
       return {
         subject: 'Thanks for offering to contribute',
-        text: `Hi ${first},\n\nThanks for offering to contribute to The Longest Table. We've logged your offer and will follow up shortly with next steps.\n\n— The Longest Table team\n${SITE}`,
+        text: `Hi ${first},\n\nThanks for offering to contribute to the Longest Table event in Pleasanton. We've logged your offer and will follow up shortly with next steps.\n\n${sig}`,
         replyTo: TEAM_INBOX,
       };
     case 'volunteer':
       return {
         subject: 'Welcome to the Longest Table volunteer crew',
-        text: `Hi ${first},\n\nThank you for signing up to volunteer at The Longest Table on Saturday, June 6, 2026. Your role lead will reach out within a week with details.\n\nYou signed up for: ${(d.roles || []).join(', ') || '(none specified)'}\n\nIf you're a Table Captain, please RSVP your entire table on Eventbrite — register a ticket for every person at your table:\n${EVENTBRITE}\n\n— The Longest Table team\n${SITE}`,
+        text: `Hi ${first},\n\nThank you for signing up to volunteer at the Longest Table event in Pleasanton on Saturday, June 6, 2026. Your role lead will reach out within a week with details.\n\nYou signed up for: ${(d.roles || []).join(', ') || '(none specified)'}\n\nIf you're a Table Captain, please RSVP your entire table on Eventbrite — register a ticket for every person at your table:\n${EVENTBRITE}\n\n${sig}`,
       };
     case 'host':
       return {
-        subject: "You're a Table Captain at The Longest Table",
-        text: `Hi ${first},\n\nThank you for stepping up to captain a section of The Longest Table on Saturday, June 6, 2026. We've saved ${d.seats} seats with your name on them.\n\nNext step — RSVP your full crew on Eventbrite. Register a ticket for every person at your table (yourself, family, friends):\n${EVENTBRITE}\n\nWe'll be in touch in the coming weeks with your section assignment.\n\n— The Longest Table team\n${SITE}`,
+        subject: "You're a Table Captain at the Longest Table",
+        text: `Hi ${first},\n\nThank you for stepping up to captain a section of the Longest Table event in Pleasanton on Saturday, June 6, 2026. We've saved ${d.seats} seats with your name on them.\n\nNext step — RSVP your full crew on Eventbrite. Register a ticket for every person at your table (yourself, family, friends):\n${EVENTBRITE}\n\nWe'll be in touch in the coming weeks with your section assignment.\n\n${sig}`,
       };
     case 'share':
       return {
         subject: 'Thanks for sharing',
-        text: `Hi ${first},\n\nThanks for spreading the word about The Longest Table. Every forwarded message fills a seat.\n\n— The Longest Table team\n${SITE}`,
+        text: `Hi ${first},\n\nThanks for spreading the word about the Longest Table event in Pleasanton. Every forwarded message fills a seat.\n\n${sig}`,
       };
     case 'signup':
       return {
         subject: 'Welcome to Pleasanton Connects',
-        text: `Hi ${first},\n\nThanks for signing up. We'll be in touch when there's something worth your inbox.\n\n— Pleasanton Connects\n${SITE}`,
+        text: `Hi ${first},\n\nThanks for signing up for updates from Pleasanton Connects. We'll be in touch when there's something worth your inbox.\n\n${sig}`,
       };
   }
   return null;
