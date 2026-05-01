@@ -1,11 +1,19 @@
 import crypto from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
+import { Resend } from 'resend';
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY,
   { auth: { persistSession: false } },
 );
+
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const FROM_ADDR = 'The Longest Table <notifications@ltpleasanton.org>';
+const TEAM_INBOX = 'pleasantonconnects@gmail.com';
+const SPONSOR_INBOX = 'gabrielle@pleasantondowntown.net';
+const SITE = 'https://ltpleasanton.org';
+const EVENTBRITE = 'https://www.eventbrite.com/e/the-longest-table-pleasanton-tickets-1988461076608?aff=oddtdtcreator';
 
 const TABLES = {
   contact: 'contacts',
@@ -112,6 +120,99 @@ function row(form, d) {
   }
 }
 
+/* ─── Email templates ─── */
+
+function firstName(name) {
+  return (name || '').trim().split(/\s+/)[0] || 'neighbor';
+}
+
+// Returns { subject, text, replyTo? } for the user-facing confirmation, or null.
+function confirmationEmail(form, d) {
+  const first = firstName(d.name);
+  switch (form) {
+    case 'contact':
+      return {
+        subject: 'We got your message',
+        text: `Hi ${first},\n\nThanks for reaching out about The Longest Table. We read every message and someone from our team will write back within a couple of days.\n\nIn the meantime, you can RSVP for the event on Eventbrite:\n${EVENTBRITE}\n\n— The Longest Table team\n${SITE}`,
+        replyTo: TEAM_INBOX,
+      };
+    case 'donation':
+      return {
+        subject: 'Thanks for offering to contribute',
+        text: `Hi ${first},\n\nThanks for offering to contribute to The Longest Table. We've logged your offer and will follow up shortly with next steps.\n\n— The Longest Table team\n${SITE}`,
+        replyTo: TEAM_INBOX,
+      };
+    case 'volunteer':
+      return {
+        subject: 'Welcome to the Longest Table volunteer crew',
+        text: `Hi ${first},\n\nThank you for signing up to volunteer at The Longest Table on Saturday, June 6, 2026. Your role lead will reach out within a week with details.\n\nYou signed up for: ${(d.roles || []).join(', ') || '(none specified)'}\n\nIf you're a Table Captain, please RSVP your entire table on Eventbrite — register a ticket for every person at your table:\n${EVENTBRITE}\n\n— The Longest Table team\n${SITE}`,
+      };
+    case 'host':
+      return {
+        subject: "You're a Table Captain at The Longest Table",
+        text: `Hi ${first},\n\nThank you for stepping up to captain a section of The Longest Table on Saturday, June 6, 2026. We've saved ${d.seats} seats with your name on them.\n\nNext step — RSVP your full crew on Eventbrite. Register a ticket for every person at your table (yourself, family, friends):\n${EVENTBRITE}\n\nWe'll be in touch in the coming weeks with your section assignment.\n\n— The Longest Table team\n${SITE}`,
+      };
+    case 'share':
+      return {
+        subject: 'Thanks for sharing',
+        text: `Hi ${first},\n\nThanks for spreading the word about The Longest Table. Every forwarded message fills a seat.\n\n— The Longest Table team\n${SITE}`,
+      };
+    case 'signup':
+      return {
+        subject: 'Welcome to Pleasanton Connects',
+        text: `Hi ${first},\n\nThanks for signing up. We'll be in touch when there's something worth your inbox.\n\n— Pleasanton Connects\n${SITE}`,
+      };
+  }
+  return null;
+}
+
+// Returns { to, subject, text, replyTo? } for the team-facing notification, or null.
+function teamNotification(form, d) {
+  if (form === 'contact') {
+    return {
+      to: [TEAM_INBOX],
+      subject: `[ltpleasanton] Contact: ${d.name || 'no name'}`,
+      text: `New contact form submission:\n\nFrom: ${d.name} <${d.email}>\n\n${d.message}\n\n—\nReply to this email to respond directly to the submitter.`,
+      replyTo: d.email,
+    };
+  }
+  if (form === 'donation') {
+    const recipients = d.category === 'support' ? [TEAM_INBOX, SPONSOR_INBOX] : [TEAM_INBOX];
+    return {
+      to: recipients,
+      subject: `[ltpleasanton] Contribution (${d.category}): ${d.name || 'no name'}`,
+      text:
+        `New contribution form submission:\n\n` +
+        `Name:         ${d.name}\n` +
+        `Email:        ${d.email}\n` +
+        `Phone:        ${d.phone || '—'}\n` +
+        `Organization: ${d.organization || '—'}\n` +
+        `Category:     ${d.category}\n` +
+        `Food details: ${d.foodDetails || '—'}\n` +
+        `Notes:        ${d.notes || '—'}\n\n` +
+        `—\nReply to this email to respond directly to the submitter.`,
+      replyTo: d.email,
+    };
+  }
+  return null;
+}
+
+async function trySend({ to, subject, text, replyTo }) {
+  if (!resend) return;
+  try {
+    const { error } = await resend.emails.send({
+      from: FROM_ADDR,
+      to: Array.isArray(to) ? to : [to],
+      subject,
+      text,
+      ...(replyTo ? { replyTo } : {}),
+    });
+    if (error) console.error('Resend error:', error);
+  } catch (e) {
+    console.error('Resend exception:', e);
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -146,5 +247,16 @@ export default async function handler(req, res) {
     console.error('insert error', form, error);
     return res.status(500).json({ error: 'Could not save submission' });
   }
+
+  // Fire-and-await emails (best effort — don't fail the request if they fail).
+  const sends = [];
+  const conf = confirmationEmail(form, data);
+  if (conf && data.email) {
+    sends.push(trySend({ to: data.email, subject: conf.subject, text: conf.text, replyTo: conf.replyTo }));
+  }
+  const team = teamNotification(form, data);
+  if (team) sends.push(trySend(team));
+  if (sends.length) await Promise.allSettled(sends);
+
   return res.status(200).json({ ok: true });
 }

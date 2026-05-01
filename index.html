@@ -14,16 +14,16 @@
 <meta property="og:site_name" content="The Longest Table · Pleasanton" />
 <meta property="og:title" content="The Longest Table · Pleasanton" />
 <meta property="og:description" content="1,000 neighbors. One long table. Saturday, June 6, 2026 · 6:30pm on Main Street. Bring something to eat and meet the people who live near you." />
-<meta property="og:image" content="https://longest-table-pleasanton.vercel.app/assets/longest-table-hero.png" />
+<meta property="og:image" content="https://ltpleasanton.org/assets/longest-table-hero.png" />
 <meta property="og:image:width" content="1267" />
 <meta property="og:image:height" content="704" />
 <meta property="og:image:alt" content="An aerial photo of one long dinner table running down a green lawn, set with white linens and lined with neighbors eating together." />
-<meta property="og:url" content="https://longest-table-pleasanton.vercel.app/" />
+<meta property="og:url" content="https://ltpleasanton.org/" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="The Longest Table · Pleasanton" />
 <meta name="twitter:description" content="1,000 neighbors. One long table. Saturday, June 6, 2026 · 6:30pm on Main Street. Bring something to eat and meet the people who live near you." />
-<meta name="twitter:image" content="https://longest-table-pleasanton.vercel.app/assets/longest-table-hero.png" />
+<meta name="twitter:image" content="https://ltpleasanton.org/assets/longest-table-hero.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -900,7 +900,7 @@ const EVENT = {
   startISO: "2026-06-07T01:30:00Z",
   endISO:   "2026-06-07T03:00:00Z",
   location: "Main Street, Pleasanton, CA",
-  details:  "An outdoor community dinner along Main Street. Bring something to eat and meet the people who live near you. Free RSVP required. https://longest-table-pleasanton.vercel.app",
+  details:  "An outdoor community dinner along Main Street. Bring something to eat and meet the people who live near you. Free RSVP required. https://ltpleasanton.org",
 };
 
 function googleCalendarUrl() {
@@ -934,7 +934,7 @@ function downloadICS() {
     "PRODID:-//Pleasanton Connects//Longest Table//EN",
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
-    `UID:longest-table-2026-06-06@longest-table-pleasanton`,
+    `UID:longest-table-2026-06-06@ltpleasanton.org`,
     `DTSTAMP:${EVENT.startUTC}`,
     `DTSTART:${EVENT.startUTC}`,
     `DTEND:${EVENT.endUTC}`,
@@ -1554,8 +1554,7 @@ function VolunteerPage({ go }) {
 
 
 /* ─── Share — toolkit blocks + small "tell us you shared" form ─── */
-// TODO: update SITE_URL once the final domain is chosen.
-const SITE_URL = "longest-table-pleasanton.vercel.app";
+const SITE_URL = "ltpleasanton.org";
 
 function CopyBlock({ channel, body }) {
   const [copied, setCopied] = React.useState(false);
