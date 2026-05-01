@@ -16,7 +16,10 @@ const TABLES = {
   signup: 'signups',
 };
 
-const DONATION_CATEGORIES = new Set(['monetary', 'tshirts', 'kids_zone', 'food', 'other']);
+const DONATION_CATEGORIES = new Set(['support', 'kids_zone', 'food', 'other']);
+// Donations marked 'support' should be forwarded by email to:
+//   pleasantonconnects@gmail.com, gabrielle@pleasantondowntown.net
+// Forwarding will be wired in when Resend is configured.
 
 const isEmail = (s) => typeof s === 'string' && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.trim());
 const trim = (s) => (typeof s === 'string' ? s.trim() : '');

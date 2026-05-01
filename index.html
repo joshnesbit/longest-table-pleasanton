@@ -570,6 +570,8 @@ section { padding: 96px 0; }
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
 
 <script type="text/babel">
+const EVENTBRITE_URL = "https://www.eventbrite.com/e/the-longest-table-pleasanton-tickets-1988461076608?aff=oddtdtcreator";
+
 /* ─── Icons ─── */
 const Icon = {
   Ticket: ({ size = 28, color = "currentColor" }) => (
@@ -679,7 +681,6 @@ const Icon = {
 const NAV_ITEMS = [
   { id: "home", label: "Longest Table" },
   { id: "faq", label: "FAQ" },
-  { id: "pc", label: "Pleasanton Connects", external: "https://pleasantonconnects.org" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -732,8 +733,7 @@ function Nav({ route, go }) {
             <button className="btn btn-ghost nav-cta" onClick={goVolunteer}>
               Volunteer
             </button>
-            <a className="btn btn-terracotta" href="https://eventbrite.com" target="_blank" rel="noreferrer"
-              onClick={(e) => { e.preventDefault(); window.showToast("Eventbrite link coming soon"); }}>
+            <a className="btn btn-terracotta" href={EVENTBRITE_URL} target="_blank" rel="noreferrer">
               RSVP <Icon.ExternalArrow />
             </a>
           </div>
@@ -766,8 +766,8 @@ function Nav({ route, go }) {
             Volunteer
           </button>
           <a className="btn btn-terracotta" style={{ marginTop: 8, alignSelf: "flex-start" }}
-            href="https://eventbrite.com" target="_blank" rel="noreferrer"
-            onClick={(e) => { e.preventDefault(); window.showToast("Eventbrite link coming soon"); setOpen(false); }}>
+            href={EVENTBRITE_URL} target="_blank" rel="noreferrer"
+            onClick={() => setOpen(false)}>
             RSVP on Eventbrite <Icon.ExternalArrow />
           </a>
         </div>
@@ -793,7 +793,6 @@ function Footer({ go }) {
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14 }}>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("home")}>Longest Table</button></li>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("faq")}>FAQ</button></li>
-            <li><a href="https://pleasantonconnects.org" target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>Pleasanton Connects <Icon.ExternalArrow /></a></li>
           </ul>
         </div>
         <div>
@@ -809,7 +808,7 @@ function Footer({ go }) {
         <div>
           <h4>Connect</h4>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14 }}>
-            <li><a href="#" onClick={(e) => { e.preventDefault(); go("contact"); }}>hello@pleasantonconnects.org</a></li>
+            <li><a href="mailto:pleasantonconnects@gmail.com">pleasantonconnects@gmail.com</a></li>
             <li><button className="btn-link" style={{ color: "var(--cream)", textDecoration: "none" }} onClick={() => go("signup")}>Newsletter</button></li>
           </ul>
         </div>
@@ -879,8 +878,7 @@ function Hero({ go }) {
           The Longest Table is an outdoor community dinner along Main Street. A time to share a meal together, sit beside neighbors we have not met, and have some fun.
         </p>
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 32 }}>
-          <a className="btn btn-terracotta" href="https://eventbrite.com" target="_blank" rel="noreferrer"
-            onClick={(e) => { e.preventDefault(); window.showToast("Eventbrite link coming soon"); }}>
+          <a className="btn btn-terracotta" href={EVENTBRITE_URL} target="_blank" rel="noreferrer">
             RSVP on Eventbrite <Icon.ExternalArrow />
           </a>
           <button className="btn" style={{ background: "rgba(246, 239, 227, 0.14)", color: "var(--paper)", border: "1px solid rgba(246, 239, 227, 0.4)" }}
@@ -936,7 +934,7 @@ function downloadICS() {
     "PRODID:-//Pleasanton Connects//Longest Table//EN",
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
-    `UID:longest-table-2026-06-06@pleasantonconnects.org`,
+    `UID:longest-table-2026-06-06@longest-table-pleasanton`,
     `DTSTAMP:${EVENT.startUTC}`,
     `DTSTART:${EVENT.startUTC}`,
     `DTEND:${EVENT.endUTC}`,
@@ -1061,7 +1059,7 @@ const WAYS = [
 
 function FiveWays({ go }) {
   const handle = (w) => {
-    if (w.external === "eventbrite") return window.showToast("Eventbrite link coming soon");
+    if (w.external === "eventbrite") { window.open(EVENTBRITE_URL, "_blank", "noreferrer"); return; }
     if (w.external === "flyer") return window.showToast("Flyer link coming soon");
     go(w.goTo || w.id);
   };
@@ -1156,11 +1154,6 @@ function Why() {
         <p style={{ fontSize: 18, color: "var(--ink-soft)" }}>
           Our journey began last summer with a community-wide listening tour to better understand how our neighbors build real-life connections. The Longest Table is our first major public event. We look forward to sharing with you what we've learned and the work we plan to do over the next year to help strengthen Pleasanton's social fabric. We want to move beyond digital distractions and create opportunities for neighbors to connect.
         </p>
-        <div style={{ marginTop: 12 }}>
-          <a className="btn-link" href="https://pleasantonconnects.org" target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            Learn more about Pleasanton Connects <Icon.ExternalArrow />
-          </a>
-        </div>
       </div>
     </section>
   );
@@ -1212,7 +1205,7 @@ function ThankYou({ title, body, emailPreview, go }) {
           <div className="eyebrow" style={{ marginBottom: 12 }}>What just landed in your inbox</div>
           <div className="email-preview">
             <div className="ep-head">
-              From: hello@pleasantonconnects.org &nbsp; · &nbsp; Subject: {emailPreview.subject}
+              From: pleasantonconnects@gmail.com &nbsp; · &nbsp; Subject: {emailPreview.subject}
             </div>
             <div className="ep-body">
               <img src="assets/pleasanton-connects-logo.png" alt="" style={{ height: 56, marginBottom: 18 }} />
@@ -1348,23 +1341,22 @@ function HostPage({ go }) {
   return (
     <div className="page-fade">
       <PageHeader eyebrow="Host a Table" title="Become a table captain."
-        sub="Table captains are the secret ingredient. You take ownership of a small slice of Main Street — invite your friends, family, neighbors, and coworkers to fill an 8 to 10-seat section, and coordinate what everyone is bringing to eat. Two quick steps below." go={go} />
+        sub="Table captains are the secret ingredient. You take ownership of a small slice of Main Street — invite your friends, family, neighbors, and coworkers to fill an 8 to 10-seat section. Two quick steps below." go={go} />
       <section className="container-narrow" style={{ paddingTop: 56 }}>
         <div style={{ display: "grid", gap: 18, marginBottom: 32 }}>
           <div className="card" style={{ display: "flex", gap: 18, alignItems: "flex-start" }}>
             <div className="serif" style={{ fontSize: 36, color: "var(--terracotta)", lineHeight: 1, minWidth: 48 }}>01</div>
             <div>
               <strong style={{ display: "block", marginBottom: 4 }}>Sign up as a captain (form below)</strong>
-              <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>Tell us your name and contact info so we can assign you a section and coordinate dish details across captains.</p>
+              <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>Tell us your name and contact info so we can assign you a section.</p>
             </div>
           </div>
           <div className="card" style={{ display: "flex", gap: 18, alignItems: "flex-start" }}>
             <div className="serif" style={{ fontSize: 36, color: "var(--terracotta)", lineHeight: 1, minWidth: 48 }}>02</div>
             <div style={{ flex: 1 }}>
               <strong style={{ display: "block", marginBottom: 4 }}>RSVP your full crew on Eventbrite</strong>
-              <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)", marginBottom: 12 }}>Register a ticket for every person at your table — yourself, family, friends. Family of four = four tickets.</p>
-              <a className="btn btn-terracotta" href="https://eventbrite.com" target="_blank" rel="noreferrer"
-                onClick={(e) => { e.preventDefault(); window.showToast("Eventbrite link coming soon"); }}>
+              <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)", marginBottom: 12 }}>Register a ticket for every person at your table — yourself, family, friends.</p>
+              <a className="btn btn-terracotta" href={EVENTBRITE_URL} target="_blank" rel="noreferrer">
                 RSVP your crew on Eventbrite <Icon.ExternalArrow />
               </a>
             </div>
@@ -1416,10 +1408,6 @@ function HostPage({ go }) {
               ))}
             </div>
             {errors.prior && <div className="error-msg">{errors.prior}</div>}
-          </div>
-          <div className="field">
-            <label>Anything we should know? <span style={{ color: "var(--muted)", fontWeight: 400 }}>(optional)</span></label>
-            <textarea value={data.notes} onChange={(e) => set("notes", e.target.value)} placeholder="Accessibility notes, dietary considerations across your group, etc." />
           </div>
           <CaptchaField captcha={captcha} error={errors.captcha} />
           {errors.submit && <div className="error-msg">{errors.submit}</div>}
@@ -1505,7 +1493,7 @@ function VolunteerPage({ go }) {
         <div className="card-warm" style={{ padding: "20px 22px", marginBottom: 8, borderRadius: 14 }}>
           <strong style={{ display: "block", marginBottom: 6 }}>A note for Table Captains</strong>
           <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>
-            You are the secret ingredient to a successful Longest Table! As a captain, you take ownership of a small slice of Main Street. You'll invite your friends, family, neighbors, and coworkers to fill an 8 to 10-seat section and coordinate what everyone is bringing to eat. You have full license to decorate your table to make it uniquely yours! If you are volunteering as a Table Captain, please <a href="https://eventbrite.com" target="_blank" rel="noreferrer" onClick={(e) => { e.preventDefault(); window.showToast("Eventbrite link coming soon"); }} style={{ color: "var(--forest)", textDecoration: "underline" }}>RSVP on Eventbrite</a> for your entire table as a group.
+            You are the secret ingredient to a successful Longest Table! As a captain, you take ownership of a small slice of Main Street. You'll invite your friends, family, neighbors, and coworkers to fill an 8 to 10-seat section and coordinate what everyone is bringing to eat. You have full license to decorate your table to make it uniquely yours! If you are volunteering as a Table Captain, please <a href={EVENTBRITE_URL} target="_blank" rel="noreferrer" style={{ color: "var(--forest)", textDecoration: "underline" }}>RSVP on Eventbrite</a> for your entire table as a group.
           </p>
         </div>
       </section>
@@ -1591,10 +1579,10 @@ function CopyBlock({ channel, body }) {
 }
 
 const SHARE_BLOCKS = [
-  { channel: "Instagram caption", body: `Saturday June 6 · Main Street · 6:30pm.\n\nA bunch of us are putting one long table down Main Street and bringing dinner. 1,000 neighbors invited. Bring something to eat, sit next to someone you haven't met. That's the whole thing.\n\nFree. RSVP at the link in bio.\n\n#LongestTablePleasanton` },
-  { channel: "Facebook post", body: `Hey Pleasanton — on Saturday June 6 a bunch of us are putting one (almost) continuous table down Main Street and inviting the whole town to dinner. Bring something to eat, bring a friend, sit next to someone new. It's free, no fundraiser, no pitch. Just neighbors eating together. RSVP at ${SITE_URL}.` },
-  { channel: "Nextdoor", body: `Neighbors — The Longest Table is happening Saturday June 6, 6:30 to 8pm on Main Street. The plan: 1,000 of us at one long table, eating dinner together. It's free. Table captains are claiming 8 to 10-seat sections — I'd love to see our block represented. Details and RSVP at ${SITE_URL}.` },
-  { channel: "Text to a neighbor", body: `Hey — free neighborhood dinner June 6 on Main Street. 1,000 of us at one long table. Bring something to eat. Wanna grab seats together? ${SITE_URL}` },
+  { channel: "Instagram caption", body: `Saturday June 6 · Main Street · 6:30pm.\n\nA bunch of us are putting one long table down Main Street and bringing dinner. 1,000 neighbors invited. Bring your own food, sit next to someone you haven't met. That's the whole thing.\n\nFree. RSVP at the link in bio.\n\n#longesttablecommunity #pleasanton` },
+  { channel: "Facebook post", body: `Hey Pleasanton — on Saturday June 6 a bunch of us are putting one (almost) continuous table down Main Street and inviting the whole town to dinner. Bring your own food, bring a friend, sit next to someone new. It's free, no fundraiser, no pitch. Just neighbors eating together.\n\nMore info: ${SITE_URL}\nRSVP: ${EVENTBRITE_URL}\n\n#longesttablecommunity #pleasanton` },
+  { channel: "Nextdoor", body: `Neighbors — The Longest Table is happening Saturday June 6, 6:30 to 8pm on Main Street. The plan: 1,000 of us at one long table, bringing our own food, eating together. It's free. Table captains are claiming 8 to 10-seat sections — I'd love to see our block represented.\n\nMore info: ${SITE_URL}\nRSVP: ${EVENTBRITE_URL}` },
+  { channel: "Text to a neighbor", body: `Hey — neighborhood dinner June 6 on Main Street. 1,000 of us at one long table. Bring something to eat. Wanna grab seats together? ${SITE_URL}` },
 ];
 
 function SharePage({ go }) {
@@ -1686,7 +1674,7 @@ function SharePage({ go }) {
             A short message from a friend goes a lot further than a public post. Tweak this and send it to your block, your coworkers, your folks.
           </p>
           <CopyBlock channel="Personal invite (email or text)"
-            body={`Hi [name] —\n\nI'm captaining a table at the Longest Table on June 6 — a community dinner along Main Street, downtown Pleasanton. 6:30 to 8pm.\n\nIt's free, outside, kids welcome. Bring something to eat and sit with my crew. Would you come?\n\nMore info and the RSVP link: ${SITE_URL}`} />
+            body={`Hi [name] —\n\nI'm captaining a table at the Longest Table on June 6 — a community dinner along Main Street, downtown Pleasanton. 6:30 to 8pm.\n\nIt's free, outside, kids welcome. Bring your own food and sit with my crew. Would you come?\n\nMore info: ${SITE_URL}\nRSVP: ${EVENTBRITE_URL}`} />
         </div>
       </section>
       <section style={{ background: "var(--cream)", padding: "72px 0" }}>
@@ -1896,7 +1884,7 @@ function ContactPage({ go }) {
             <div className="eyebrow">Direct</div>
             <p style={{ marginTop: 12, fontSize: 16, color: "var(--ink-soft)" }}>
               <strong style={{ color: "var(--ink)", display: "block" }}>Email</strong>
-              hello@pleasantonconnects.org
+              <a href="mailto:pleasantonconnects@gmail.com" style={{ color: "var(--forest)", textDecoration: "underline" }}>pleasantonconnects@gmail.com</a>
             </p>
             <p style={{ marginTop: 16, fontSize: 14, color: "var(--muted)" }}>
               A real human reads every message. Replies usually within a couple of days.
@@ -1941,9 +1929,9 @@ const FAQS = [
   { q: "Do I need a ticket to attend?", a: "Yes. Please register all the people in your party. If you are a family of 4, please register for 4 tickets." },
   { q: "What if I can no longer make it?", a: "Please let us know as soon as possible! Since we are aiming to seat 1,000 neighbors, knowing your seat is available allows us to invite someone from the waitlist." },
   { q: "Do I bring my own food?", a: "Yes! Coordinate with your Table Captain or bring food for your small crew. You can also pre-order a family-style meal from one of our amazing Downtown Pleasanton restaurants. And don't forget your drinks!" },
-  { q: "Can we bring alcohol?", a: "Not this time! Please refrain from bringing alcoholic beverages to the table. If you'd like a drink, you are more than welcome to visit one of our wonderful downtown bars or restaurants and enjoy it there. Just a friendly reminder to please keep those beverages within the premises of the bar or restaurant." },
+  { q: "Can we bring alcohol?", a: "Not this time! Please refrain from bringing alcoholic beverages to the event." },
   { q: "What should I bring besides food?", a: "Think of this as a giant picnic. To help reduce waste, you can bring your own reusable plates and utensils. If you are a Table Captain, don't forget your table decorations!" },
-  { q: "Is this a family friendly event?", a: "Absolutely! When you register, please be sure to register the kids too. Everyone will have a seat at the big table." },
+  { q: "Is this a family friendly event?", a: "Absolutely! When you register, please be sure to register the kids too. Everyone will have a seat at the big table. We will have standard chairs for all; we will not have high chairs available for our smallest community members." },
   { q: "Anything fun for the kids?", a: "We will have a kids zone where the kids can play or pick up something fun to take back to the table (first come, first served, until we run out). Please ensure at least one parent or guardian is with a child in the kid zone at all times." },
   { q: "What happens if it rains?", a: "We'll be keeping a close eye on the weather. If things look soggy, we will communicate a rain date or cancellation via email to all registered guests." },
 ];
@@ -1973,8 +1961,7 @@ function FaqPage({ go }) {
 
 /* ─── Donate ─── */
 const DONATION_OPTIONS = [
-  { id: "monetary", label: "A monetary pledge" },
-  { id: "tshirts", label: "T-shirts for volunteers" },
+  { id: "support", label: "I'd like to support the event with a donation or sponsorship" },
   { id: "kids_zone", label: "Items for the Kids Zone" },
   { id: "food", label: "Food or drinks for the community table" },
   { id: "other", label: "Other" },
@@ -2096,14 +2083,6 @@ function DonatePage({ go }) {
         </div>
       </form>
 
-      <section className="container-narrow" style={{ padding: "16px 0 96px" }}>
-        <div style={{ background: "var(--cream)", border: "1px solid var(--rule)", borderRadius: 14, padding: "24px 28px" }}>
-          <strong style={{ display: "block", marginBottom: 6 }}>Sponsoring the event</strong>
-          <p style={{ margin: 0, fontSize: 15, color: "var(--ink-soft)" }}>
-            If you'd like to sponsor the event, please reach out to the Pleasanton Downtown Association: <a href="mailto:gabrielle@pleasantondowntown.net" style={{ color: "var(--forest)", textDecoration: "underline" }}>gabrielle@pleasantondowntown.net</a>
-          </p>
-        </div>
-      </section>
     </div>
   );
 }
